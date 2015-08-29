@@ -3,7 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Game", "Game\Game.vcxproj", "{DB503E45-E632-4C0C-872D-EC4333E5BCAC}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{9900714F-F4F3-41AC-B088-78631BDFEEB3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Engine", "Engine", "{7770BD5B-4FDD-447A-B274-96C5A43B531F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Game", "Game", "{1014F25A-34E0-4A56-852D-70052741281E}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Game", "Code\Game\Game\Game.vcxproj", "{9E467CBE-A795-453D-B724-F0AE5D9AB220}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BuildAssets", "Code\Game\BuildAssets\BuildAssets.vcxproj", "{3670C64E-AAA0-4056-BF89-744D0276F609}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AssetBuilder", "Code\Tools\AssetBuilder\AssetBuilder.vcxproj", "{ABF804FE-993A-43E2-A242-F3090A290B12}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,16 +23,37 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{DB503E45-E632-4C0C-872D-EC4333E5BCAC}.Debug|x64.ActiveCfg = Debug|x64
-		{DB503E45-E632-4C0C-872D-EC4333E5BCAC}.Debug|x64.Build.0 = Debug|x64
-		{DB503E45-E632-4C0C-872D-EC4333E5BCAC}.Debug|x86.ActiveCfg = Debug|Win32
-		{DB503E45-E632-4C0C-872D-EC4333E5BCAC}.Debug|x86.Build.0 = Debug|Win32
-		{DB503E45-E632-4C0C-872D-EC4333E5BCAC}.Release|x64.ActiveCfg = Release|x64
-		{DB503E45-E632-4C0C-872D-EC4333E5BCAC}.Release|x64.Build.0 = Release|x64
-		{DB503E45-E632-4C0C-872D-EC4333E5BCAC}.Release|x86.ActiveCfg = Release|Win32
-		{DB503E45-E632-4C0C-872D-EC4333E5BCAC}.Release|x86.Build.0 = Release|Win32
+		{9E467CBE-A795-453D-B724-F0AE5D9AB220}.Debug|x64.ActiveCfg = Debug|x64
+		{9E467CBE-A795-453D-B724-F0AE5D9AB220}.Debug|x64.Build.0 = Debug|x64
+		{9E467CBE-A795-453D-B724-F0AE5D9AB220}.Debug|x86.ActiveCfg = Debug|Win32
+		{9E467CBE-A795-453D-B724-F0AE5D9AB220}.Debug|x86.Build.0 = Debug|Win32
+		{9E467CBE-A795-453D-B724-F0AE5D9AB220}.Release|x64.ActiveCfg = Release|x64
+		{9E467CBE-A795-453D-B724-F0AE5D9AB220}.Release|x64.Build.0 = Release|x64
+		{9E467CBE-A795-453D-B724-F0AE5D9AB220}.Release|x86.ActiveCfg = Release|Win32
+		{9E467CBE-A795-453D-B724-F0AE5D9AB220}.Release|x86.Build.0 = Release|Win32
+		{3670C64E-AAA0-4056-BF89-744D0276F609}.Debug|x64.ActiveCfg = Debug|x64
+		{3670C64E-AAA0-4056-BF89-744D0276F609}.Debug|x64.Build.0 = Debug|x64
+		{3670C64E-AAA0-4056-BF89-744D0276F609}.Debug|x86.ActiveCfg = Debug|Win32
+		{3670C64E-AAA0-4056-BF89-744D0276F609}.Debug|x86.Build.0 = Debug|Win32
+		{3670C64E-AAA0-4056-BF89-744D0276F609}.Release|x64.ActiveCfg = Release|x64
+		{3670C64E-AAA0-4056-BF89-744D0276F609}.Release|x64.Build.0 = Release|x64
+		{3670C64E-AAA0-4056-BF89-744D0276F609}.Release|x86.ActiveCfg = Release|Win32
+		{3670C64E-AAA0-4056-BF89-744D0276F609}.Release|x86.Build.0 = Release|Win32
+		{ABF804FE-993A-43E2-A242-F3090A290B12}.Debug|x64.ActiveCfg = Debug|x64
+		{ABF804FE-993A-43E2-A242-F3090A290B12}.Debug|x64.Build.0 = Debug|x64
+		{ABF804FE-993A-43E2-A242-F3090A290B12}.Debug|x86.ActiveCfg = Debug|Win32
+		{ABF804FE-993A-43E2-A242-F3090A290B12}.Debug|x86.Build.0 = Debug|Win32
+		{ABF804FE-993A-43E2-A242-F3090A290B12}.Release|x64.ActiveCfg = Release|x64
+		{ABF804FE-993A-43E2-A242-F3090A290B12}.Release|x64.Build.0 = Release|x64
+		{ABF804FE-993A-43E2-A242-F3090A290B12}.Release|x86.ActiveCfg = Release|Win32
+		{ABF804FE-993A-43E2-A242-F3090A290B12}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9E467CBE-A795-453D-B724-F0AE5D9AB220} = {1014F25A-34E0-4A56-852D-70052741281E}
+		{3670C64E-AAA0-4056-BF89-744D0276F609} = {1014F25A-34E0-4A56-852D-70052741281E}
+		{ABF804FE-993A-43E2-A242-F3090A290B12} = {9900714F-F4F3-41AC-B088-78631BDFEEB3}
 	EndGlobalSection
 EndGlobal

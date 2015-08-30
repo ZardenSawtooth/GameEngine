@@ -59,21 +59,25 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\SolutionMacros.props" />
     <Import Project="..\..\DefaultLocations.props" />
+    <Import Project="..\..\OpenGL.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\SolutionMacros.props" />
     <Import Project="..\..\DefaultLocations.props" />
+    <Import Project="..\..\OpenGL.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\SolutionMacros.props" />
     <Import Project="..\..\DefaultLocations.props" />
+    <Import Project="..\..\Direct3D.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\SolutionMacros.props" />
     <Import Project="..\..\DefaultLocations.props" />
+    <Import Project="..\..\Direct3D.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup />
@@ -87,7 +91,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <CustomBuildStep>
-      <Command>"$(BinDir)AssetBuilder.exe" asset1.txt asset2.txt</Command>
+      <Command>"$(BinDir)AssetBuilder.exe" fragmentShader.glsl vertexShader.glsl</Command>
       <Message>Building Assets</Message>
       <Outputs>_ALWAYS_RUN_</Outputs>
     </CustomBuildStep>
@@ -102,7 +106,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <CustomBuildStep>
-      <Command>"$(BinDir)AssetBuilder.exe" asset1.txt asset2.txt</Command>
+      <Command>"$(BinDir)AssetBuilder.exe" fragmentShader.hlsl vertexShader.hlsl</Command>
       <Message>Building Assets</Message>
       <Outputs>_ALWAYS_RUN_</Outputs>
     </CustomBuildStep>
@@ -121,7 +125,7 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <CustomBuildStep>
-      <Command>"$(BinDir)AssetBuilder.exe" asset1.txt asset2.txt</Command>
+      <Command>"$(BinDir)AssetBuilder.exe" fragmentShader.glsl vertexShader.glsl</Command>
       <Message>Building Assets</Message>
       <Outputs>_ALWAYS_RUN_</Outputs>
     </CustomBuildStep>
@@ -140,7 +144,7 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <CustomBuildStep>
-      <Command>"$(BinDir)AssetBuilder.exe" asset1.txt asset2.txt</Command>
+      <Command>"$(BinDir)AssetBuilder.exe" fragmentShader.hlsl vertexShader.hlsl</Command>
       <Message>Building Assets</Message>
       <Outputs>_ALWAYS_RUN_</Outputs>
     </CustomBuildStep>

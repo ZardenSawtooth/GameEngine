@@ -6,6 +6,8 @@
 // Header Files
 //=============
 
+#include "../../Engine/Graphics/Graphics.h"
+
 #include "WindowsProgram.h"
 // WindowsIncludes.h is a file I made that #includes the important windows.h file
 // along with any associated #defines that we want in order to get Windows functionality.
@@ -32,8 +34,11 @@ int WINAPI WinMain(
 	// This instance handle is here for legacy reasons and is unused
 	HINSTANCE,
 	char* i_commandLineArguments,
-	int i_initialWindowDisplayState )
+	int i_initialWindowDisplayState)
+
+	
 {
+	
 	// A Windows program doesn't actually need any windows at all
 	// but in most cases there will be a single "main" window
 	// and when it is closed the program will exit

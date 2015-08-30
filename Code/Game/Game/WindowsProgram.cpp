@@ -14,6 +14,8 @@
 // in this example program we just use it to get error messages
 #include "Windows/WindowsFunctions.h"
 
+#include "../../Engine/Graphics/Graphics.h"
+
 // Static Data Initialization
 //===========================
 
@@ -42,6 +44,7 @@ namespace
 
 int CreateMainWindowAndReturnExitCodeWhenItCloses( const HINSTANCE i_thisInstanceOfTheProgram, const int i_initialWindowDisplayState )
 {
+
 	// Try to create the main window
 	if ( CreateMainWindow( i_thisInstanceOfTheProgram, i_initialWindowDisplayState ) )
 	{
@@ -458,9 +461,13 @@ bool WaitForMainWindowToClose( int& o_exitCode )
 	// (e.g. from an in-game menu)
 
 	// Enter an infinite loop that will continue until a quit message (WM_QUIT) is received from Windows
+	eae6320::Graphics::Initialize(s_mainWindow);
 	MSG message = { 0 };
 	do
 	{
+		
+		eae6320::Graphics::Render();
+
 		// To send us a message, Windows will add it to a queue.
 		// Most Windows applications should wait until a message is received and then react to it.
 		// Real-time programs, though, must continually draw new images to the screen as fast as possible
@@ -505,6 +512,8 @@ bool WaitForMainWindowToClose( int& o_exitCode )
 			DispatchMessage( &message );
 		}
 	} while ( message.message != WM_QUIT );
+
+	eae6320::Graphics::ShutDown();
 
 	// The exit code for the application is stored in the WPARAM of a WM_QUIT message
 	o_exitCode = static_cast<int>( message.wParam );

@@ -1,7 +1,7 @@
 // Header Files
 //=============
 
-#include "../Graphics.h"
+#include "Graphics.h"
 
 #include <cassert>
 #include <cstdint>
@@ -10,9 +10,9 @@
 #include <gl/GLU.h>
 #include <string>
 #include <sstream>
-#include "../../UserOutput/UserOutput.h"
-#include "../../Windows/Functions.h"
-#include "../../../External/OpenGlExtensions/OpenGlExtensions.h"
+#include "../UserOutput/UserOutput.h"
+#include "../Windows/Functions.h"
+#include "../../External/OpenGlExtensions/OpenGlExtensions.h"
 
 // Static Data Initialization
 //===========================

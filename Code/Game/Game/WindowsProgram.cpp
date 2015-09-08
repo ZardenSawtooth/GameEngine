@@ -12,7 +12,7 @@
 #include "Resources/Resource.h"
 // WindowsFunctions.h contains convenience functionality for Windows features;
 // in this example program we just use it to get error messages
-#include "Windows/WindowsFunctions.h"
+#include "../../Engine/Windows/Functions.h"
 
 #include "../../Engine/Graphics/Graphics.h"
 
@@ -136,7 +136,7 @@ HWND CreateMainWindowHandle( const HINSTANCE i_thisInstanceOfTheProgram, const i
 	{
 		// The window's "caption"
 		// (The text that is displayed in the title bar)
-		const char* windowCaption = "[YOUR NAME HERE]'s EAE6320 Game";
+		const char* windowCaption = "tapia_aqeel's EAE6320 Game";
 		// The window's style
 		const DWORD windowStyle =
 			// "Overlapped" is basically the same as "top-level"

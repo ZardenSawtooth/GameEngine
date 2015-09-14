@@ -9,6 +9,7 @@
 //=============
 
 #include "../Windows/Includes.h"
+#include "Mesh.h"
 
 // Interface
 //==========

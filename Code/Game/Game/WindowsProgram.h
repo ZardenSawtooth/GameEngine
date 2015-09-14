@@ -10,6 +10,7 @@
 
 #include <string>
 #include "../../Engine/Windows/Includes.h"
+#include "../../Engine/Graphics/Graphics.h"
 
 // Main Function
 //==============

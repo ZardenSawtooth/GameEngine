@@ -14,7 +14,7 @@
 // in this example program we just use it to get error messages
 #include "../../Engine/Windows/Functions.h"
 
-#include "../../Engine/Graphics/Graphics.h"
+
 
 // Static Data Initialization
 //===========================

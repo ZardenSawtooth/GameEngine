@@ -13,20 +13,35 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\Direct3D">
+      <UniqueIdentifier>{5048e71c-e8be-432b-8a4d-46154a2e9286}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\OpenGl">
+      <UniqueIdentifier>{aab09aab-03a3-4d49-a1de-2a5b9e6cd16f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphics.d3d.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Direct3D</Filter>
     </ClCompile>
     <ClCompile Include="Graphics.gl.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\OpenGl</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.gl.cpp">
+      <Filter>Source Files\OpenGl</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.d3d.cpp">
+      <Filter>Source Files\Direct3D</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

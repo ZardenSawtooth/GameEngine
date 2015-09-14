@@ -8,18 +8,19 @@
 #include <d3d9.h>
 #include <d3dx9shader.h>
 #include <sstream>
-//#include "../../UserOutput/UserOutput.h"
 #include "../UserOutput/UserOutput.h"
 
 // Static Data Initialization
 //===========================
 
+//IDirect3DDevice9* s_direct3dDevice = NULL;
+
 namespace
 {
 	HWND s_renderingWindow = NULL;
 	IDirect3D9* s_direct3dInterface = NULL;
-	IDirect3DDevice9* s_direct3dDevice = NULL;
-
+	
+	
 	// This struct determines the layout of the data that the CPU will send to the GPU
 	struct sVertex
 	{
@@ -32,14 +33,14 @@ namespace
 		// Offset = 8
 		uint8_t b, g, r, a;	// Direct3D expects the byte layout of a color to be different from what you might expect
 	};
-	IDirect3DVertexDeclaration9* s_vertexDeclaration = NULL;
-
+	//IDirect3DVertexDeclaration9* s_vertexDeclaration = NULL;
+	eae6320::Graphics::Mesh sMesh;
 	// The vertex buffer holds the data for each vertex
-	IDirect3DVertexBuffer9* s_vertexBuffer = NULL;
+	//IDirect3DVertexBuffer9* s_vertexBuffer = NULL;
 	
 	// An index buffer describes how to make triangles with the vertices
 	// (i.e. it defines the vertex connectivity)
-	IDirect3DIndexBuffer9* s_indexBuffer = NULL;
+	//IDirect3DIndexBuffer9* s_indexBuffer = NULL;
 
 	// The vertex shader is a program that operates on vertices.
 	// Its input comes from a C/C++ "draw call" and is:
@@ -143,9 +144,11 @@ void eae6320::Graphics::Render()
 	// The actual function calls that draw geometry must be made between paired calls to
 	// BeginScene() and EndScene()
 	{
+		
 		HRESULT result = s_direct3dDevice->BeginScene();
 		assert( SUCCEEDED( result ) );
 		{
+			
 			// Set the shaders
 			{
 				result = s_direct3dDevice->SetVertexShader( s_vertexShader );
@@ -153,6 +156,8 @@ void eae6320::Graphics::Render()
 				result = s_direct3dDevice->SetPixelShader( s_fragmentShader );
 				assert( SUCCEEDED( result ) );
 			}
+
+			/*
 			// Bind a specific vertex buffer to the device as a data source
 			{
 				// There can be multiple streams of data feeding the display adaptor at the same time
@@ -185,10 +190,16 @@ void eae6320::Graphics::Render()
 					indexOfFirstVertexToRender, indexOfFirstVertexToRender, vertexCountToRender,
 					indexOfFirstIndexToUse, primitiveCountToRender );
 				assert( SUCCEEDED( result ) );
-			}
+			}*/
+			eae6320::Graphics::DrawMesh(sMesh, sizeof(sVertex));
+			
+			
 		}
 		result = s_direct3dDevice->EndScene();
 		assert( SUCCEEDED( result ) );
+		
+		
+
 	}
 
 	// Everything has been drawn to the "back buffer", which is just an image in memory.
@@ -223,21 +234,21 @@ bool eae6320::Graphics::ShutDown()
 				s_fragmentShader = NULL;
 			}
 
-			if ( s_vertexBuffer )
+			if ( sMesh.s_vertexBuffer )
 			{
-				s_vertexBuffer->Release();
-				s_vertexBuffer = NULL;
+				sMesh.s_vertexBuffer->Release();
+				sMesh.s_vertexBuffer = NULL;
 			}
-			if ( s_indexBuffer )
+			if ( sMesh.s_indexBuffer )
 			{
-				s_indexBuffer->Release();
-				s_indexBuffer = NULL;
+				sMesh.s_indexBuffer->Release();
+				sMesh.s_indexBuffer = NULL;
 			}
-			if ( s_vertexDeclaration )
+			if ( sMesh.s_vertexDeclaration )
 			{
 				s_direct3dDevice->SetVertexDeclaration( NULL );
-				s_vertexDeclaration->Release();
-				s_vertexDeclaration = NULL;
+				sMesh.s_vertexDeclaration->Release();
+				sMesh.s_vertexDeclaration = NULL;
 			}
 
 			s_direct3dDevice->Release();
@@ -279,7 +290,7 @@ namespace
 			presentationParameters.PresentationInterval = D3DPRESENT_INTERVAL_DEFAULT;
 		}
 		HRESULT result = s_direct3dInterface->CreateDevice( useDefaultDevice, useHardwareRendering,
-			s_renderingWindow, useHardwareVertexProcessing, &presentationParameters, &s_direct3dDevice );
+			s_renderingWindow, useHardwareVertexProcessing, &presentationParameters, &eae6320::Graphics:: s_direct3dDevice );
 		if ( SUCCEEDED( result ) )
 		{
 			return true;
@@ -319,8 +330,8 @@ namespace
 			// Place the index buffer into memory that Direct3D thinks is the most appropriate
 			const D3DPOOL useDefaultPool = D3DPOOL_DEFAULT;
 			HANDLE* notUsed = NULL;
-			const HRESULT result = s_direct3dDevice->CreateIndexBuffer( bufferSize, usage, format, useDefaultPool,
-				&s_indexBuffer, notUsed );
+			const HRESULT result = eae6320::Graphics::s_direct3dDevice->CreateIndexBuffer( bufferSize, usage, format, useDefaultPool,
+				&sMesh.s_indexBuffer, notUsed );
 			if ( FAILED( result ) )
 			{
 				eae6320::UserOutput::Print( "Direct3D failed to create an index buffer" );
@@ -334,7 +345,7 @@ namespace
 			{
 				const unsigned int lockEntireBuffer = 0;
 				const DWORD useDefaultLockingBehavior = 0;
-				const HRESULT result = s_indexBuffer->Lock( lockEntireBuffer, lockEntireBuffer,
+				const HRESULT result = sMesh.s_indexBuffer->Lock( lockEntireBuffer, lockEntireBuffer,
 					reinterpret_cast<void**>( &indexData ), useDefaultLockingBehavior );
 				if ( FAILED( result ) )
 				{
@@ -366,7 +377,7 @@ namespace
 			}
 			// The buffer must be "unlocked" before it can be used
 			{
-				const HRESULT result = s_indexBuffer->Unlock();
+				const HRESULT result = sMesh.s_indexBuffer->Unlock();
 				if ( FAILED( result ) )
 				{
 					eae6320::UserOutput::Print( "Direct3D failed to unlock the index buffer" );
@@ -434,10 +445,10 @@ namespace
 				// The following marker signals the end of the vertex declaration
 				D3DDECL_END()
 			};
-			HRESULT result = s_direct3dDevice->CreateVertexDeclaration( vertexElements, &s_vertexDeclaration );
+			HRESULT result = eae6320::Graphics::s_direct3dDevice->CreateVertexDeclaration( vertexElements, &sMesh.s_vertexDeclaration );
 			if ( SUCCEEDED( result ) )
 			{
-				result = s_direct3dDevice->SetVertexDeclaration( s_vertexDeclaration );
+				result = eae6320::Graphics::s_direct3dDevice->SetVertexDeclaration( sMesh.s_vertexDeclaration );
 				if ( FAILED( result ) )
 				{
 					eae6320::UserOutput::Print( "Direct3D failed to set the vertex declaration" );
@@ -461,8 +472,8 @@ namespace
 			// Place the vertex buffer into memory that Direct3D thinks is the most appropriate
 			const D3DPOOL useDefaultPool = D3DPOOL_DEFAULT;
 			HANDLE* const notUsed = NULL;
-			const HRESULT result = s_direct3dDevice->CreateVertexBuffer( bufferSize, usage, useSeparateVertexDeclaration, useDefaultPool,
-				&s_vertexBuffer, notUsed );
+			const HRESULT result = eae6320::Graphics::s_direct3dDevice->CreateVertexBuffer( bufferSize, usage, useSeparateVertexDeclaration, useDefaultPool,
+				&sMesh.s_vertexBuffer, notUsed );
 			if ( FAILED( result ) )
 			{
 				eae6320::UserOutput::Print( "Direct3D failed to create a vertex buffer" );
@@ -476,7 +487,7 @@ namespace
 			{
 				const unsigned int lockEntireBuffer = 0;
 				const DWORD useDefaultLockingBehavior = 0;
-				const HRESULT result = s_vertexBuffer->Lock( lockEntireBuffer, lockEntireBuffer,
+				const HRESULT result = sMesh.s_vertexBuffer->Lock( lockEntireBuffer, lockEntireBuffer,
 					reinterpret_cast<void**>( &vertexData ), useDefaultLockingBehavior );
 				if ( FAILED( result ) )
 				{
@@ -539,7 +550,7 @@ namespace
 			}
 			// The buffer must be "unlocked" before it can be used
 			{
-				const HRESULT result = s_vertexBuffer->Unlock();
+				const HRESULT result = sMesh.s_vertexBuffer->Unlock();
 				if ( FAILED( result ) )
 				{
 					eae6320::UserOutput::Print( "Direct3D failed to unlock the vertex buffer" );
@@ -554,7 +565,7 @@ namespace
 	HRESULT GetVertexProcessingUsage( DWORD& o_usage )
 	{
 		D3DDEVICE_CREATION_PARAMETERS deviceCreationParameters;
-		const HRESULT result = s_direct3dDevice->GetCreationParameters( &deviceCreationParameters );
+		const HRESULT result = eae6320::Graphics::s_direct3dDevice->GetCreationParameters( &deviceCreationParameters );
 		if ( SUCCEEDED( result ) )
 		{
 			DWORD vertexProcessingType = deviceCreationParameters.BehaviorFlags &
@@ -612,7 +623,7 @@ namespace
 		// Create the fragment shader object
 		bool wereThereErrors = false;
 		{
-			HRESULT result = s_direct3dDevice->CreatePixelShader( reinterpret_cast<DWORD*>( compiledShader->GetBufferPointer() ),
+			HRESULT result = eae6320::Graphics::s_direct3dDevice->CreatePixelShader( reinterpret_cast<DWORD*>( compiledShader->GetBufferPointer() ),
 				&s_fragmentShader );
 			if ( FAILED( result ) )
 			{
@@ -668,7 +679,7 @@ namespace
 		// Create the vertex shader object
 		bool wereThereErrors = false;
 		{
-			HRESULT result = s_direct3dDevice->CreateVertexShader( reinterpret_cast<DWORD*>( compiledShader->GetBufferPointer() ),
+			HRESULT result = eae6320::Graphics::s_direct3dDevice->CreateVertexShader( reinterpret_cast<DWORD*>( compiledShader->GetBufferPointer() ),
 				&s_vertexShader );
 			if ( FAILED( result ) )
 			{

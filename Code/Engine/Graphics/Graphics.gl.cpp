@@ -37,8 +37,8 @@ namespace
 	};
 
 	// A vertex array encapsulates both the vertex and index data as well as the vertex format
-	GLuint s_vertexArrayId = 0;
-
+	//GLuint s_vertexArrayId = 0;
+	eae6320::Graphics::Mesh sMesh;
 	// OpenGL encapsulates a matching vertex shader and fragment shader into what it calls a "program".
 
 	// A vertex shader is a program that operates on vertices.
@@ -149,11 +149,11 @@ void eae6320::Graphics::Render()
 		}
 		// Bind a specific vertex buffer to the device as a data source
 		{
-			glBindVertexArray( s_vertexArrayId );
+			glBindVertexArray(sMesh.s_vertexArrayId );
 			assert( glGetError() == GL_NO_ERROR );
 		}
 		// Render objects from the current streams
-		{
+		/*{
 			// We are using triangles as the "primitive" type,
 			// and we have defined the vertex buffer as a triangle list
 			// (meaning that every triangle is defined by three vertices)
@@ -169,7 +169,9 @@ void eae6320::Graphics::Render()
 			const GLsizei vertexCountToRender = primitiveCountToRender * vertexCountPerTriangle;
 			glDrawElements( mode, vertexCountToRender, indexType, offset );
 			assert( glGetError() == GL_NO_ERROR );
-		}
+		}*/
+
+		eae6320::Graphics::DrawMesh(sMesh, sizeof(sVertex) );
 	}
 
 	// Everything has been drawn to the "back buffer", which is just an image in memory.
@@ -200,10 +202,10 @@ bool eae6320::Graphics::ShutDown()
 			}
 			s_programId = 0;
 		}
-		if ( s_vertexArrayId != 0 )
+		if ( sMesh.s_vertexArrayId != 0 )
 		{
 			const GLsizei arrayCount = 1;
-			glDeleteVertexArrays( arrayCount, &s_vertexArrayId );
+			glDeleteVertexArrays( arrayCount, &sMesh.s_vertexArrayId );
 			const GLenum errorCode = glGetError();
 			if ( errorCode != GL_NO_ERROR )
 			{
@@ -212,7 +214,7 @@ bool eae6320::Graphics::ShutDown()
 					reinterpret_cast<const char*>( gluErrorString( errorCode ) );
 				UserOutput::Print( errorMessage.str() );
 			}
-			s_vertexArrayId = 0;
+			sMesh.s_vertexArrayId = 0;
 		}
 
 		if ( wglMakeCurrent( s_deviceContext, NULL ) != FALSE )
@@ -435,11 +437,11 @@ namespace
 		// Create a vertex array object and make it active
 		{
 			const GLsizei arrayCount = 1;
-			glGenVertexArrays( arrayCount, &s_vertexArrayId );
+			glGenVertexArrays( arrayCount, &sMesh.s_vertexArrayId );
 			const GLenum errorCode = glGetError();
 			if ( errorCode == GL_NO_ERROR )
 			{
-				glBindVertexArray( s_vertexArrayId );
+				glBindVertexArray( sMesh.s_vertexArrayId );
 				const GLenum errorCode = glGetError();
 				if ( errorCode != GL_NO_ERROR )
 				{
@@ -726,7 +728,7 @@ namespace
 
 		// Delete the buffer object
 		// (the vertex array will hold a reference to it)
-		if ( s_vertexArrayId != 0 )
+		if ( sMesh.s_vertexArrayId != 0 )
 		{
 			// Unbind the vertex array
 			// (this must be done before deleting the vertex buffer)

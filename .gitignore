@@ -5,3 +5,5 @@ tapia_aqeel.sdf
 temp/
 Code/Tools/AssetBuilder/AssetBuilder.vcxproj.user
 Code/External/Lua/5.2.3/README
+Code/Engine/Graphics/GraphicsOld.d3d.cpp
+Code/Engine/Graphics/GraphicsOld.gl.cpp

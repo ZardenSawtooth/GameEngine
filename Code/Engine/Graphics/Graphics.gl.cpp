@@ -2,7 +2,7 @@
 //=============
 
 #include "Graphics.h"
-
+#include "Mesh.h"
 #include <cassert>
 #include <cstdint>
 #include <cstdlib>

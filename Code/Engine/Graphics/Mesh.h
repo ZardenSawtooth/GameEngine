@@ -21,7 +21,8 @@ namespace eae6320
 {
 	namespace Graphics
 	{
-		IDirect3DDevice9* s_direct3dDevice = NULL;
+		
+		//IDirect3DDevice9* s_direct3dDevice = NULL;
 
 		struct  Mesh
 		{

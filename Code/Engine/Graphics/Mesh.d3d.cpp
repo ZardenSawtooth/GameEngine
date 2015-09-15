@@ -2,6 +2,7 @@
 //=============
 
 #include "Mesh.h"
+#include "Graphics.h"
 #include <cassert>
 #include <cstdint>
 #include <d3d9.h>
@@ -13,7 +14,7 @@ namespace eae6320
 {
 	void Graphics::DrawMesh(const Mesh &i_Mesh, const unsigned int i_sizeOfsVertex) {
 
-		//extern IDirect3DDevice9* s_direct3dDevice;
+		IDirect3DDevice9* s_direct3dDevice = eae6320::Graphics::getDirect3DDevice();
 		// Bind a specific vertex buffer to the device as a data source
 		{
 			// There can be multiple streams of data feeding the display adaptor at the same time

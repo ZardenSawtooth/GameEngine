@@ -2,7 +2,7 @@
 //=============
 
 #include "Graphics.h"
-
+#include "Mesh.h"
 #include <cassert>
 #include <cstdint>
 #include <d3d9.h>
@@ -17,6 +17,7 @@
 
 namespace
 {
+	IDirect3DDevice9* s_direct3dDevice = NULL;
 	HWND s_renderingWindow = NULL;
 	IDirect3D9* s_direct3dInterface = NULL;
 	
@@ -64,6 +65,10 @@ namespace
 
 // Helper Function Declarations
 //=============================
+
+IDirect3DDevice9* eae6320::Graphics::getDirect3DDevice() {
+	return s_direct3dDevice;
+}
 
 namespace
 {
@@ -290,7 +295,7 @@ namespace
 			presentationParameters.PresentationInterval = D3DPRESENT_INTERVAL_DEFAULT;
 		}
 		HRESULT result = s_direct3dInterface->CreateDevice( useDefaultDevice, useHardwareRendering,
-			s_renderingWindow, useHardwareVertexProcessing, &presentationParameters, &eae6320::Graphics:: s_direct3dDevice );
+			s_renderingWindow, useHardwareVertexProcessing, &presentationParameters, &s_direct3dDevice );
 		if ( SUCCEEDED( result ) )
 		{
 			return true;
@@ -330,7 +335,7 @@ namespace
 			// Place the index buffer into memory that Direct3D thinks is the most appropriate
 			const D3DPOOL useDefaultPool = D3DPOOL_DEFAULT;
 			HANDLE* notUsed = NULL;
-			const HRESULT result = eae6320::Graphics::s_direct3dDevice->CreateIndexBuffer( bufferSize, usage, format, useDefaultPool,
+			const HRESULT result = s_direct3dDevice->CreateIndexBuffer( bufferSize, usage, format, useDefaultPool,
 				&sMesh.s_indexBuffer, notUsed );
 			if ( FAILED( result ) )
 			{
@@ -445,10 +450,10 @@ namespace
 				// The following marker signals the end of the vertex declaration
 				D3DDECL_END()
 			};
-			HRESULT result = eae6320::Graphics::s_direct3dDevice->CreateVertexDeclaration( vertexElements, &sMesh.s_vertexDeclaration );
+			HRESULT result = s_direct3dDevice->CreateVertexDeclaration( vertexElements, &sMesh.s_vertexDeclaration );
 			if ( SUCCEEDED( result ) )
 			{
-				result = eae6320::Graphics::s_direct3dDevice->SetVertexDeclaration( sMesh.s_vertexDeclaration );
+				result = s_direct3dDevice->SetVertexDeclaration( sMesh.s_vertexDeclaration );
 				if ( FAILED( result ) )
 				{
 					eae6320::UserOutput::Print( "Direct3D failed to set the vertex declaration" );
@@ -472,7 +477,7 @@ namespace
 			// Place the vertex buffer into memory that Direct3D thinks is the most appropriate
 			const D3DPOOL useDefaultPool = D3DPOOL_DEFAULT;
 			HANDLE* const notUsed = NULL;
-			const HRESULT result = eae6320::Graphics::s_direct3dDevice->CreateVertexBuffer( bufferSize, usage, useSeparateVertexDeclaration, useDefaultPool,
+			const HRESULT result = s_direct3dDevice->CreateVertexBuffer( bufferSize, usage, useSeparateVertexDeclaration, useDefaultPool,
 				&sMesh.s_vertexBuffer, notUsed );
 			if ( FAILED( result ) )
 			{
@@ -565,7 +570,7 @@ namespace
 	HRESULT GetVertexProcessingUsage( DWORD& o_usage )
 	{
 		D3DDEVICE_CREATION_PARAMETERS deviceCreationParameters;
-		const HRESULT result = eae6320::Graphics::s_direct3dDevice->GetCreationParameters( &deviceCreationParameters );
+		const HRESULT result = s_direct3dDevice->GetCreationParameters( &deviceCreationParameters );
 		if ( SUCCEEDED( result ) )
 		{
 			DWORD vertexProcessingType = deviceCreationParameters.BehaviorFlags &
@@ -623,7 +628,7 @@ namespace
 		// Create the fragment shader object
 		bool wereThereErrors = false;
 		{
-			HRESULT result = eae6320::Graphics::s_direct3dDevice->CreatePixelShader( reinterpret_cast<DWORD*>( compiledShader->GetBufferPointer() ),
+			HRESULT result = s_direct3dDevice->CreatePixelShader( reinterpret_cast<DWORD*>( compiledShader->GetBufferPointer() ),
 				&s_fragmentShader );
 			if ( FAILED( result ) )
 			{
@@ -679,7 +684,7 @@ namespace
 		// Create the vertex shader object
 		bool wereThereErrors = false;
 		{
-			HRESULT result = eae6320::Graphics::s_direct3dDevice->CreateVertexShader( reinterpret_cast<DWORD*>( compiledShader->GetBufferPointer() ),
+			HRESULT result = s_direct3dDevice->CreateVertexShader( reinterpret_cast<DWORD*>( compiledShader->GetBufferPointer() ),
 				&s_vertexShader );
 			if ( FAILED( result ) )
 			{

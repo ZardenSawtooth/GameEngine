@@ -9,7 +9,8 @@
 //=============
 
 #include "../Windows/Includes.h"
-#include "Mesh.h"
+#include <d3d9.h>
+
 
 // Interface
 //==========
@@ -21,6 +22,8 @@ namespace eae6320
 		bool Initialize( const HWND i_renderingWindow );
 		void Render();
 		bool ShutDown();
+
+		IDirect3DDevice9* getDirect3DDevice();
 	}
 }
 

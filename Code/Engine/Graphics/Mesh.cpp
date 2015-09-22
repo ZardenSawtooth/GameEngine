@@ -54,11 +54,11 @@ namespace eae6320 {
 		//delete vertexdata and indexdata pointers
 		if (vertexData != NULL)
 		{
-			//delete vertexData;
+			delete vertexData;
 		}
 		if (indexData != NULL) 
 		{
-			//delete indexData;
+			delete indexData;
 		}
 
 		vertexData = NULL;
@@ -425,7 +425,7 @@ namespace
 			lua_pushinteger(&io_luaState, 1);
 			lua_gettable(&io_luaState, -2);
 
-			indexData[++indexCount] = lua_tointeger(&io_luaState, -1);
+			indexData[++indexCount] = static_cast<uint32_t> (  lua_tointeger(&io_luaState, -1) );
 
 			//pop first value
 			lua_pop(&io_luaState, 1);
@@ -434,7 +434,7 @@ namespace
 			lua_pushinteger(&io_luaState, 3);
 			lua_gettable(&io_luaState, -2);
 
-			indexData[++indexCount] = lua_tointeger(&io_luaState, -1);
+			indexData[++indexCount] = static_cast<uint32_t> ( lua_tointeger(&io_luaState, -1) );
 
 			//pop second value
 			lua_pop(&io_luaState, 1);
@@ -443,7 +443,7 @@ namespace
 			lua_pushinteger(&io_luaState, 2);
 			lua_gettable(&io_luaState, -2);
 
-			indexData[++indexCount] = lua_tointeger(&io_luaState, -1);
+			indexData[++indexCount] = static_cast<uint32_t>( lua_tointeger(&io_luaState, -1) );
 
 			//pop third value
 			lua_pop(&io_luaState, 1);
@@ -454,7 +454,7 @@ namespace
 			lua_pushinteger(&io_luaState, 1);
 			lua_gettable(&io_luaState, -2);
 
-			indexData[++indexCount] = lua_tointeger(&io_luaState, -1);
+			indexData[++indexCount] = static_cast<uint32_t> (lua_tointeger(&io_luaState, -1) );
 
 			//pop first value
 			lua_pop(&io_luaState, 1);
@@ -463,7 +463,7 @@ namespace
 			lua_pushinteger(&io_luaState, 2);
 			lua_gettable(&io_luaState, -2);
 
-			indexData[++indexCount] = lua_tointeger(&io_luaState, -1);
+			indexData[++indexCount] = static_cast<uint32_t>( lua_tointeger(&io_luaState, -1));
 
 			//pop second value
 			lua_pop(&io_luaState, 1);
@@ -472,7 +472,7 @@ namespace
 			lua_pushinteger(&io_luaState, 3);
 			lua_gettable(&io_luaState, -2);
 
-			indexData[++indexCount] = lua_tointeger(&io_luaState, -1);
+			indexData[++indexCount] = static_cast<uint32_t> ( lua_tointeger(&io_luaState, -1) );
 
 			//pop third value
 			lua_pop(&io_luaState, 1);

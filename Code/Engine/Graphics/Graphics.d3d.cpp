@@ -8,7 +8,7 @@
 #include <d3d9.h>
 #include <d3dx9shader.h>
 #include <sstream>
-#include "../UserOutput/UserOutput.h"
+
 
 // Static Data Initialization
 //===========================
@@ -23,7 +23,7 @@ namespace
 	
 	
 	// This struct determines the layout of the data that the CPU will send to the GPU
-	struct sVertex
+	/*struct sVertex
 	{
 		// POSITION
 		// 2 floats == 8 bytes
@@ -33,7 +33,7 @@ namespace
 		// 4 uint8_ts == 4 bytes
 		// Offset = 8
 		uint8_t b, g, r, a;	// Direct3D expects the byte layout of a color to be different from what you might expect
-	};
+	};*/
 	//IDirect3DVertexDeclaration9* s_vertexDeclaration = NULL;
 	eae6320::Graphics::Mesh sMesh;
 	// The vertex buffer holds the data for each vertex
@@ -73,10 +73,10 @@ IDirect3DDevice9* eae6320::Graphics::getDirect3DDevice() {
 namespace
 {
 	bool CreateDevice();
-	bool CreateIndexBuffer();
+	//bool CreateIndexBuffer();
 	bool CreateInterface();
-	bool CreateVertexBuffer();
-	HRESULT GetVertexProcessingUsage( DWORD& o_usage );
+//	bool CreateVertexBuffer();
+//	HRESULT GetVertexProcessingUsage( DWORD& o_usage );
 	bool LoadFragmentShader();
 	bool LoadVertexShader();
 }
@@ -99,15 +99,20 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 		goto OnError;
 	}
 
+
+	if (!eae6320::Graphics::LoadMesh(sMesh))
+	{
+		goto OnError;
+	}
 	// Initialize the graphics objects
-	if ( !CreateVertexBuffer() )
+	/*if ( !CreateVertexBuffer() )
 	{
 		goto OnError;
 	}
 	if ( !CreateIndexBuffer() )
 	{
 		goto OnError;
-	}
+	}*/
 	if ( !LoadVertexShader() )
 	{
 		goto OnError;
@@ -196,7 +201,7 @@ void eae6320::Graphics::Render()
 					indexOfFirstIndexToUse, primitiveCountToRender );
 				assert( SUCCEEDED( result ) );
 			}*/
-			eae6320::Graphics::DrawMesh(sMesh, sizeof(sVertex));
+			eae6320::Graphics::DrawMesh(sMesh);
 			
 			
 		}
@@ -307,7 +312,7 @@ namespace
 		}
 	}
 
-	bool CreateIndexBuffer()
+	/*bool CreateIndexBuffer()
 	{
 		// The usage tells Direct3D how this vertex buffer will be used
 		DWORD usage = 0;
@@ -393,6 +398,7 @@ namespace
 
 		return true;
 	}
+	*/
 
 	bool CreateInterface()
 	{
@@ -409,7 +415,7 @@ namespace
 			return false;
 		}
 	}
-
+	/*
 	bool CreateVertexBuffer()
 	{
 		// The usage tells Direct3D how this vertex buffer will be used
@@ -566,7 +572,9 @@ namespace
 
 		return true;
 	}
+	*/
 
+	/*
 	HRESULT GetVertexProcessingUsage( DWORD& o_usage )
 	{
 		D3DDEVICE_CREATION_PARAMETERS deviceCreationParameters;
@@ -583,21 +591,27 @@ namespace
 		}
 		return result;
 	}
+	*/
 
 	bool LoadFragmentShader()
 	{
 		// Load the source code from file and compile it
 		ID3DXBuffer* compiledShader;
 		{
-			const char* sourceCodeFileName = "data/fragmentShader.hlsl";
-			const D3DXMACRO* noMacros = NULL;
+			const char* sourceCodeFileName = "data/fragment.shader";
+			//const D3DXMACRO* noMacros = NULL;
+			const D3DXMACRO defines[] =
+			{
+				{ "EAE6320_PLATFORM_D3D", "1" },
+				{ NULL, NULL }
+			};
 			ID3DXInclude* noIncludes = NULL;
 			const char* entryPoint = "main";
 			const char* profile = "ps_3_0";
 			const DWORD noFlags = 0;
 			ID3DXBuffer* errorMessages = NULL;
 			ID3DXConstantTable** noConstants = NULL;
-			HRESULT result = D3DXCompileShaderFromFile( sourceCodeFileName, noMacros, noIncludes, entryPoint, profile, noFlags,
+			HRESULT result = D3DXCompileShaderFromFile( sourceCodeFileName, defines, noIncludes, entryPoint, profile, noFlags,
 				&compiledShader, &errorMessages, noConstants );
 			if ( SUCCEEDED( result ) )
 			{
@@ -645,15 +659,20 @@ namespace
 		// Load the source code from file and compile it
 		ID3DXBuffer* compiledShader;
 		{
-			const char* sourceCodeFileName = "data/vertexShader.hlsl";
-			const D3DXMACRO* noMacros = NULL;
+			const char* sourceCodeFileName = "data/vertex.shader";
+			const D3DXMACRO defines[] =
+			{
+				{ "EAE6320_PLATFORM_D3D", "1" },
+				{ NULL, NULL }
+			};
+			//const D3DXMACRO* noMacros = NULL;
 			ID3DXInclude* noIncludes = NULL;
 			const char* entryPoint = "main";
 			const char* profile = "vs_3_0";
 			const DWORD noFlags = 0;
 			ID3DXBuffer* errorMessages = NULL;
 			ID3DXConstantTable** noConstants = NULL;
-			HRESULT result = D3DXCompileShaderFromFile( sourceCodeFileName, noMacros, noIncludes, entryPoint, profile, noFlags,
+			HRESULT result = D3DXCompileShaderFromFile( sourceCodeFileName, defines, noIncludes, entryPoint, profile, noFlags,
 				&compiledShader, &errorMessages, noConstants );
 			if ( SUCCEEDED( result ) )
 			{

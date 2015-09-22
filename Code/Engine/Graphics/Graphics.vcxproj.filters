@@ -36,6 +36,9 @@
     <ClCompile Include="Mesh.d3d.cpp">
       <Filter>Source Files\Direct3D</Filter>
     </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics.h">

@@ -1,16 +1,17 @@
 #pragma once
-#include <WinBase.h>
+#ifndef _USEROUTPUT_H
+#define _USEROUTPUT_H
+
+#include "../Windows/Includes.h"
 #include <string>
 
 namespace eae6320 {
 
 	namespace UserOutput {
 
-		void Print( std::string i_String) {
-
-			OutputDebugString(i_String.c_str());
-		}
-
+		void Print( std::string i_String);
 	}
 
 }
+
+#endif //USEROUTPUT_h

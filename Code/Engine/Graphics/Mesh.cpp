@@ -46,7 +46,7 @@ namespace eae6320 {
 		Graphics::CreateVertexBuffer(vertexData, i_Mesh);
 		Graphics::CreateIndexBuffer(indexData, i_Mesh);
 #elif defined( EAE6320_PLATFORM_GL )
-		Graphics::CreateVertexArray(i_Mesh);
+		Graphics::CreateVertexArray(i_Mesh, vertexData, indexData);
 #endif
 		
 

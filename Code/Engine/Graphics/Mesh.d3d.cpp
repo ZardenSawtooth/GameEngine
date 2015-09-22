@@ -137,6 +137,7 @@ namespace eae6320
 			// Place the vertex buffer into memory that Direct3D thinks is the most appropriate
 			const D3DPOOL useDefaultPool = D3DPOOL_DEFAULT;
 			HANDLE* const notUsed = NULL;
+			
 			const HRESULT result = s_direct3dDevice->CreateVertexBuffer(bufferSize, usage, useSeparateVertexDeclaration, useDefaultPool,
 				&i_Mesh.s_vertexBuffer, notUsed);
 			if (FAILED(result))
@@ -162,14 +163,14 @@ namespace eae6320
 				}
 			}
 
-			memcpy(vertexData, i_vertexData, sizeof(sVertex) * 4);
+			memcpy(vertexData, i_vertexData, sizeof(i_vertexData[0]) * 4);
 			// Fill the buffer
 			{
 				// You will need to fill in two pieces of information for each vertex:
 				//	* 2 floats for the POSITION
 				//	* 4 uint8_ts for the COLOR
 
-				// The floats for POSITION are for the X and Y coordinates, like in Assignment 02.
+				// The floats for POSITION are for t0he X and Y coordinates, like in Assignment 02.
 				// The difference this time is that there should be fewer (because we are sharing data).
 
 				// The uint8_ts for COLOR are "RGBA", where "RGB" stands for "Red Green Blue" and "A" for "Alpha".
@@ -283,7 +284,7 @@ namespace eae6320
 					return false;
 				}
 			}
-			memcpy(indexData, i_indexData, sizeof(uint8_t) * 6);
+			memcpy(indexData, i_indexData, sizeof(uint32_t) * 6);
 			// Fill the buffer
 			{
 				// EAE6320_TODO:

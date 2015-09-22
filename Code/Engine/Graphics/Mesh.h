@@ -53,13 +53,15 @@ namespace eae6320
 
 		#if defined( EAE6320_PLATFORM_D3D )
 			HRESULT GetVertexProcessingUsage(DWORD& o_usage);
+			bool CreateVertexBuffer(sVertex* i_vertexData, Mesh &i_Mesh);
+			bool CreateIndexBuffer(uint32_t * i_indexData, Mesh &i_Mesh);
+
 		#elif defined( EAE6320_PLATFORM_GL )
-			bool CreateVertexArray(Mesh &i_Mesh);
+
+			bool CreateVertexArray(Mesh &i_Mesh, sVertex* i_vertexData, uint32_t * i_indexData);
 		#endif
 
-		bool CreateVertexBuffer( sVertex* i_vertexData, Mesh &i_Mesh);
-		bool CreateIndexBuffer( uint32_t * i_indexData,  Mesh &i_Mesh);
-
+		
 		
 		void DrawMesh(const Mesh &i_Mesh );
 

@@ -33,21 +33,21 @@ namespace eae6320
 		}
 	}
 
-	bool Graphics::CreateVertexArray(Mesh &i_Mesh)
+	bool Graphics::CreateVertexArray(Mesh &i_Mesh, sVertex* i_vertexData, uint32_t * i_indexData)
 	{
 		bool wereThereErrors = false;
 		GLuint vertexBufferId = 0;
 		GLuint indexBufferId = 0;
-		Mesh sMesh = i_Mesh;
+		
 
 		// Create a vertex array object and make it active
 		{
 			const GLsizei arrayCount = 1;
-			glGenVertexArrays(arrayCount, &sMesh.s_vertexArrayId);
+			glGenVertexArrays(arrayCount, &i_Mesh.s_vertexArrayId);
 			const GLenum errorCode = glGetError();
 			if (errorCode == GL_NO_ERROR)
 			{
-				glBindVertexArray(sMesh.s_vertexArrayId);
+				glBindVertexArray(i_Mesh.s_vertexArrayId);
 				const GLenum errorCode = glGetError();
 				if (errorCode != GL_NO_ERROR)
 				{
@@ -64,7 +64,7 @@ namespace eae6320
 				wereThereErrors = true;
 				std::stringstream errorMessage;
 				errorMessage << "OpenGL failed to get an unused vertex array ID: " <<
-					reinterpret_cast<const char*>(gluErrorString(errorCode));
+					reinterpret_cast<const char*>(gluErrorString(errorCode));  
 				eae6320::UserOutput::Print(errorMessage.str());
 				goto OnExit;
 			}
@@ -122,7 +122,10 @@ namespace eae6320
 				// To make pure red you would use the max for R and nothing for G and B, so (1, 0, 0).
 				// Experiment with other values to see what happens!
 
-				vertexData[0].x = 0.0f;
+
+				memcpy(vertexData, i_vertexData, sizeof(sVertex) * 4);
+
+			/*	vertexData[0].x = 0.0f;
 				vertexData[0].y = 0.0f;
 				// Red
 				vertexData[0].r = 255;
@@ -152,7 +155,7 @@ namespace eae6320
 				vertexData[3].r = 255;
 				vertexData[3].g = 0;
 				vertexData[3].b = 0;
-				vertexData[3].a = 255;
+				vertexData[3].a = 255;*/
 
 				//vertexData[1].x = EAE6320;
 				// etc.
@@ -303,15 +306,17 @@ namespace eae6320
 				// (also remember to maintain the correct handedness for the triangle winding order).
 
 				// Triangle 0
-				indexData[0] = 0;
-				indexData[1] = 1;
-				indexData[2] = 2;
+				//indexData[0] = 0;
+				//indexData[1] = 1;
+				//indexData[2] = 2;
 
-				// Triangle 1
-				indexData[3] = 0;
-				indexData[4] = 2;
-				indexData[5] = 3;
+				//// Triangle 1
+				//indexData[3] = 0;
+				//indexData[4] = 2;
+				//indexData[5] = 3;
 				// etc...
+
+				memcpy(indexData, i_indexData, sizeof(uint32_t) * 6);
 			}
 
 			const GLsizeiptr bufferSize = triangleCount * vertexCountPerTriangle * sizeof(uint32_t);
@@ -334,7 +339,7 @@ namespace eae6320
 
 		// Delete the buffer object
 		// (the vertex array will hold a reference to it)
-		if (sMesh.s_vertexArrayId != 0)
+		if (i_Mesh.s_vertexArrayId != 0)
 		{
 			// Unbind the vertex array
 			// (this must be done before deleting the vertex buffer)

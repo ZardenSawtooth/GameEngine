@@ -173,7 +173,7 @@ namespace eae6320
 				eae6320::UserOutput::Print(errorMessage.str());
 				goto OnExit;
 			}
-		}
+		}  
 		// Initialize the vertex format
 		{
 			const GLsizei stride = sizeof(sVertex);

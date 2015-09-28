@@ -65,7 +65,7 @@ namespace eae6320
 		
 		void DrawMesh(const Mesh &i_Mesh );
 
-		bool LoadMesh( Mesh &i_Mesh);
+		bool LoadMesh( Mesh &i_Mesh, const char * i_path);
 		
 	}
 }

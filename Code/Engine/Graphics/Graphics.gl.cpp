@@ -39,6 +39,7 @@ namespace
 	// A vertex array encapsulates both the vertex and index data as well as the vertex format
 	//GLuint s_vertexArrayId = 0;
 	eae6320::Graphics::Mesh sMesh;
+	eae6320::Graphics::Mesh sMeshTriangle;
 	// OpenGL encapsulates a matching vertex shader and fragment shader into what it calls a "program".
 
 	// A vertex shader is a program that operates on vertices.
@@ -112,7 +113,11 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 		goto OnError;
 	}*/
 
-	if (!eae6320::Graphics::LoadMesh(sMesh))
+	if (!eae6320::Graphics::LoadMesh(sMesh, "data/square.mesh"))
+	{
+		goto OnError;
+	}
+	if (!eae6320::Graphics::LoadMesh(sMeshTriangle, "data/triangle.mesh"))
 	{
 		goto OnError;
 	}
@@ -159,6 +164,7 @@ void eae6320::Graphics::Render()
 			glBindVertexArray(sMesh.s_vertexArrayId );
 			assert( glGetError() == GL_NO_ERROR );
 		}
+		
 		// Render objects from the current streams
 		/*{
 			// We are using triangles as the "primitive" type,
@@ -178,7 +184,15 @@ void eae6320::Graphics::Render()
 			assert( glGetError() == GL_NO_ERROR );
 		}*/
 
-		eae6320::Graphics::DrawMesh(sMesh );
+		
+		eae6320::Graphics::DrawMesh(sMesh);
+		
+		{
+			glBindVertexArray(sMeshTriangle.s_vertexArrayId);
+			assert(glGetError() == GL_NO_ERROR);
+		}
+		eae6320::Graphics::DrawMesh(sMeshTriangle);
+		
 	}
 
 	// Everything has been drawn to the "back buffer", which is just an image in memory.
@@ -222,6 +236,20 @@ bool eae6320::Graphics::ShutDown()
 				UserOutput::Print( errorMessage.str() );
 			}
 			sMesh.s_vertexArrayId = 0;
+		}
+		if (sMeshTriangle.s_vertexArrayId != 0)
+		{
+			const GLsizei arrayCount = 1;
+			glDeleteVertexArrays(arrayCount, &sMeshTriangle.s_vertexArrayId);
+			const GLenum errorCode = glGetError();
+			if (errorCode != GL_NO_ERROR)
+			{
+				std::stringstream errorMessage;
+				errorMessage << "OpenGL failed to delete the vertex array: " <<
+					reinterpret_cast<const char*>(gluErrorString(errorCode));
+				UserOutput::Print(errorMessage.str());
+			}
+			sMeshTriangle.s_vertexArrayId = 0;
 		}
 
 		if ( wglMakeCurrent( s_deviceContext, NULL ) != FALSE )

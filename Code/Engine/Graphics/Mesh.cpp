@@ -31,11 +31,11 @@ namespace eae6320 {
 
 	
 
-	bool Graphics::LoadMesh( Mesh &i_Mesh) {
+	bool Graphics::LoadMesh( Mesh &i_Mesh, const char * i_path) {
 		
 	
 
-		const char* const path = "data/square.mesh";
+		const char* const path = i_path;
 		if (!LoadAsset(path))
 		{
 			return false;

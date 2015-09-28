@@ -36,6 +36,7 @@ namespace
 	};*/
 	//IDirect3DVertexDeclaration9* s_vertexDeclaration = NULL;
 	eae6320::Graphics::Mesh sMesh;
+	eae6320::Graphics::Mesh sMeshTriangle;
 	// The vertex buffer holds the data for each vertex
 	//IDirect3DVertexBuffer9* s_vertexBuffer = NULL;
 	
@@ -100,7 +101,11 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 	}
 
 
-	if (!eae6320::Graphics::LoadMesh(sMesh))
+	if (!eae6320::Graphics::LoadMesh(sMesh, "data/square.mesh"))
+	{
+		goto OnError;
+	}
+	if (!eae6320::Graphics::LoadMesh(sMeshTriangle, "data/triangle.mesh"))
 	{
 		goto OnError;
 	}
@@ -202,6 +207,7 @@ void eae6320::Graphics::Render()
 				assert( SUCCEEDED( result ) );
 			}*/
 			eae6320::Graphics::DrawMesh(sMesh);
+			eae6320::Graphics::DrawMesh(sMeshTriangle);
 			
 			
 		}
@@ -259,6 +265,24 @@ bool eae6320::Graphics::ShutDown()
 				s_direct3dDevice->SetVertexDeclaration( NULL );
 				sMesh.s_vertexDeclaration->Release();
 				sMesh.s_vertexDeclaration = NULL;
+			}
+
+			//for second triangle mesh
+			if (sMeshTriangle.s_vertexBuffer)
+			{
+				sMeshTriangle.s_vertexBuffer->Release();
+				sMeshTriangle.s_vertexBuffer = NULL;
+			}
+			if (sMeshTriangle.s_indexBuffer)
+			{
+				sMeshTriangle.s_indexBuffer->Release();
+				sMeshTriangle.s_indexBuffer = NULL;
+			}
+			if (sMeshTriangle.s_vertexDeclaration)
+			{
+				s_direct3dDevice->SetVertexDeclaration(NULL);
+				sMeshTriangle.s_vertexDeclaration->Release();
+				sMeshTriangle.s_vertexDeclaration = NULL;
 			}
 
 			s_direct3dDevice->Release();

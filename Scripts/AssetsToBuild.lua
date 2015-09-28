@@ -4,7 +4,7 @@ return
 	{
 		src = "",
 		tar = "",
-		tool = "GenericBuilder.exe",
+		tool = "MeshBuilder.exe",
 		assets =
 		{
 			"square.mesh",

@@ -16,7 +16,7 @@ This is an example builder program that just copies the source file to the targe
 
 namespace eae6320
 {
-	class cGenericBuilder : public cbBuilder
+	class cMeshBuilder : public cbBuilder
 	{
 		// Interface
 		//==========

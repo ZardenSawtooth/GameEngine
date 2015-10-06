@@ -61,10 +61,7 @@ namespace eae6320
 			bool CreateVertexArray(Mesh &i_Mesh, sVertex* i_vertexData, uint32_t * i_indexData);
 		#endif
 
-		
-		
 		void DrawMesh(const Mesh &i_Mesh );
-
 		bool LoadMesh( Mesh &i_Mesh, const char * i_path);
 		
 	}

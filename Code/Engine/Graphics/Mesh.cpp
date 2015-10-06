@@ -1,10 +1,10 @@
 #include "Mesh.h"
-#include "../../External/Lua/Includes.h"
 #include <iostream>
 #include <assert.h>
+#include <fstream>
 
 
-
+/*
 eae6320::Graphics::sVertex* vertexData = NULL;
 uint32_t* indexData = NULL;
 
@@ -26,20 +26,36 @@ namespace
 
 	bool LoadAsset(const char* const i_path);
 }
-
+*/
 namespace eae6320 {
-
 	
-
 	bool Graphics::LoadMesh( Mesh &i_Mesh, const char * i_path) {
-		
-	
-
-		const char* const path = i_path;
+		/*const char* const path = i_path;
 		if (!LoadAsset(path))
 		{
 			return false;
-		}
+		}*/
+		std::ifstream infile(i_path, std::ifstream::binary);
+
+		// get size of file
+		infile.seekg(0, infile.end);
+		long size = infile.tellg();
+		infile.seekg(0);
+
+		// allocate memory for file content
+		char* buffer = new char[size];
+
+		// read content of infile
+		infile.read(buffer, size);
+		char * currentPointer = buffer;
+		uint32_t vertexCount = *reinterpret_cast<uint32_t*>(currentPointer);
+		currentPointer += sizeof(uint32_t);
+		sVertex * vertexData = reinterpret_cast<sVertex*>(currentPointer);
+		currentPointer = currentPointer + (sizeof(sVertex) * vertexCount);
+		uint32_t indexCount = *reinterpret_cast<uint32_t*>(currentPointer);
+		currentPointer += sizeof(uint32_t);
+		uint32_t * indexData = reinterpret_cast<uint32_t *>(currentPointer);
+		
 
 #if defined( EAE6320_PLATFORM_D3D )
 		//create index and vertex buffers
@@ -48,27 +64,17 @@ namespace eae6320 {
 #elif defined( EAE6320_PLATFORM_GL )
 		Graphics::CreateVertexArray(i_Mesh, vertexData, indexData);
 #endif
-		
 
+		// release dynamically-allocated memory
+		delete[] buffer;
+		infile.close();
 
-		//delete vertexdata and indexdata pointers
-		if (vertexData != NULL)
-		{
-			delete vertexData;
-		}
-		if (indexData != NULL) 
-		{
-			delete indexData;
-		}
-
-		vertexData = NULL;
-		indexData = NULL;
 
 		return true;
 	}
 }
 
-
+/*
 
 namespace
 {
@@ -493,4 +499,4 @@ namespace
 
 		return true;
 	}
-}
+}*/

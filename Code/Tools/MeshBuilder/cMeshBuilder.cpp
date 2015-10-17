@@ -407,6 +407,30 @@ namespace
 		lua_pushinteger(&io_luaState, 1);
 		lua_gettable(&io_luaState, -2);
 
+#if defined( EAE6320_PLATFORM_D3D )
+
+		vertexData[i_index].b = static_cast<uint8_t> (255 * lua_tonumber(&io_luaState, -1));
+		lua_pop(&io_luaState, 1);
+
+		lua_pushinteger(&io_luaState, 2);
+		lua_gettable(&io_luaState, -2);
+
+		vertexData[i_index].g = static_cast<uint8_t> (255 * lua_tonumber(&io_luaState, -1));
+		lua_pop(&io_luaState, 1);
+
+		lua_pushinteger(&io_luaState, 3);
+		lua_gettable(&io_luaState, -2);
+
+		vertexData[i_index].r = static_cast<uint8_t> (255 * lua_tonumber(&io_luaState, -1));
+		lua_pop(&io_luaState, 1);
+
+		lua_pushinteger(&io_luaState, 4);
+		lua_gettable(&io_luaState, -2);
+
+		vertexData[i_index].a = static_cast<uint8_t> (255 * lua_tonumber(&io_luaState, -1));
+		lua_pop(&io_luaState, 1);
+#elif defined(EAE6320_PLATFORM_GL)
+
 		vertexData[i_index].r = static_cast<uint8_t> (255 * lua_tonumber(&io_luaState, -1));
 		lua_pop(&io_luaState, 1);
 
@@ -427,6 +451,11 @@ namespace
 
 		vertexData[i_index].a = static_cast<uint8_t> (255 * lua_tonumber(&io_luaState, -1));
 		lua_pop(&io_luaState, 1);
+
+
+#endif
+
+
 
 		return true;
 	}

@@ -35,6 +35,7 @@ namespace eae6320 {
 		{
 			return false;
 		}*/
+		//load file to read from
 		std::ifstream infile(i_path, std::ifstream::binary);
 
 		// get size of file

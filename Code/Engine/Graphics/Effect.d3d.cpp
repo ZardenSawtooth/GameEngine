@@ -7,6 +7,16 @@
 
 namespace eae6320 {
 
+	bool Graphics::SetDrawCallUniforms(const Effect &i_Effect, float * i_floatArray) {
+
+		//float  floatArray[] = {0.0, 0.0};
+		IDirect3DDevice9* direct3dDevice = eae6320::Graphics::getDirect3DDevice();
+
+		HRESULT result = i_Effect.vertexShaderConstantTable->SetFloatArray(direct3dDevice, i_Effect.handle , i_floatArray, 2);
+
+		return true;
+	}
+
 	void Graphics::SetEffect(const Effect &i_Effect) {
 
 		IDirect3DDevice9* s_direct3dDevice = eae6320::Graphics::getDirect3DDevice();
@@ -37,14 +47,18 @@ namespace eae6320 {
 			const char* profile = "ps_3_0";
 			const DWORD noFlags = 0;
 			ID3DXBuffer* errorMessages = NULL;
-			ID3DXConstantTable** noConstants = NULL;
+
+			ID3DXConstantTable* fragmentShaderConstantTable = NULL;
 			HRESULT result = D3DXCompileShaderFromFile(sourceCodeFileName, defines, noIncludes, entryPoint, profile, noFlags,
-				&compiledShader, &errorMessages, noConstants);
+				&compiledShader, &errorMessages, &fragmentShaderConstantTable);
+
+		//	D3DXHANDLE handle = fragmentShaderConstantTable->GetConstantByName(NULL, "g_position_offset");
 			if (SUCCEEDED(result))
 			{
 				if (errorMessages)
 				{
 					errorMessages->Release();
+				//	fragmentShaderConstantTable->Release();
 				}
 			}
 			else
@@ -100,9 +114,19 @@ namespace eae6320 {
 			const char* profile = "vs_3_0";
 			const DWORD noFlags = 0;
 			ID3DXBuffer* errorMessages = NULL;
-			ID3DXConstantTable** noConstants = NULL;
+			
 			HRESULT result = D3DXCompileShaderFromFile(sourceCodeFileName, defines, noIncludes, entryPoint, profile, noFlags,
-				&compiledShader, &errorMessages, noConstants);
+				&compiledShader, &errorMessages, &i_Effect.vertexShaderConstantTable);
+
+			
+			i_Effect.handle = i_Effect.vertexShaderConstantTable->GetConstantByName(NULL, "g_position_offset");
+			if ( i_Effect.handle == -NULL) {
+				std::stringstream errorMessage;
+				errorMessage << "Direct3D failed to find the Uniform for vertex shader ";
+				eae6320::UserOutput::Print(errorMessage.str());
+			}
+
+
 			if (SUCCEEDED(result))
 			{
 				if (errorMessages)

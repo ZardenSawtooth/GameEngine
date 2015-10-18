@@ -15,6 +15,15 @@
 
 namespace eae6320 {
 
+	bool Graphics::SetDrawCallUniforms(const Effect &i_Effect, float * i_floatArray ) {
+
+
+		//float  floatArray[] = { 0.0, 0.0 };
+		glUniform2fv(i_Effect.location, 1, i_floatArray);
+		return true;
+	}
+
+
 	void Graphics::SetEffect(const Effect &i_Effect) {
 
 		//Calls to set shaders
@@ -512,6 +521,8 @@ namespace eae6320 {
 				goto OnExit;
 			}
 		}
+		
+
 
 	OnExit:
 

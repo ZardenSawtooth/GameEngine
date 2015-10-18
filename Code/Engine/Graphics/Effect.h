@@ -9,7 +9,10 @@
 //=============
 
 #include "../Windows/Includes.h"
+#if defined( EAE6320_PLATFORM_D3D )
 #include <d3d9.h>
+#include <d3dx9shader.h>
+#endif
 #include <gl/GL.h>
 #include <gl/GLU.h>
 #include "../UserOutput/UserOutput.h"
@@ -31,8 +34,11 @@ namespace eae6320
 
 			IDirect3DVertexShader9* s_vertexShader = NULL;
 			IDirect3DPixelShader9* s_fragmentShader = NULL;
+			D3DXHANDLE handle = NULL;
+			ID3DXConstantTable* vertexShaderConstantTable = NULL;
 #elif defined( EAE6320_PLATFORM_GL )
 			GLuint s_programId = 0;
+			GLint location = -1;
 #endif
 		};
 
@@ -54,6 +60,7 @@ namespace eae6320
 
 		void SetEffect(const Effect &i_Effect);
 		bool LoadEffect(Effect &i_Effect, const char * i_FragmentPath, const char * i_VertexPath);
+		bool SetDrawCallUniforms(const Effect &i_Effect, float * i_floatArray);
 
 	}
 }

@@ -463,6 +463,7 @@ bool WaitForMainWindowToClose( int& o_exitCode )
 	// Enter an infinite loop that will continue until a quit message (WM_QUIT) is received from Windows
 	eae6320::Graphics::Initialize(s_mainWindow);
 	MSG message = { 0 };
+
 	do
 	{
 		

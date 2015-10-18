@@ -193,8 +193,9 @@ void eae6320::Graphics::Render()
 			glDrawElements( mode, vertexCountToRender, indexType, offset );
 			assert( glGetError() == GL_NO_ERROR );
 		}*/
+		float testPosn[] = { 0.0, 0.0 };
+		eae6320::Graphics::SetDrawCallUniforms(sEffect,  testPosn);
 
-		
 		eae6320::Graphics::DrawMesh(sMesh);
 		
 		{
@@ -403,6 +404,14 @@ namespace
 				eae6320::UserOutput::Print( errorMessage.str() );
 				return false;
 			}
+		}
+
+		sEffect .location = glGetUniformLocation(sEffect.s_programId, "g_position_offset");
+
+		if (sEffect.location == -1) {
+			std::stringstream errorMessage;
+			errorMessage << "OpenGL failed to find the Uniform ";
+			eae6320::UserOutput::Print(errorMessage.str());
 		}
 
 		return true;

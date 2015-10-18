@@ -40,7 +40,7 @@ namespace eae6320 {
 
 		// get size of file
 		infile.seekg(0, infile.end);
-		long size = infile.tellg();
+		long size = static_cast<long>(infile.tellg());
 		infile.seekg(0);
 
 		// allocate memory for file content

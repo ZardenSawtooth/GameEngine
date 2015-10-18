@@ -216,7 +216,19 @@ void eae6320::Graphics::Render()
 			}*/
 
 			eae6320::Graphics::SetEffect(sEffect);
+
+
+			float test[] = { -0.3, 0.0 };
+			eae6320::Graphics::SetDrawCallUniforms(sEffect, test);
+			eae6320::Graphics::DrawMesh(sMeshTriangle);
+
+			float test3[] = { 0.0, 0.0 };
+			eae6320::Graphics::SetDrawCallUniforms(sEffect, test3);
 			eae6320::Graphics::DrawMesh(sMesh);
+			
+
+			float test2[] = { 1.0, 0.0 };
+			eae6320::Graphics::SetDrawCallUniforms(sEffect, test2);
 			eae6320::Graphics::DrawMesh(sMeshTriangle);
 			
 			

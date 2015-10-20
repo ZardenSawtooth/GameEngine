@@ -13,7 +13,9 @@
 // WindowsFunctions.h contains convenience functionality for Windows features;
 // in this example program we just use it to get error messages
 #include "../../Engine/Windows/Functions.h"
-
+#include "../../Engine/Time/Time.h"
+#include "../../Engine/UserInput/UserInput.h"
+#include "../../Engine/Graphics/Renderable.h"
 
 
 // Static Data Initialization
@@ -36,7 +38,7 @@ namespace
 	// If you don't change the name below from the default then
 	// your program could have problems when it is run at the same time on the same computer
 	// as one of your classmate's
-	const char* s_mainWindowClass_name = "[YOUR NAME HERE]'s Main Window Class";
+	const char* s_mainWindowClass_name = "tapia_aqeel's Main Window Class";
 }
 
 // Main Function
@@ -61,6 +63,7 @@ int CreateMainWindowAndReturnExitCodeWhenItCloses( const HINSTANCE i_thisInstanc
 
 // Helper Functions
 //=================
+bool UpdateEntities_floats();
 
 bool CreateMainWindow( const HINSTANCE i_thisInstanceOfTheProgram, const int i_initialWindowDisplayState )
 {
@@ -125,6 +128,7 @@ int WaitForMainWindowToCloseAndReturnExitCode( const HINSTANCE i_thisInstanceOfT
 		}
 	}
 }
+
 
 // CreateMainWindow
 //-----------------
@@ -466,7 +470,8 @@ bool WaitForMainWindowToClose( int& o_exitCode )
 
 	do
 	{
-		
+		eae6320::Time::OnNewFrame();
+		UpdateEntities_floats();
 		eae6320::Graphics::Render();
 
 		// To send us a message, Windows will add it to a queue.
@@ -521,3 +526,54 @@ bool WaitForMainWindowToClose( int& o_exitCode )
 
 	return true;
 }
+
+bool UpdateEntities_floats()
+{
+	bool wereThereErrors = false;
+
+	// The following is an array of two floats,
+	// but defined as a struct so that I can reference them with the human-readable "x" and "y"
+	// rather than the less-descriptive [0] and [1]:
+	struct 
+	{
+		float x, y;
+	}offset;
+	
+	offset.x = offset.y = 0.0f;
+	{
+		// Get the direction
+		{
+			if (eae6320::UserInput::IsKeyPressed(VK_LEFT))
+			{
+				offset.x -= 1.0f;
+			}
+			if (eae6320::UserInput::IsKeyPressed(VK_RIGHT))
+			{
+				offset.x += 1.0f;
+			}
+			if (eae6320::UserInput::IsKeyPressed(VK_UP))
+			{
+				offset.y += 1.0f;
+			}
+			if (eae6320::UserInput::IsKeyPressed(VK_DOWN))
+			{
+				offset.y -= 1.0f;
+			}
+		}
+		// Get the speed
+		const float unitsPerSecond = 1.0f;	// This is arbitrary
+		const float unitsToMove = unitsPerSecond * eae6320::Time::GetSecondsElapsedThisFrame();	// This makes the speed frame-rate-independent
+																								// Normalize the offset
+		offset.x *= unitsToMove;
+		offset.y *= unitsToMove;
+	}
+	// The following line assumes there is some "entity" for the rectangle that the game code controls
+	// that encapsulates a mesh, an effect, and a position offset.
+	// You don't have to do it this way for your assignment!
+	// You just need a way to update the position offset associated with the colorful rectangle.
+	
+	eae6320::Graphics::RenderableList[0]->mPositionOffset.x += offset.x;
+	eae6320::Graphics::RenderableList[0]->mPositionOffset.y += offset.y;
+	return !wereThereErrors;
+}
+

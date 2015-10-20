@@ -9,12 +9,18 @@
 #include <d3d9.h>
 #include <d3dx9shader.h>
 #include <sstream>
+#include "Renderable.h"
+#include "../Math/cVector.h"
 
 
 // Static Data Initialization
 //===========================
 
 //IDirect3DDevice9* s_direct3dDevice = NULL;
+ std::vector <eae6320::Graphics::Renderable*>  eae6320::Graphics::RenderableList;
+eae6320::Graphics::Renderable renderableTriangle1;
+eae6320::Graphics::Renderable renderableTriangle2;
+eae6320::Graphics::Renderable renderableSquare;
 
 namespace
 {
@@ -39,6 +45,10 @@ namespace
 	eae6320::Graphics::Mesh sMesh;
 	eae6320::Graphics::Mesh sMeshTriangle;
 	eae6320::Graphics::Effect sEffect;
+
+	//std::vector <eae6320::Graphics::Renderable> RenderableList;
+
+
 
 	// The vertex buffer holds the data for each vertex
 	//IDirect3DVertexBuffer9* s_vertexBuffer = NULL;
@@ -116,7 +126,22 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 		goto OnError;
 	}
 
+	RenderableList.push_back( &renderableSquare);
+	RenderableList.push_back( &renderableTriangle1 );
+	RenderableList.push_back( &renderableTriangle2 ); 
 
+	renderableTriangle1.mEffect = sEffect;
+	renderableTriangle1.mMesh = sMeshTriangle;
+	renderableTriangle1.mPositionOffset.x = -0.3f;
+	renderableTriangle1.mPositionOffset.y = -0.3f;
+
+	renderableTriangle2.mEffect = sEffect;
+	renderableTriangle2.mMesh = sMeshTriangle;
+	renderableTriangle2.mPositionOffset.x = 1.0f;
+	renderableTriangle2.mPositionOffset.y = 0.3f;
+
+	renderableSquare.mEffect = sEffect;
+	renderableSquare.mMesh = sMesh;
 	// Initialize the graphics objects
 	/*if ( !CreateVertexBuffer() )
 	{
@@ -218,19 +243,28 @@ void eae6320::Graphics::Render()
 			eae6320::Graphics::SetEffect(sEffect);
 
 
-			float test[] = { -0.3, 0.0 };
-			eae6320::Graphics::SetDrawCallUniforms(sEffect, test);
-			eae6320::Graphics::DrawMesh(sMeshTriangle);
+			for (int i = 0; i < RenderableList.size(); i++) {
 
-			float test3[] = { 0.0, 0.0 };
-			eae6320::Graphics::SetDrawCallUniforms(sEffect, test3);
-			eae6320::Graphics::DrawMesh(sMesh);
-			
+				//renderableSquare.mPositionOffset.x += 0.01;
 
-			float test2[] = { 1.0, 0.0 };
-			eae6320::Graphics::SetDrawCallUniforms(sEffect, test2);
-			eae6320::Graphics::DrawMesh(sMeshTriangle);
-			
+				eae6320::Graphics::SetDrawCallUniforms(RenderableList[i]->mEffect, reinterpret_cast<float*>(&RenderableList[i]->mPositionOffset));
+				eae6320::Graphics::DrawMesh(RenderableList[i]->mMesh);
+			}
+
+			////draw first triangle
+			//
+			//eae6320::Graphics::SetDrawCallUniforms(renderableTriangle1.mEffect, reinterpret_cast<float*>(&renderableTriangle1.mPositionOffset));
+			//eae6320::Graphics::DrawMesh(renderableTriangle1.mMesh);
+
+			////draw second triangle
+
+			//eae6320::Graphics::SetDrawCallUniforms(renderableTriangle2.mEffect, reinterpret_cast<float*>(&renderableTriangle2.mPositionOffset));
+			//eae6320::Graphics::DrawMesh(renderableTriangle2.mMesh);
+
+			////draw square
+			//eae6320::Graphics::SetDrawCallUniforms(renderableSquare.mEffect, reinterpret_cast<float*>(&renderableSquare.mPositionOffset));
+			//eae6320::Graphics::DrawMesh(renderableSquare.mMesh);
+					
 			
 		}
 		result = s_direct3dDevice->EndScene();
@@ -358,6 +392,22 @@ namespace
 		}
 	}
 
+	bool CreateInterface()
+	{
+		// D3D_SDK_VERSION is #defined by the Direct3D header files,
+		// and is just a way to make sure that everything is up-to-date
+		s_direct3dInterface = Direct3DCreate9(D3D_SDK_VERSION);
+		if (s_direct3dInterface)
+		{
+			return true;
+		}
+		else
+		{
+			eae6320::UserOutput::Print("DirectX failed to create a Direct3D9 interface");
+			return false;
+		}
+	}
+
 	/*bool CreateIndexBuffer()
 	{
 		// The usage tells Direct3D how this vertex buffer will be used
@@ -446,21 +496,7 @@ namespace
 	}
 	*/
 
-	bool CreateInterface()
-	{
-		// D3D_SDK_VERSION is #defined by the Direct3D header files,
-		// and is just a way to make sure that everything is up-to-date
-		s_direct3dInterface = Direct3DCreate9( D3D_SDK_VERSION );
-		if ( s_direct3dInterface )
-		{
-			return true;
-		}
-		else
-		{
-			eae6320::UserOutput::Print( "DirectX failed to create a Direct3D9 interface" );
-			return false;
-		}
-	}
+	
 	/*
 	bool CreateVertexBuffer()
 	{

@@ -9,14 +9,18 @@
 //=============
 
 #include "../Windows/Includes.h"
+#include "../UserOutput/UserOutput.h"
 #if defined( EAE6320_PLATFORM_D3D )
-#include <d3d9.h>
+
 #include <d3dx9shader.h>
-#endif
+#include <d3d9.h>
+#elif defined( EAE6320_PLATFORM_GL )
 #include <gl/GL.h>
 #include <gl/GLU.h>
-#include "../UserOutput/UserOutput.h"
 #include "../../External/OpenGlExtensions/OpenGlExtensions.h"
+#endif
+
+
 
 
 // Interface

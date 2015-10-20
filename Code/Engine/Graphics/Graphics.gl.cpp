@@ -14,9 +14,14 @@
 #include "../UserOutput/UserOutput.h"
 #include "../Windows/Functions.h"
 #include "../../External/OpenGlExtensions/OpenGlExtensions.h"
+#include "Renderable.h"
 
 // Static Data Initialization
 //===========================
+std::vector <eae6320::Graphics::Renderable*>  eae6320::Graphics::RenderableList;
+eae6320::Graphics::Renderable renderableTriangle1;
+eae6320::Graphics::Renderable renderableTriangle2;
+eae6320::Graphics::Renderable renderableSquare;
 
 namespace
 {
@@ -125,17 +130,31 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 		goto OnError;
 	}
 	
+	
 
 
 	if ( !CreateProgram() )
 	{
 		goto OnError;
 	}
-	/*if (!eae6320::Graphics::LoadEffect(sEffect, "data/fragment.shader", "data/vertex.shader"))
-	{
-		goto OnError;
-	}
-*/
+
+	RenderableList.push_back(&renderableSquare);
+	RenderableList.push_back(&renderableTriangle1);
+	RenderableList.push_back(&renderableTriangle2);
+
+	renderableTriangle1.mEffect = sEffect;
+	renderableTriangle1.mMesh = sMeshTriangle;
+	renderableTriangle1.mPositionOffset.x = -0.3f;
+	renderableTriangle1.mPositionOffset.y = -0.3f;
+
+	renderableTriangle2.mEffect = sEffect;
+	renderableTriangle2.mMesh = sMeshTriangle;
+	renderableTriangle2.mPositionOffset.x = 1.0f;
+	renderableTriangle2.mPositionOffset.y = 0.3f;
+
+	renderableSquare.mEffect = sEffect;
+	renderableSquare.mMesh = sMesh;
+
 	return true;
 
 OnError:
@@ -170,10 +189,7 @@ void eae6320::Graphics::Render()
 
 		SetEffect(sEffect);
 		// Bind a specific vertex buffer to the device as a data source
-		{
-			glBindVertexArray(sMesh.s_vertexArrayId );
-			assert( glGetError() == GL_NO_ERROR );
-		}
+		
 		
 		// Render objects from the current streams
 		/*{
@@ -193,16 +209,22 @@ void eae6320::Graphics::Render()
 			glDrawElements( mode, vertexCountToRender, indexType, offset );
 			assert( glGetError() == GL_NO_ERROR );
 		}*/
-		float testPosn[] = { 0.0, 0.0 };
-		eae6320::Graphics::SetDrawCallUniforms(sEffect,  testPosn);
 
-		eae6320::Graphics::DrawMesh(sMesh);
+		for (int i = 0; i < RenderableList.size(); i++) {
+			{
+				glBindVertexArray(RenderableList[i]->mMesh.s_vertexArrayId);
+				assert(glGetError() == GL_NO_ERROR);
+			}
+
+			eae6320::Graphics::SetDrawCallUniforms(RenderableList[i]->mEffect, reinterpret_cast<float*>(&RenderableList[i]->mPositionOffset));
+			eae6320::Graphics::DrawMesh(RenderableList[i]->mMesh);
+		}
 		
-		{
+		/*{
 			glBindVertexArray(sMeshTriangle.s_vertexArrayId);
 			assert(glGetError() == GL_NO_ERROR);
 		}
-		eae6320::Graphics::DrawMesh(sMeshTriangle);
+		eae6320::Graphics::DrawMesh(sMeshTriangle);*/
 		
 	}
 

@@ -162,80 +162,110 @@ OnError:
 	ShutDown();
 	return false;
 }
-
-void eae6320::Graphics::Render()
-{
-	// Every frame an entirely new image will be created.
-	// Before drawing anything, then, the previous image will be erased
-	// by "clearing" the image buffer (filling it with a solid color)
+bool eae6320::Graphics::Clear() {
 	{
 		// Black is usually used
-		glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
-		assert( glGetError() == GL_NO_ERROR );
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		assert(glGetError() == GL_NO_ERROR);
 		// In addition to the color, "depth" and "stencil" can also be cleared,
 		// but for now we only care about color
 		const GLbitfield clearColor = GL_COLOR_BUFFER_BIT;
-		glClear( clearColor );
-		assert( glGetError() == GL_NO_ERROR );
+		glClear(clearColor);
+		assert(glGetError() == GL_NO_ERROR);
 	}
-
-	// The actual function calls that draw geometry
-	{
-		// Set the vertex and fragment shaders
-		/*{
-			glUseProgram( s_programId );
-			assert( glGetError() == GL_NO_ERROR );
-		}*/
-
-		SetEffect(sEffect);
-		// Bind a specific vertex buffer to the device as a data source
-		
-		
-		// Render objects from the current streams
-		/*{
-			// We are using triangles as the "primitive" type,
-			// and we have defined the vertex buffer as a triangle list
-			// (meaning that every triangle is defined by three vertices)
-			const GLenum mode = GL_TRIANGLES;
-			// We'll use 32-bit indices in this class to keep things simple
-			// (i.e. every index will be a 32 bit unsigned integer)
-			const GLenum indexType = GL_UNSIGNED_INT;
-			// It is possible to start rendering in the middle of an index buffer
-			const GLvoid* const offset = 0;
-			// We are drawing a square
-			const GLsizei primitiveCountToRender = 2;	// How many triangles will be drawn?
-			const GLsizei vertexCountPerTriangle = 3;
-			const GLsizei vertexCountToRender = primitiveCountToRender * vertexCountPerTriangle;
-			glDrawElements( mode, vertexCountToRender, indexType, offset );
-			assert( glGetError() == GL_NO_ERROR );
-		}*/
-
-		for (unsigned int i = 0; i < RenderableList.size(); i++) {
-			{
-				glBindVertexArray(RenderableList[i]->mMesh.s_vertexArrayId);
-				assert(glGetError() == GL_NO_ERROR);
-			}
-
-			eae6320::Graphics::SetDrawCallUniforms(RenderableList[i]->mEffect, reinterpret_cast<float*>(&RenderableList[i]->mPositionOffset));
-			eae6320::Graphics::DrawMesh(RenderableList[i]->mMesh);
-		}
-		
-		/*{
-			glBindVertexArray(sMeshTriangle.s_vertexArrayId);
-			assert(glGetError() == GL_NO_ERROR);
-		}
-		eae6320::Graphics::DrawMesh(sMeshTriangle);*/
-		
-	}
-
-	// Everything has been drawn to the "back buffer", which is just an image in memory.
-	// In order to display it, the contents of the back buffer must be swapped with the "front buffer"
-	// (which is what the user sees)
-	{
-		BOOL result = SwapBuffers( s_deviceContext );
-		assert( result != FALSE );
-	}
+	return true;
 }
+
+bool eae6320::Graphics::BeginScene() {
+	return true;
+}
+
+bool eae6320::Graphics::EndScene() {
+
+
+	return true;
+}
+bool  eae6320::Graphics::DisplayRenderedBuffer() {
+	{
+		BOOL result = SwapBuffers(s_deviceContext);
+		assert(result != FALSE);
+	}
+	return true;
+}
+//void eae6320::Graphics::Render()
+//{
+//	// Every frame an entirely new image will be created.
+//	// Before drawing anything, then, the previous image will be erased
+//	// by "clearing" the image buffer (filling it with a solid color)
+//	{
+//		// Black is usually used
+//		glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
+//		assert( glGetError() == GL_NO_ERROR );
+//		// In addition to the color, "depth" and "stencil" can also be cleared,
+//		// but for now we only care about color
+//		const GLbitfield clearColor = GL_COLOR_BUFFER_BIT;
+//		glClear( clearColor );
+//		assert( glGetError() == GL_NO_ERROR );
+//	}
+//
+//	// The actual function calls that draw geometry
+//	{
+//		// Set the vertex and fragment shaders
+//		/*{
+//			glUseProgram( s_programId );
+//			assert( glGetError() == GL_NO_ERROR );
+//		}*/
+//
+//		SetEffect(sEffect);
+//		// Bind a specific vertex buffer to the device as a data source
+//		
+//		
+//		// Render objects from the current streams
+//		/*{
+//			// We are using triangles as the "primitive" type,
+//			// and we have defined the vertex buffer as a triangle list
+//			// (meaning that every triangle is defined by three vertices)
+//			const GLenum mode = GL_TRIANGLES;
+//			// We'll use 32-bit indices in this class to keep things simple
+//			// (i.e. every index will be a 32 bit unsigned integer)
+//			const GLenum indexType = GL_UNSIGNED_INT;
+//			// It is possible to start rendering in the middle of an index buffer
+//			const GLvoid* const offset = 0;
+//			// We are drawing a square
+//			const GLsizei primitiveCountToRender = 2;	// How many triangles will be drawn?
+//			const GLsizei vertexCountPerTriangle = 3;
+//			const GLsizei vertexCountToRender = primitiveCountToRender * vertexCountPerTriangle;
+//			glDrawElements( mode, vertexCountToRender, indexType, offset );
+//			assert( glGetError() == GL_NO_ERROR );
+//			{
+//			glBindVertexArray(RenderableList[i]->mMesh.s_vertexArrayId);
+//			assert(glGetError() == GL_NO_ERROR);
+//			}
+//		}*/
+//
+//		for (unsigned int i = 0; i < RenderableList.size(); i++) {
+//			
+//
+//			eae6320::Graphics::SetDrawCallUniforms(RenderableList[i]->mEffect, reinterpret_cast<float*>(&RenderableList[i]->mPositionOffset));
+//			eae6320::Graphics::DrawMesh(RenderableList[i]->mMesh);
+//		}
+//		
+//		/*{
+//			glBindVertexArray(sMeshTriangle.s_vertexArrayId);
+//			assert(glGetError() == GL_NO_ERROR);
+//		}
+//		eae6320::Graphics::DrawMesh(sMeshTriangle);*/
+//		
+//	}
+//
+//	// Everything has been drawn to the "back buffer", which is just an image in memory.
+//	// In order to display it, the contents of the back buffer must be swapped with the "front buffer"
+//	// (which is what the user sees)
+//	{
+//		BOOL result = SwapBuffers(s_deviceContext);
+//		assert(result != FALSE);
+//	}
+//}
 
 bool eae6320::Graphics::ShutDown()
 {

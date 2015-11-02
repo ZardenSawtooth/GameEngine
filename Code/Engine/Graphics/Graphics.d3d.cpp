@@ -168,11 +168,7 @@ OnError:
 	return false;
 }
 
-void eae6320::Graphics::Render()
-{
-	// Every frame an entirely new image will be created.
-	// Before drawing anything, then, the previous image will be erased
-	// by "clearing" the image buffer (filling it with a solid color)
+bool eae6320::Graphics::Clear() {
 	{
 		const D3DRECT* subRectanglesToClear = NULL;
 		const DWORD subRectangleCount = 0;
@@ -180,112 +176,162 @@ void eae6320::Graphics::Render()
 		D3DCOLOR clearColor;
 		{
 			// Black is usually used:
-			clearColor = D3DCOLOR_XRGB( 0, 0, 0 );
+			clearColor = D3DCOLOR_XRGB(0, 0, 0);
 		}
 		const float noZBuffer = 0.0f;
 		const DWORD noStencilBuffer = 0;
-		HRESULT result = s_direct3dDevice->Clear( subRectangleCount, subRectanglesToClear,
-			clearTheRenderTarget, clearColor, noZBuffer, noStencilBuffer );
-		assert( SUCCEEDED( result ) );
+		HRESULT result = s_direct3dDevice->Clear(subRectangleCount, subRectanglesToClear,
+			clearTheRenderTarget, clearColor, noZBuffer, noStencilBuffer);
+		assert(SUCCEEDED(result));
 	}
+	return true;
+}
 
-	// The actual function calls that draw geometry must be made between paired calls to
-	// BeginScene() and EndScene()
-	{
-		
-		HRESULT result = s_direct3dDevice->BeginScene();
-		assert( SUCCEEDED( result ) );
-		{
-			
-			// Set the shaders
-			/*{
-				result = s_direct3dDevice->SetVertexShader( s_vertexShader );
-				assert( SUCCEEDED( result ) );
-				result = s_direct3dDevice->SetPixelShader( s_fragmentShader );
-				assert( SUCCEEDED( result ) );
-			}*/
+bool eae6320::Graphics::BeginScene() {
+	HRESULT result = s_direct3dDevice->BeginScene();
+	assert(SUCCEEDED(result));
+	return true;
+}
 
-			/*
-			// Bind a specific vertex buffer to the device as a data source
-			{
-				// There can be multiple streams of data feeding the display adaptor at the same time
-				const unsigned int streamIndex = 0;
-				// It's possible to start streaming data in the middle of a vertex buffer
-				const unsigned int bufferOffset = 0;
-				// The "stride" defines how large a single vertex is in the stream of data
-				const unsigned int bufferStride = sizeof( sVertex );
-				result = s_direct3dDevice->SetStreamSource( streamIndex, s_vertexBuffer, bufferOffset, bufferStride );
-				assert( SUCCEEDED( result ) );
-			}
-			// Bind a specific index buffer to the device as a data source
-			{
-				result = s_direct3dDevice->SetIndices( s_indexBuffer );
-				assert( SUCCEEDED( result ) );
-			}
-			// Render objects from the current streams
-			{
-				// We are using triangles as the "primitive" type,
-				// and we have defined the vertex buffer as a triangle list
-				// (meaning that every triangle is defined by three vertices)
-				const D3DPRIMITIVETYPE primitiveType = D3DPT_TRIANGLELIST;
-				// It's possible to start rendering primitives in the middle of the stream
-				const unsigned int indexOfFirstVertexToRender = 0;
-				const unsigned int indexOfFirstIndexToUse = 0;
-				// We are drawing a square
-				const unsigned int vertexCountToRender = 4;	// How vertices from the vertex buffer will be used?
-				const unsigned int primitiveCountToRender = 2;	// How many triangles will be drawn?
-				result = s_direct3dDevice->DrawIndexedPrimitive( primitiveType,
-					indexOfFirstVertexToRender, indexOfFirstVertexToRender, vertexCountToRender,
-					indexOfFirstIndexToUse, primitiveCountToRender );
-				assert( SUCCEEDED( result ) );
-			}*/
+bool eae6320::Graphics::EndScene() {
 
-			eae6320::Graphics::SetEffect(sEffect);
+	HRESULT result = s_direct3dDevice->EndScene();
+	assert(SUCCEEDED(result));
+	return true;
 
-
-			for (int i = 0; i < RenderableList.size(); i++) {
-
-				//renderableSquare.mPositionOffset.x += 0.01;
-
-				eae6320::Graphics::SetDrawCallUniforms(RenderableList[i]->mEffect, reinterpret_cast<float*>(&RenderableList[i]->mPositionOffset));
-				eae6320::Graphics::DrawMesh(RenderableList[i]->mMesh);
-			}
-
-			////draw first triangle
-			//
-			//eae6320::Graphics::SetDrawCallUniforms(renderableTriangle1.mEffect, reinterpret_cast<float*>(&renderableTriangle1.mPositionOffset));
-			//eae6320::Graphics::DrawMesh(renderableTriangle1.mMesh);
-
-			////draw second triangle
-
-			//eae6320::Graphics::SetDrawCallUniforms(renderableTriangle2.mEffect, reinterpret_cast<float*>(&renderableTriangle2.mPositionOffset));
-			//eae6320::Graphics::DrawMesh(renderableTriangle2.mMesh);
-
-			////draw square
-			//eae6320::Graphics::SetDrawCallUniforms(renderableSquare.mEffect, reinterpret_cast<float*>(&renderableSquare.mPositionOffset));
-			//eae6320::Graphics::DrawMesh(renderableSquare.mMesh);
-					
-			
-		}
-		result = s_direct3dDevice->EndScene();
-		assert( SUCCEEDED( result ) );
-		
-		
-
-	}
-
-	// Everything has been drawn to the "back buffer", which is just an image in memory.
-	// In order to display it, the contents of the back buffer must be "presented"
-	// (to the front buffer)
+}
+bool  eae6320::Graphics::DisplayRenderedBuffer() {
 	{
 		const RECT* noSourceRectangle = NULL;
 		const RECT* noDestinationRectangle = NULL;
 		const HWND useDefaultWindow = NULL;
 		const RGNDATA* noDirtyRegion = NULL;
-		HRESULT result = s_direct3dDevice->Present( noSourceRectangle, noDestinationRectangle, useDefaultWindow, noDirtyRegion );
-		assert( SUCCEEDED( result ) );
+		HRESULT result = s_direct3dDevice->Present(noSourceRectangle, noDestinationRectangle, useDefaultWindow, noDirtyRegion);
+		assert(SUCCEEDED(result));
 	}
+	return true;
 }
+
+
+
+//void eae6320::Graphics::Render()
+//{
+//	// Every frame an entirely new image will be created.
+//	// Before drawing anything, then, the previous image will be erased
+//	// by "clearing" the image buffer (filling it with a solid color)
+//	{
+//		const D3DRECT* subRectanglesToClear = NULL;
+//		const DWORD subRectangleCount = 0;
+//		const DWORD clearTheRenderTarget = D3DCLEAR_TARGET;
+//		D3DCOLOR clearColor;
+//		{
+//			// Black is usually used:
+//			clearColor = D3DCOLOR_XRGB( 0, 0, 0 );
+//		}
+//		const float noZBuffer = 0.0f;
+//		const DWORD noStencilBuffer = 0;
+//		HRESULT result = s_direct3dDevice->Clear( subRectangleCount, subRectanglesToClear,
+//			clearTheRenderTarget, clearColor, noZBuffer, noStencilBuffer );
+//		assert( SUCCEEDED( result ) );
+//	}
+//
+//	// The actual function calls that draw geometry must be made between paired calls to
+//	// BeginScene() and EndScene()
+//	{
+//		
+//		HRESULT result = s_direct3dDevice->BeginScene();
+//		assert( SUCCEEDED( result ) );
+//		{
+//			
+//			// Set the shaders
+//			/*{
+//				result = s_direct3dDevice->SetVertexShader( s_vertexShader );
+//				assert( SUCCEEDED( result ) );
+//				result = s_direct3dDevice->SetPixelShader( s_fragmentShader );
+//				assert( SUCCEEDED( result ) );
+//			}*/
+//
+//			/*
+//			// Bind a specific vertex buffer to the device as a data source
+//			{
+//				// There can be multiple streams of data feeding the display adaptor at the same time
+//				const unsigned int streamIndex = 0;
+//				// It's possible to start streaming data in the middle of a vertex buffer
+//				const unsigned int bufferOffset = 0;
+//				// The "stride" defines how large a single vertex is in the stream of data
+//				const unsigned int bufferStride = sizeof( sVertex );
+//				result = s_direct3dDevice->SetStreamSource( streamIndex, s_vertexBuffer, bufferOffset, bufferStride );
+//				assert( SUCCEEDED( result ) );
+//			}
+//			// Bind a specific index buffer to the device as a data source
+//			{
+//				result = s_direct3dDevice->SetIndices( s_indexBuffer );
+//				assert( SUCCEEDED( result ) );
+//			}
+//			// Render objects from the current streams
+//			{
+//				// We are using triangles as the "primitive" type,
+//				// and we have defined the vertex buffer as a triangle list
+//				// (meaning that every triangle is defined by three vertices)
+//				const D3DPRIMITIVETYPE primitiveType = D3DPT_TRIANGLELIST;
+//				// It's possible to start rendering primitives in the middle of the stream
+//				const unsigned int indexOfFirstVertexToRender = 0;
+//				const unsigned int indexOfFirstIndexToUse = 0;
+//				// We are drawing a square
+//				const unsigned int vertexCountToRender = 4;	// How vertices from the vertex buffer will be used?
+//				const unsigned int primitiveCountToRender = 2;	// How many triangles will be drawn?
+//				result = s_direct3dDevice->DrawIndexedPrimitive( primitiveType,
+//					indexOfFirstVertexToRender, indexOfFirstVertexToRender, vertexCountToRender,
+//					indexOfFirstIndexToUse, primitiveCountToRender );
+//				assert( SUCCEEDED( result ) );
+//			}*/
+//
+//			SetEffect(sEffect);
+//
+//
+//			for (int i = 0; i < RenderableList.size(); i++) {
+//
+//				//renderableSquare.mPositionOffset.x += 0.01;
+//
+//				eae6320::Graphics::SetDrawCallUniforms(RenderableList[i]->mEffect, reinterpret_cast<float*>(&RenderableList[i]->mPositionOffset));
+//				eae6320::Graphics::DrawMesh(RenderableList[i]->mMesh);
+//			}
+//
+//			////draw first triangle
+//			//
+//			//eae6320::Graphics::SetDrawCallUniforms(renderableTriangle1.mEffect, reinterpret_cast<float*>(&renderableTriangle1.mPositionOffset));
+//			//eae6320::Graphics::DrawMesh(renderableTriangle1.mMesh);
+//
+//			////draw second triangle
+//
+//			//eae6320::Graphics::SetDrawCallUniforms(renderableTriangle2.mEffect, reinterpret_cast<float*>(&renderableTriangle2.mPositionOffset));
+//			//eae6320::Graphics::DrawMesh(renderableTriangle2.mMesh);
+//
+//			////draw square
+//			//eae6320::Graphics::SetDrawCallUniforms(renderableSquare.mEffect, reinterpret_cast<float*>(&renderableSquare.mPositionOffset));
+//			//eae6320::Graphics::DrawMesh(renderableSquare.mMesh);
+//					
+//			
+//		}
+//		result = s_direct3dDevice->EndScene();
+//		assert( SUCCEEDED( result ) );
+//		
+//		
+//
+//	}
+//
+//	// Everything has been drawn to the "back buffer", which is just an image in memory.
+//	// In order to display it, the contents of the back buffer must be "presented"
+//	// (to the front buffer)
+//	{
+//		const RECT* noSourceRectangle = NULL;
+//		const RECT* noDestinationRectangle = NULL;
+//		const HWND useDefaultWindow = NULL;
+//		const RGNDATA* noDirtyRegion = NULL;
+//		HRESULT result = s_direct3dDevice->Present( noSourceRectangle, noDestinationRectangle, useDefaultWindow, noDirtyRegion );
+//		assert( SUCCEEDED( result ) );
+//	}
+//}
 
 bool eae6320::Graphics::ShutDown()
 {

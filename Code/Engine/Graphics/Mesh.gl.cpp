@@ -13,6 +13,8 @@ namespace eae6320
 {
 	void Graphics::DrawMesh(const Mesh &i_Mesh)
 	{
+		glBindVertexArray(i_Mesh.s_vertexArrayId);
+		assert(glGetError() == GL_NO_ERROR);
 		// Render objects from the current streams
 		{
 			// We are using triangles as the "primitive" type,
@@ -30,7 +32,11 @@ namespace eae6320
 			const GLsizei vertexCountToRender = primitiveCountToRender * vertexCountPerTriangle;
 			glDrawElements(mode, vertexCountToRender, indexType, offset);
 			assert(glGetError() == GL_NO_ERROR);
+
+			
 		}
+
+
 	}
 
 	bool Graphics::CreateVertexArray(Mesh &i_Mesh, sVertex* i_vertexData, uint32_t * i_indexData)

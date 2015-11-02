@@ -24,6 +24,11 @@ namespace eae6320
 		void Render();
 		bool ShutDown();
 
+		bool Clear();
+		bool BeginScene();
+		bool EndScene();
+		bool DisplayRenderedBuffer();
+
 		IDirect3DDevice9* getDirect3DDevice();
 	}
 }

@@ -17,7 +17,6 @@ namespace eae6320 {
 
 	bool Graphics::SetDrawCallUniforms(const Effect &i_Effect, float * i_floatArray ) {
 
-
 		//float  floatArray[] = { 0.0, 0.0 };
 		glUniform2fv(i_Effect.location, 1, i_floatArray);
 		return true;
@@ -206,11 +205,9 @@ namespace eae6320 {
 			}
 			// Set the source code into the shader
 			{
-				const GLsizei shaderSourceCount = 3;
+				const GLsizei shaderSourceCount = 1;
 				const GLchar* shaderSources[] =
 				{
-					"#version 330// The version of GLSL to use must come first\n",
-					"#define EAE6320_PLATFORM_GL\n",
 					reinterpret_cast<GLchar*>(shaderSource)
 				};
 				const GLint* sourcesAreNullTerminated = NULL;
@@ -405,11 +402,9 @@ namespace eae6320 {
 			}
 			// Set the source code into the shader
 			{
-				const GLsizei shaderSourceCount = 3;
+				const GLsizei shaderSourceCount = 1;
 				const GLchar* shaderSources[] =
 				{
-					"#version 330// The version of GLSL to use must come first\n",
-					"#define EAE6320_PLATFORM_GL\n",
 					reinterpret_cast<GLchar*>(shaderSource)
 				};
 				const GLint* sourcesAreNullTerminated = NULL;

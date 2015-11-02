@@ -17,11 +17,22 @@ return
 	{
 		src = "",
 		tar = "",
-		tool = "GenericBuilder.exe",
+		tool = "ShaderBuilder.exe",
 		assets = 
 		{
 			"fragment.shader",
 			"vertex.shader",
+		},
+	},
+
+	Effects = 
+	{
+		src = "",
+		tar = "",
+		tool = "EffectBuilder.exe",
+		assets = 
+		{
+			"mesheffect.effect",
 		},
 	},
 }

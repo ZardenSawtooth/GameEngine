@@ -9,7 +9,7 @@ return
 		{
 			"square.mesh",
 			"triangle.mesh",
-		}
+		},
 		
 	},
 
@@ -22,6 +22,7 @@ return
 		{
 			"fragment.shader",
 		},
+		dependencies = "shaders.inc",
 	},
 
 	VertexShaders = 
@@ -33,6 +34,7 @@ return
 		{
 			"vertex.shader",
 		},
+		dependencies = "shaders.inc",
 	},
 
 	Effects = 
@@ -44,5 +46,6 @@ return
 		{
 			"mesheffect.effect",
 		},
+	
 	},
 }

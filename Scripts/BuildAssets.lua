@@ -42,14 +42,17 @@ end
 
 --EAE6320_TODO: I have shown the simplest parameters to BuildAsset() that are possible.
 --You should definitely feel free to change these
-local function BuildAsset( i_relativePath, i_builderFileName )
+local function BuildAsset( i_relativePath, i_builderFileName, i_dependency )
 	-- Get the absolute paths to the source and target
 	--EAE6320_TODO: I am assuming that the relative path of the source and target is the same,
 	--but if this isn't true for you (i.e. you use different extensions)
 	--then you will need to update this part
 	local path_source = s_AuthoredAssetDir .. i_relativePath
 	local path_target = s_BuiltAssetDir .. i_relativePath
-
+	local path_dependency
+	if i_dependency then
+	 path_dependency= s_AuthoredAssetDir .. i_dependency
+	end
 	-- If the source file doesn't exist then it can't be built
 	do
 		local doesSourceExist = DoesFileExist( path_source )
@@ -84,7 +87,16 @@ local function BuildAsset( i_relativePath, i_builderFileName )
 			-- then the target should be re-built.
 			local lastWriteTime_source = GetLastWriteTime( path_source )
 			local lastWriteTime_target = GetLastWriteTime( path_target )
-			shouldTargetBeBuilt = lastWriteTime_source > lastWriteTime_target
+			local lastWriteTime_dependency
+			if i_dependency then
+			print("-----------" .. path_dependency .. "builder = " .. i_builderFileName)
+				lastWriteTime_dependency = GetLastWriteTime( path_dependency )
+			else
+				lastWriteTime_dependency = 0
+			end
+			
+			shouldTargetBeBuilt = math.max(lastWriteTime_source, lastWriteTime_dependency) > lastWriteTime_target
+			
 			if not shouldTargetBeBuilt then
 				-- Even if the target was built from the current source
 				-- the builder may have changed which could cause different output
@@ -168,7 +180,7 @@ local function BuildAssets( i_assetsToBuild )
 		
 		for j, value in ipairs( assets ) do
 			-- TODO
-				if not BuildAsset( assetInfo.src ..value, assetInfo.tool ) then
+				if not BuildAsset( assetInfo.src ..value, assetInfo.tool, assetInfo.dependencies ) then
 				-- If there's an error then the asset build should fail,
 				-- but we can still try to build any remaining assets
 				wereThereErrors = true

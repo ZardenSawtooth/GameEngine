@@ -210,7 +210,7 @@ void eae6320::Graphics::Render()
 			assert( glGetError() == GL_NO_ERROR );
 		}*/
 
-		for (int i = 0; i < RenderableList.size(); i++) {
+		for (unsigned int i = 0; i < RenderableList.size(); i++) {
 			{
 				glBindVertexArray(RenderableList[i]->mMesh.s_vertexArrayId);
 				assert(glGetError() == GL_NO_ERROR);

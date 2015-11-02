@@ -16,7 +16,7 @@
 bool eae6320::cShaderBuilder::Build( const std::vector<std::string>& i_arguments )
 {
 	// Decide which kind of shader program to compile
-	Graphics::ShaderTypes::eShaderType shaderType = Graphics::ShaderTypes::Unknown;
+	/*Graphics::ShaderTypes::eShaderType shaderType = Graphics::ShaderTypes::Unknown;
 	{
 		if ( i_arguments.size() >= 1 )
 		{
@@ -44,7 +44,7 @@ bool eae6320::cShaderBuilder::Build( const std::vector<std::string>& i_arguments
 				m_path_source );
 			return false;
 		}
-	}
+	}*/
 	// Get the path to the shader compiler
 	std::string path_fxc;
 	{
@@ -73,8 +73,9 @@ bool eae6320::cShaderBuilder::Build( const std::vector<std::string>& i_arguments
 	{
 		std::stringstream commandToBuild;
 		commandToBuild << "\"" << path_fxc << "\"";
+		commandToBuild << " /Tvs_3_0";
 		// Target profile
-		switch ( shaderType )
+		/*switch ( shaderType )
 		{
 		case Graphics::ShaderTypes::Vertex:
 			commandToBuild << " /Tvs_3_0";
@@ -82,7 +83,7 @@ bool eae6320::cShaderBuilder::Build( const std::vector<std::string>& i_arguments
 		case Graphics::ShaderTypes::Fragment:
 			commandToBuild << " /Tps_3_0";
 			break;
-		}
+		}*/
 		// Entry point
 		commandToBuild << " /Emain"
 			// #define the platform

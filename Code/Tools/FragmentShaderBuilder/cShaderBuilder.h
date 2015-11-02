@@ -5,6 +5,10 @@
 #ifndef EAE6320_CSHADERBUILDER_H
 #define EAE6320_CSHADERBUILDER_H
 
+#ifdef _DEBUG
+#define EAE6320_GRAPHICS_AREDEBUGSHADERSENABLED
+#endif
+
 // Header Files
 //=============
 

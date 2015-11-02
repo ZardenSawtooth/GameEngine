@@ -13,14 +13,24 @@ return
 		
 	},
 
-	Shaders = 
+	FragmentShaders = 
 	{
 		src = "",
 		tar = "",
-		tool = "ShaderBuilder.exe",
+		tool = "FragmentShaderBuilder.exe",
 		assets = 
 		{
 			"fragment.shader",
+		},
+	},
+
+	VertexShaders = 
+	{
+		src = "",
+		tar = "",
+		tool = "VertexShaderBuilder.exe",
+		assets = 
+		{
 			"vertex.shader",
 		},
 	},

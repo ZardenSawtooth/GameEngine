@@ -181,7 +181,7 @@ namespace
 		lua_pushstring(&io_luaState, keyvertex);
 		lua_gettable(&io_luaState, -2);
 		const char * vertexpath = lua_tostring(&io_luaState, -1);
-		i_outfile.write(reinterpret_cast<const char *>(fragmentpath), std::strlen(vertexpath));
+		i_outfile.write(reinterpret_cast<const char *>(vertexpath), std::strlen(vertexpath));
 		i_outfile.write("\0", 1);
 
 		lua_pop(&io_luaState, 1);

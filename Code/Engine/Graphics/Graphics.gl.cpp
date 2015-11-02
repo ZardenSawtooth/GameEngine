@@ -349,7 +349,7 @@ namespace
 		{
 			return false;
 		}*/
-		eae6320::Graphics::LoadEffect(sEffect, "data/fragment.shader", "data/vertex.shader");
+		eae6320::Graphics::LoadEffect(sEffect, "data/mesheffect.effect");
 
 		// Link the program
 		{

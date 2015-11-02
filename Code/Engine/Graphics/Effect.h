@@ -63,7 +63,7 @@ namespace eae6320
 #endif
 
 		void SetEffect(const Effect &i_Effect);
-		bool LoadEffect(Effect &i_Effect, const char * i_FragmentPath, const char * i_VertexPath);
+		bool LoadEffect(Effect &i_Effect, const char * i_path);
 		bool SetDrawCallUniforms(const Effect &i_Effect, float * i_floatArray);
 
 	}

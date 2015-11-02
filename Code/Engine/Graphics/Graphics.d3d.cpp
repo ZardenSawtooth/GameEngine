@@ -121,7 +121,7 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 	{
 		goto OnError;
 	}
-	if (!eae6320::Graphics::LoadEffect(sEffect, "data/fragment.shader", "data/vertex.shader"))
+	if (!eae6320::Graphics::LoadEffect(sEffect, "data/mesheffect.effect"))
 	{
 		goto OnError;
 	}

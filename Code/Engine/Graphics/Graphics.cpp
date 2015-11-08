@@ -19,13 +19,19 @@ namespace eae6320
 					SetEffect(RenderableList[i]->mEffect);
 					eae6320::Graphics::SetDrawCallUniforms(RenderableList[i]->mEffect, reinterpret_cast<float*>(&RenderableList[i]->mPositionOffset));
 					eae6320::Graphics::DrawMesh(RenderableList[i]->mMesh);
-				}	
+				}
+				
 			}
 			EndScene();
+			
+			
+	
 		}
+	
 		// Everything has been drawn to the "back buffer", which is just an image in memory.
 		// In order to display it, the contents of the back buffer must be "presented"
 		// (to the front buffer)
 		DisplayRenderedBuffer();
 	}
+
 }

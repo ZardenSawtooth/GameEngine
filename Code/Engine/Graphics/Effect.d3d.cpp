@@ -14,15 +14,19 @@ namespace eae6320 {
 
 		//float  floatArray[] = {0.0, 0.0};
 		IDirect3DDevice9* direct3dDevice = eae6320::Graphics::getDirect3DDevice();
-		Math::cMatrix_transformation matrix;
+		
+		
+		Math::cMatrix_transformation matrixWorldToView = Math::cMatrix_transformation::CreateWorldToViewTransform(Math::cQuaternion::cQuaternion(), Math::cVector(0, 0, 10));
+		Math::cMatrix_transformation matrixViewToScreen = Math::cMatrix_transformation::CreateViewToScreenTransform(Math::ConvertDegreesToRadians(60), 1.33f, 0.1f, 100);
+
 		
 //		HRESULT result = i_Effect.vertexShaderConstantTable->SetFloatArray(direct3dDevice, i_Effect.handle , i_floatArray, 2);
 
 		HRESULT result = i_Effect.vertexShaderConstantTable->SetMatrixTranspose(direct3dDevice, i_Effect.handle_localToWorld, reinterpret_cast<const D3DXMATRIX*>(&i_localToWorldTransform));
 
-		result = i_Effect.vertexShaderConstantTable->SetMatrixTranspose(direct3dDevice, i_Effect.handle_worldToView, reinterpret_cast<const D3DXMATRIX*>(&matrix));
+		result = i_Effect.vertexShaderConstantTable->SetMatrixTranspose(direct3dDevice, i_Effect.handle_worldToView, reinterpret_cast<const D3DXMATRIX*>(&matrixWorldToView));
 
-		result = i_Effect.vertexShaderConstantTable->SetMatrixTranspose(direct3dDevice, i_Effect.handle_viewToScreen, reinterpret_cast<const D3DXMATRIX*>(&matrix));
+		result = i_Effect.vertexShaderConstantTable->SetMatrixTranspose(direct3dDevice, i_Effect.handle_viewToScreen, reinterpret_cast<const D3DXMATRIX*>(&matrixViewToScreen));
 
 		return true;
 	}

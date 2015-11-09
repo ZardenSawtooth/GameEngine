@@ -11,6 +11,9 @@
 #include "../Windows/Includes.h"
 #include "../UserOutput/UserOutput.h"
 #include "../Math/cMatrix_transformation.h"
+#include "../Math/cVector.h"
+#include "../Math/cQuaternion.h"
+#include "../Math/Functions.h"
 #if defined( EAE6320_PLATFORM_D3D )
 
 #include <d3dx9shader.h>

@@ -1,6 +1,6 @@
 #include "shaders.inc"
 
-uniform float2 g_position_offset;
+uniform float3 g_position_offset;
 
 #if defined( EAE6320_PLATFORM_D3D )
 
@@ -51,7 +51,7 @@ uniform float2 g_position_offset;
 			#elif defined( EAE6320_PLATFORM_GL )
 			gl_Position 
 			#endif
-			= vec4( i_position + g_position_offset, 0.0, 1.0 );
+			= vec4( i_position + g_position_offset, 1.0 );
 			
 		}
 		{

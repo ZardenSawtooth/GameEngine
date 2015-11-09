@@ -190,7 +190,7 @@ namespace eae6320
 			// Offset = 0
 			{
 				const GLuint vertexElementLocation = 0;
-				const GLint elementCount = 2;
+				const GLint elementCount = 3;
 				const GLboolean notNormalized = GL_FALSE;	// The given floats should be used as-is
 				glVertexAttribPointer(vertexElementLocation, elementCount, GL_FLOAT, notNormalized, stride, offset);
 				const GLenum errorCode = glGetError();
@@ -224,7 +224,7 @@ namespace eae6320
 			}
 			// Color (1)
 			// 4 uint8_ts == 4 bytes
-			// Offset = 8
+			// Offset = 12
 			{
 				const GLuint vertexElementLocation = 1;
 				const GLint elementCount = 4;

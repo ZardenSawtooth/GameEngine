@@ -399,6 +399,12 @@ namespace
 		vertexData[i_index].y = static_cast<float> (lua_tonumber(&io_luaState, -1));
 		lua_pop(&io_luaState, 1);
 
+		lua_pushinteger(&io_luaState, 3);
+		lua_gettable(&io_luaState, -2);
+
+		vertexData[i_index].z = static_cast<float> (lua_tonumber(&io_luaState, -1));
+		lua_pop(&io_luaState, 1);
+
 		return true;
 	}
 

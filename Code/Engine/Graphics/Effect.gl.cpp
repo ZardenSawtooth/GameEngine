@@ -15,14 +15,14 @@
 
 namespace eae6320 {
 
-	bool Graphics::SetDrawCallUniforms(const Effect &i_Effect, float * i_floatArray ) {
+	bool Graphics::SetDrawCallUniforms(const Effect &i_Effect, Math::cMatrix_transformation i_localToWorldTransform) {
 
 		//float  floatArray[] = { 0.0, 0.0 };
 		//glUniform2fv(i_Effect.location, 1, i_floatArray);
 		Math::cMatrix_transformation matrix;
 		const GLboolean dontTranspose = false; // Matrices are already in the correct format
 		const GLsizei uniformCountToSet = 1;
-		glUniformMatrix4fv(i_Effect.location_localToWorld , uniformCountToSet, dontTranspose, reinterpret_cast<const GLfloat*>(&matrix));
+		glUniformMatrix4fv(i_Effect.location_localToWorld , uniformCountToSet, dontTranspose, reinterpret_cast<const GLfloat*>(&i_localToWorldTransform));
 		glUniformMatrix4fv(i_Effect.location_worldToView, uniformCountToSet, dontTranspose, reinterpret_cast<const GLfloat*>(&matrix));
 		glUniformMatrix4fv(i_Effect.location_viewToScreen, uniformCountToSet, dontTranspose, reinterpret_cast<const GLfloat*>(&matrix));
 		return true;

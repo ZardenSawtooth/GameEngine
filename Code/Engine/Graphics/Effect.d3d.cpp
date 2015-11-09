@@ -10,7 +10,7 @@
 
 namespace eae6320 {
 
-	bool Graphics::SetDrawCallUniforms(const Effect &i_Effect, float * i_floatArray) {
+	bool Graphics::SetDrawCallUniforms(const Effect &i_Effect, Math::cMatrix_transformation i_localToWorldTransform) {
 
 		//float  floatArray[] = {0.0, 0.0};
 		IDirect3DDevice9* direct3dDevice = eae6320::Graphics::getDirect3DDevice();
@@ -18,7 +18,7 @@ namespace eae6320 {
 		
 //		HRESULT result = i_Effect.vertexShaderConstantTable->SetFloatArray(direct3dDevice, i_Effect.handle , i_floatArray, 2);
 
-		HRESULT result = i_Effect.vertexShaderConstantTable->SetMatrixTranspose(direct3dDevice, i_Effect.handle_localToWorld, reinterpret_cast<const D3DXMATRIX*>(&matrix));
+		HRESULT result = i_Effect.vertexShaderConstantTable->SetMatrixTranspose(direct3dDevice, i_Effect.handle_localToWorld, reinterpret_cast<const D3DXMATRIX*>(&i_localToWorldTransform));
 
 		result = i_Effect.vertexShaderConstantTable->SetMatrixTranspose(direct3dDevice, i_Effect.handle_worldToView, reinterpret_cast<const D3DXMATRIX*>(&matrix));
 

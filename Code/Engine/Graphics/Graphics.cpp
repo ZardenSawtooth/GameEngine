@@ -17,7 +17,10 @@ namespace eae6320
 			{	
 				for (int i = 0; i < 1/*RenderableList.size()*/; i++) {
 					SetEffect(RenderableList[i]->mEffect);
-					eae6320::Graphics::SetDrawCallUniforms(RenderableList[i]->mEffect, reinterpret_cast<float*>(&RenderableList[i]->mPositionOffset));
+
+					Math::cMatrix_transformation matrix(RenderableList[0]->m_orientation, RenderableList[0]->m_position) ;
+
+					eae6320::Graphics::SetDrawCallUniforms(RenderableList[i]->mEffect, matrix);
 					eae6320::Graphics::DrawMesh(RenderableList[i]->mMesh);
 				}
 				

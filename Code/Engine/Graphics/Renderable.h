@@ -4,6 +4,7 @@
 #include "Mesh.h"
 #include "Effect.h"
 #include "../Math/cVector.h"
+#include "../Math/cQuaternion.h"
 #include <vector>
 
 namespace eae6320 
@@ -20,6 +21,8 @@ namespace eae6320
 			};
 			Mesh mMesh;
 			Effect mEffect;
+			Math::cVector m_position;
+			Math::cQuaternion m_orientation;
 			PositionOffset mPositionOffset;
 		}; 
 

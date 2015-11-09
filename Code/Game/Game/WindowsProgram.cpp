@@ -572,8 +572,8 @@ bool UpdateEntities_floats()
 	// You don't have to do it this way for your assignment!
 	// You just need a way to update the position offset associated with the colorful rectangle.
 	
-	eae6320::Graphics::RenderableList[0]->mPositionOffset.x += offset.x;
-	eae6320::Graphics::RenderableList[0]->mPositionOffset.y += offset.y;
+	eae6320::Graphics::RenderableList[0]->m_position.x += offset.x;
+	eae6320::Graphics::RenderableList[0]->m_position.y += offset.y;
 	return !wereThereErrors;
 }
 

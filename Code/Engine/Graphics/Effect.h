@@ -69,7 +69,7 @@ namespace eae6320
 
 		void SetEffect(const Effect &i_Effect);
 		bool LoadEffect(Effect &i_Effect, const char * i_path);
-		bool SetDrawCallUniforms(const Effect &i_Effect, float * i_floatArray);
+		bool SetDrawCallUniforms(const Effect &i_Effect, Math::cMatrix_transformation i_localToWorldTransform);
 
 	}
 }

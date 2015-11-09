@@ -12,7 +12,7 @@ uniform float2 g_position_offset;
 		// Input
 		//======
 
-		in const float2 i_position : POSITION,
+		in const float3 i_position : POSITION,
 		in const float4 i_color : COLOR,
 
 		// Output
@@ -28,7 +28,7 @@ uniform float2 g_position_offset;
 	// Input
 	//======
 
-	layout( location = 0 ) in vec2 i_position;
+	layout( location = 0 ) in vec3 i_position;
 	layout( location = 1 ) in vec4 i_color;
 
 	// Output

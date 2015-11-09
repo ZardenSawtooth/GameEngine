@@ -155,6 +155,9 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 	renderableSquare.mEffect = sEffect;
 	renderableSquare.mMesh = sMesh;
 
+	//enabling backface culling
+	glEnable(GL_CULL_FACE);
+
 	return true;
 
 OnError:

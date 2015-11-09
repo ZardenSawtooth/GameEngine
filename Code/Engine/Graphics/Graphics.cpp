@@ -15,7 +15,7 @@ namespace eae6320
 		{
 			BeginScene();
 			{	
-				for (int i = 0; i < RenderableList.size(); i++) {
+				for (int i = 0; i < 1/*RenderableList.size()*/; i++) {
 					SetEffect(RenderableList[i]->mEffect);
 					eae6320::Graphics::SetDrawCallUniforms(RenderableList[i]->mEffect, reinterpret_cast<float*>(&RenderableList[i]->mPositionOffset));
 					eae6320::Graphics::DrawMesh(RenderableList[i]->mMesh);

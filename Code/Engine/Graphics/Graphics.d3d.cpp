@@ -113,21 +113,21 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 		goto OnError;
 	}
 
-	if (!eae6320::Graphics::LoadMesh(sMesh, "data/square.mesh"))
+	if (!eae6320::Graphics::LoadMesh(sMesh, "data/box.mesh"))
 	{
 		goto OnError;
 	}
-	if (!eae6320::Graphics::LoadMesh(sMeshTriangle, "data/triangle.mesh"))
+	/*if (!eae6320::Graphics::LoadMesh(sMeshTriangle, "data/triangle.mesh"))
 	{
 		goto OnError;
-	}
+	}*/
 	if (!eae6320::Graphics::LoadEffect(sEffect, "data/mesheffect.effect"))
 	{
 		goto OnError;
 	}
 
 	RenderableList.push_back( &renderableSquare);
-	RenderableList.push_back( &renderableTriangle1 );
+	/*RenderableList.push_back( &renderableTriangle1 );
 	RenderableList.push_back( &renderableTriangle2 ); 
 
 	renderableTriangle1.mEffect = sEffect;
@@ -138,7 +138,7 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 	renderableTriangle2.mEffect = sEffect;
 	renderableTriangle2.mMesh = sMeshTriangle;
 	renderableTriangle2.mPositionOffset.x = 1.0f;
-	renderableTriangle2.mPositionOffset.y = 0.3f;
+	renderableTriangle2.mPositionOffset.y = 0.3f;*/
 
 	renderableSquare.mEffect = sEffect;
 	renderableSquare.mMesh = sMesh;

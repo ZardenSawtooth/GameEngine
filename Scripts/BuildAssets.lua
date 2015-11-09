@@ -89,7 +89,6 @@ local function BuildAsset( i_relativePath, i_builderFileName, i_dependency )
 			local lastWriteTime_target = GetLastWriteTime( path_target )
 			local lastWriteTime_dependency
 			if i_dependency then
-			print("-----------" .. path_dependency .. "builder = " .. i_builderFileName)
 				lastWriteTime_dependency = GetLastWriteTime( path_dependency )
 			else
 				lastWriteTime_dependency = 0

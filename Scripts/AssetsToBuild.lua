@@ -7,8 +7,7 @@ return
 		tool = "MeshBuilder.exe",
 		assets =
 		{
-			"square.mesh",
-			"triangle.mesh",
+			"box.mesh",
 		},
 		
 	},

@@ -27,7 +27,7 @@ namespace eae6320
 			// It is possible to start rendering in the middle of an index buffer
 			const GLvoid* const offset = 0;
 			// We are drawing a square
-			const GLsizei primitiveCountToRender = 2;	// How many triangles will be drawn?
+			const GLsizei primitiveCountToRender = 12;	// How many triangles will be drawn?
 			const GLsizei vertexCountPerTriangle = 3;
 			const GLsizei vertexCountToRender = primitiveCountToRender * vertexCountPerTriangle;
 			glDrawElements(mode, vertexCountToRender, indexType, offset);
@@ -39,7 +39,7 @@ namespace eae6320
 
 	}
 
-	bool Graphics::CreateVertexArray(Mesh &i_Mesh, sVertex* i_vertexData, uint32_t * i_indexData)
+	bool Graphics::CreateVertexArray(Mesh &i_Mesh, sVertex* i_vertexData, uint32_t * i_indexData, const unsigned int i_vertexCount, const unsigned int i_indexCount)
 	{
 		bool wereThereErrors = false;
 		GLuint vertexBufferId = 0;
@@ -108,7 +108,8 @@ namespace eae6320
 		// Assign the data to the buffer
 		{
 			// We are drawing a square
-			const unsigned int vertexCount = 4;	// What is the minimum number of vertices a square needs (so that no data is duplicated)?
+			
+			const unsigned int vertexCount = 8;	// What is the minimum number of vertices a square needs (so that no data is duplicated)?
 			sVertex vertexData[vertexCount];
 			// Fill in the data for the triangle
 			{
@@ -129,7 +130,7 @@ namespace eae6320
 				// Experiment with other values to see what happens!
 
 
-				memcpy(vertexData, i_vertexData, sizeof(sVertex) * 4);
+				memcpy(vertexData, i_vertexData, sizeof(sVertex) * i_vertexCount);
 
 			/*	vertexData[0].x = 0.0f;
 				vertexData[0].y = 0.0f;
@@ -298,7 +299,7 @@ namespace eae6320
 		// Allocate space and copy the triangle data into the index buffer
 		{
 			// We are drawing a square
-			const unsigned int triangleCount = 2;	// How many triangles does a square have?
+			const unsigned int triangleCount = 12;	// How many triangles does a square have?
 			const unsigned int vertexCountPerTriangle = 3;
 			uint32_t indexData[triangleCount * vertexCountPerTriangle];
 			// Fill in the data for the triangle
@@ -322,10 +323,10 @@ namespace eae6320
 				//indexData[5] = 3;
 				// etc...
 
-				memcpy(indexData, i_indexData, sizeof(uint32_t) * 6);
+				memcpy(indexData, i_indexData, sizeof(uint32_t) * i_indexCount * 3);
 			}
 
-			const GLsizeiptr bufferSize = triangleCount * vertexCountPerTriangle * sizeof(uint32_t);
+			const GLsizeiptr bufferSize = i_indexCount * vertexCountPerTriangle * sizeof(uint32_t);
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER, bufferSize, reinterpret_cast<const GLvoid*>(indexData),
 				// Our code will only ever write to the buffer
 				GL_STATIC_DRAW);

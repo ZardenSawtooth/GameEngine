@@ -7,7 +7,6 @@
 #include <gl/GL.h>
 #include <gl/GLU.h>
 #include "../../External/OpenGlExtensions/OpenGlExtensions.h"
-
 #include <assert.h>
 
 

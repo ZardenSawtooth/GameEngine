@@ -545,19 +545,19 @@ bool UpdateEntities_floats()
 		{
 			if (eae6320::UserInput::IsKeyPressed(VK_LEFT))
 			{
-				offset.x -= 1.0f;
+				offset.x -= 2.2f;
 			}
 			if (eae6320::UserInput::IsKeyPressed(VK_RIGHT))
 			{
-				offset.x += 1.0f;
+				offset.x += 2.2f;
 			}
 			if (eae6320::UserInput::IsKeyPressed(VK_UP))
 			{
-				offset.y += 1.0f;
+				offset.y += 2.2f;
 			}
 			if (eae6320::UserInput::IsKeyPressed(VK_DOWN))
 			{
-				offset.y -= 1.0f;
+				offset.y -= 2.2f;
 			}
 		}
 		// Get the speed

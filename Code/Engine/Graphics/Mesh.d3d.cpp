@@ -40,8 +40,8 @@ namespace eae6320
 			const unsigned int indexOfFirstVertexToRender = 0;
 			const unsigned int indexOfFirstIndexToUse = 0;
 			// We are drawing a square
-			const unsigned int vertexCountToRender = 4;	// How vertices from the vertex buffer will be used?
-			const unsigned int primitiveCountToRender = 2;	// How many triangles will be drawn?
+			const unsigned int vertexCountToRender = 8;	// How vertices from the vertex buffer will be used?
+			const unsigned int primitiveCountToRender = 12;	// How many triangles will be drawn?
 			HRESULT result = s_direct3dDevice->DrawIndexedPrimitive(primitiveType,
 				indexOfFirstVertexToRender, indexOfFirstVertexToRender, vertexCountToRender,
 				indexOfFirstIndexToUse, primitiveCountToRender);
@@ -68,7 +68,7 @@ namespace eae6320
 		return result;
 	}
 
-	bool Graphics::CreateVertexBuffer( sVertex* i_vertexData,  Mesh &i_Mesh)
+	bool Graphics::CreateVertexBuffer(const unsigned int i_vertexCount, sVertex* i_vertexData,  Mesh &i_Mesh)
 	{
 		
 		IDirect3DDevice9* s_direct3dDevice = eae6320::Graphics::getDirect3DDevice();
@@ -130,7 +130,7 @@ namespace eae6320
 		// Create a vertex buffer
 		{
 			// We are drawing one square
-			const unsigned int vertexCount = 4;	// What is the minimum number of vertices a square needs (so that no data is duplicated)?
+			const unsigned int vertexCount = i_vertexCount;	// What is the minimum number of vertices a square needs (so that no data is duplicated)?
 			const unsigned int bufferSize = vertexCount * sizeof(sVertex);
 			// We will define our own vertex format
 			const DWORD useSeparateVertexDeclaration = 0;
@@ -163,7 +163,7 @@ namespace eae6320
 				}
 			}
 
-			memcpy(vertexData, i_vertexData, sizeof(i_vertexData[0]) * 4);
+			memcpy(vertexData, i_vertexData, sizeof(sVertex) * i_vertexCount);
 			// Fill the buffer
 			{
 				// You will need to fill in two pieces of information for each vertex:
@@ -231,7 +231,7 @@ namespace eae6320
 		return true;
 	}
 
-	bool Graphics::CreateIndexBuffer(uint32_t * i_indexData,  Mesh &i_Mesh)
+	bool Graphics::CreateIndexBuffer(const unsigned int i_indexCount, uint32_t * i_indexData,  Mesh &i_Mesh)
 	{
 		IDirect3DDevice9* s_direct3dDevice = eae6320::Graphics::getDirect3DDevice();
 		// The usage tells Direct3D how this vertex buffer will be used
@@ -251,7 +251,7 @@ namespace eae6320
 		unsigned int bufferSize;
 		{
 			// We are drawing a square
-			const unsigned int triangleCount = 2;	// How many triangles does a square have?
+			const unsigned int triangleCount = i_indexCount;	// How many triangles does a square have?
 			const unsigned int vertexCountPerTriangle = 3;
 			bufferSize = triangleCount * vertexCountPerTriangle * sizeof(uint32_t);
 			// We'll use 32-bit indices in this class to keep things simple
@@ -284,7 +284,7 @@ namespace eae6320
 					return false;
 				}
 			}
-			memcpy(indexData, i_indexData, sizeof(uint32_t) * 6);
+			memcpy(indexData, i_indexData, sizeof(uint32_t) * i_indexCount * 3);
 			// Fill the buffer
 			{
 				// EAE6320_TODO:

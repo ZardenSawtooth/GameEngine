@@ -60,10 +60,10 @@ namespace eae6320 {
 
 #if defined( EAE6320_PLATFORM_D3D )
 		//create index and vertex buffers
-		Graphics::CreateVertexBuffer(vertexData, i_Mesh);
-		Graphics::CreateIndexBuffer(indexData, i_Mesh);
+		Graphics::CreateVertexBuffer(vertexCount, vertexData, i_Mesh);
+		Graphics::CreateIndexBuffer(indexCount,  indexData, i_Mesh);
 #elif defined( EAE6320_PLATFORM_GL )
-		Graphics::CreateVertexArray(i_Mesh, vertexData, indexData);
+		Graphics::CreateVertexArray(i_Mesh, vertexData, indexData, vertexCount, indexCount);
 #endif
 
 		// release dynamically-allocated memory

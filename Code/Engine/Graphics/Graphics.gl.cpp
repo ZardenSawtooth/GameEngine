@@ -461,9 +461,25 @@ namespace
 			}
 		}
 
-		sEffect .location = glGetUniformLocation(sEffect.s_programId, "g_position_offset");
+		sEffect.location_localToWorld = glGetUniformLocation(sEffect.s_programId, "g_transform_localToWorld");
 
-		if (sEffect.location == -1) {
+		if (sEffect.location_localToWorld == -1) {
+			std::stringstream errorMessage;
+			errorMessage << "OpenGL failed to find the Uniform ";
+			eae6320::UserOutput::Print(errorMessage.str());
+		}
+
+		sEffect.location_worldToView = glGetUniformLocation(sEffect.s_programId, "g_transform_worldToView");
+
+		if (sEffect.location_worldToView == -1) {
+			std::stringstream errorMessage;
+			errorMessage << "OpenGL failed to find the Uniform ";
+			eae6320::UserOutput::Print(errorMessage.str());
+		}
+
+		sEffect.location_viewToScreen = glGetUniformLocation(sEffect.s_programId, "g_transform_viewToScreen");
+
+		if (sEffect.location_viewToScreen == -1) {
 			std::stringstream errorMessage;
 			errorMessage << "OpenGL failed to find the Uniform ";
 			eae6320::UserOutput::Print(errorMessage.str());

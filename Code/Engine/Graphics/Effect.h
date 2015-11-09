@@ -10,6 +10,7 @@
 
 #include "../Windows/Includes.h"
 #include "../UserOutput/UserOutput.h"
+#include "../Math/cMatrix_transformation.h"
 #if defined( EAE6320_PLATFORM_D3D )
 
 #include <d3dx9shader.h>
@@ -38,11 +39,15 @@ namespace eae6320
 
 			IDirect3DVertexShader9* s_vertexShader = NULL;
 			IDirect3DPixelShader9* s_fragmentShader = NULL;
-			D3DXHANDLE handle = NULL;
+			D3DXHANDLE handle_localToWorld = NULL;
+			D3DXHANDLE handle_worldToView = NULL;
+			D3DXHANDLE handle_viewToScreen = NULL;
 			ID3DXConstantTable* vertexShaderConstantTable = NULL;
 #elif defined( EAE6320_PLATFORM_GL )
 			GLuint s_programId = 0;
-			GLint location = -1;
+			GLint location_localToWorld = -1;
+			GLint location_worldToView = -1;
+			GLint location_viewToScreen = -1;
 #endif
 		};
 

@@ -113,7 +113,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(LibDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Opengl32.lib;glu32.lib;OpenGlExtensions.lib;%(AdditionalDependencies);UserOutput.lib</AdditionalDependencies>
+      <AdditionalDependencies>Opengl32.lib;glu32.lib;OpenGlExtensions.lib;%(AdditionalDependencies);UserOutput.lib;Math.lib</AdditionalDependencies>
       <AdditionalOptions>/ignore:4006,4221 %(AdditionalOptions)</AdditionalOptions>
     </Lib>
   </ItemDefinitionGroup>
@@ -131,7 +131,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>d3dx9.lib;d3d9.lib;%(AdditionalDependencies);UserOutput.lib</AdditionalDependencies>
+      <AdditionalDependencies>d3dx9.lib;d3d9.lib;%(AdditionalDependencies);UserOutput.lib;Math.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(DXSDK_DIR)Lib\x64\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>/ignore:4006,4221 %(AdditionalOptions)</AdditionalOptions>
     </Lib>
@@ -154,7 +154,7 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalDependencies>Opengl32.lib;glu32.lib;OpenGlExtensions.lib;%(AdditionalDependencies);UserOutput.lib</AdditionalDependencies>
+      <AdditionalDependencies>Opengl32.lib;glu32.lib;OpenGlExtensions.lib;%(AdditionalDependencies);UserOutput.lib;Math.lib</AdditionalDependencies>
       <AdditionalOptions>/ignore:4006,4221 %(AdditionalOptions)</AdditionalOptions>
     </Lib>
   </ItemDefinitionGroup>
@@ -176,7 +176,7 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalDependencies>d3dx9.lib;d3d9.lib;%(AdditionalDependencies);UserOutput.lib</AdditionalDependencies>
+      <AdditionalDependencies>d3dx9.lib;d3d9.lib;%(AdditionalDependencies);UserOutput.lib;Math.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(DXSDK_DIR)Lib\x64\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>/ignore:4006,4221 %(AdditionalOptions)</AdditionalOptions>
     </Lib>

@@ -7,14 +7,22 @@
 #include <iostream>
 #include <fstream>
 
+
 namespace eae6320 {
 
 	bool Graphics::SetDrawCallUniforms(const Effect &i_Effect, float * i_floatArray) {
 
 		//float  floatArray[] = {0.0, 0.0};
 		IDirect3DDevice9* direct3dDevice = eae6320::Graphics::getDirect3DDevice();
+		Math::cMatrix_transformation matrix;
+		
+//		HRESULT result = i_Effect.vertexShaderConstantTable->SetFloatArray(direct3dDevice, i_Effect.handle , i_floatArray, 2);
 
-		HRESULT result = i_Effect.vertexShaderConstantTable->SetFloatArray(direct3dDevice, i_Effect.handle , i_floatArray, 2);
+		HRESULT result = i_Effect.vertexShaderConstantTable->SetMatrixTranspose(direct3dDevice, i_Effect.handle_localToWorld, reinterpret_cast<const D3DXMATRIX*>(&matrix));
+
+		result = i_Effect.vertexShaderConstantTable->SetMatrixTranspose(direct3dDevice, i_Effect.handle_worldToView, reinterpret_cast<const D3DXMATRIX*>(&matrix));
+
+		result = i_Effect.vertexShaderConstantTable->SetMatrixTranspose(direct3dDevice, i_Effect.handle_viewToScreen, reinterpret_cast<const D3DXMATRIX*>(&matrix));
 
 		return true;
 	}
@@ -167,11 +175,25 @@ namespace eae6320 {
 			char * currentPointer = buffer;
 			
 			D3DXGetShaderConstantTable(reinterpret_cast<const DWORD*>(buffer), &i_Effect.vertexShaderConstantTable);
-			i_Effect.handle = i_Effect.vertexShaderConstantTable->GetConstantByName(NULL, "g_position_offset");
-			if ( i_Effect.handle == -NULL) {
+			i_Effect.handle_localToWorld = i_Effect.vertexShaderConstantTable->GetConstantByName(NULL, "g_transform_localToWorld");
+			if ( i_Effect.handle_localToWorld == -NULL) {
 			std::stringstream errorMessage;
 			errorMessage << "Direct3D failed to find the Uniform for vertex shader ";
 			eae6320::UserOutput::Print(errorMessage.str());
+			}
+
+			i_Effect.handle_worldToView = i_Effect.vertexShaderConstantTable->GetConstantByName(NULL, "g_transform_worldToView");
+			if (i_Effect.handle_worldToView == -NULL) {
+				std::stringstream errorMessage;
+				errorMessage << "Direct3D failed to find the Uniform for vertex shader ";
+				eae6320::UserOutput::Print(errorMessage.str());
+			}
+
+			i_Effect.handle_viewToScreen = i_Effect.vertexShaderConstantTable->GetConstantByName(NULL, "g_transform_viewToScreen");
+			if (i_Effect.handle_viewToScreen == -NULL) {
+				std::stringstream errorMessage;
+				errorMessage << "Direct3D failed to find the Uniform for vertex shader ";
+				eae6320::UserOutput::Print(errorMessage.str());
 			}
 			/*if (SUCCEEDED(result))
 			{

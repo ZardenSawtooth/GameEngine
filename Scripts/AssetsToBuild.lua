@@ -8,6 +8,7 @@ return
 		assets =
 		{
 			"box.mesh",
+			"floor.mesh",
 		},
 		
 	},

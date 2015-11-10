@@ -22,6 +22,7 @@ std::vector <eae6320::Graphics::Renderable*>  eae6320::Graphics::RenderableList;
 eae6320::Graphics::Renderable renderableTriangle1;
 eae6320::Graphics::Renderable renderableTriangle2;
 eae6320::Graphics::Renderable renderableSquare;
+eae6320::Graphics::Renderable renderableFloor;
 
 namespace
 {
@@ -47,6 +48,8 @@ namespace
 	eae6320::Graphics::Mesh sMesh;
 	eae6320::Graphics::Mesh sMeshTriangle;
 	eae6320::Graphics::Effect sEffect;
+	eae6320::Graphics::Mesh FloorMesh;
+
 	// OpenGL encapsulates a matching vertex shader and fragment shader into what it calls a "program".
 
 	// A vertex shader is a program that operates on vertices.
@@ -125,6 +128,10 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 	{
 		goto OnError;
 	}
+	if (!eae6320::Graphics::LoadMesh(FloorMesh, "data/floor.mesh"))
+	{
+		goto OnError;
+	}
 	/*if (!eae6320::Graphics::LoadMesh(sMeshTriangle, "data/triangle.mesh"))
 	{
 		goto OnError;
@@ -139,10 +146,11 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 	}
 
 	RenderableList.push_back(&renderableSquare);
+	RenderableList.push_back(&renderableFloor);
 //	RenderableList.push_back(&renderableTriangle1);
 //	RenderableList.push_back(&renderableTriangle2);
 
-	renderableTriangle1.mEffect = sEffect;
+	/*renderableTriangle1.mEffect = sEffect;
 	renderableTriangle1.mMesh = sMeshTriangle;
 	renderableTriangle1.mPositionOffset.x = -0.3f;
 	renderableTriangle1.mPositionOffset.y = -0.3f;
@@ -151,9 +159,12 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 	renderableTriangle2.mMesh = sMeshTriangle;
 	renderableTriangle2.mPositionOffset.x = 1.0f;
 	renderableTriangle2.mPositionOffset.y = 0.3f;
-
+*/
 	renderableSquare.mEffect = sEffect;
 	renderableSquare.mMesh = sMesh;
+
+	renderableFloor.mEffect = sEffect;
+	renderableFloor.mMesh = FloorMesh;
 
 	//enabling backface culling
 	glEnable(GL_CULL_FACE);

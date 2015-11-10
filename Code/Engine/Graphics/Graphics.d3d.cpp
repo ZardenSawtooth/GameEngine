@@ -21,6 +21,7 @@
 eae6320::Graphics::Renderable renderableTriangle1;
 eae6320::Graphics::Renderable renderableTriangle2;
 eae6320::Graphics::Renderable renderableSquare;
+eae6320::Graphics::Renderable renderableFloor;
 
 namespace
 {
@@ -118,6 +119,12 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 	{
 		goto OnError;
 	}
+
+	if (!eae6320::Graphics::LoadMesh(FloorMesh, "data/floor.mesh"))
+	{
+		goto OnError;
+	}
+
 	/*if (!eae6320::Graphics::LoadMesh(sMeshTriangle, "data/triangle.mesh"))
 	{
 		goto OnError;
@@ -128,6 +135,7 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 	}
 
 	RenderableList.push_back( &renderableSquare);
+	RenderableList.push_back(&renderableFloor);
 	/*RenderableList.push_back( &renderableTriangle1 );
 	RenderableList.push_back( &renderableTriangle2 ); 
 
@@ -143,6 +151,10 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 
 	renderableSquare.mEffect = sEffect;
 	renderableSquare.mMesh = sMesh;
+
+	renderableFloor.mEffect = sEffect;
+	renderableFloor.mMesh = FloorMesh;
+	
 	// Initialize the graphics objects
 	/*if ( !CreateVertexBuffer() )
 	{

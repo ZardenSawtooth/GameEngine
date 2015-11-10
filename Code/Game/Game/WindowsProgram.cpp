@@ -16,6 +16,7 @@
 #include "../../Engine/Time/Time.h"
 #include "../../Engine/UserInput/UserInput.h"
 #include "../../Engine/Graphics/Renderable.h"
+#include "../../Engine/Graphics/Camera.h"
 
 
 // Static Data Initialization
@@ -538,6 +539,8 @@ bool UpdateEntities_floats()
 	{
 		float x, y;
 	}offset;
+
+	eae6320::Math::cVector cameraDir;
 	
 	offset.x = offset.y = 0.0f;
 	{
@@ -574,6 +577,36 @@ bool UpdateEntities_floats()
 	
 	eae6320::Graphics::RenderableList[0]->m_position.x += offset.x;
 	eae6320::Graphics::RenderableList[0]->m_position.y += offset.y;
+
+	{
+		if (eae6320::UserInput::IsKeyPressed('A'))
+		{
+			cameraDir.x -= 2.0f;
+		}
+		if (eae6320::UserInput::IsKeyPressed('D'))
+		{
+			cameraDir.x += 2.0f;
+		}
+		if (eae6320::UserInput::IsKeyPressed('W'))
+		{
+			cameraDir.z += 0.5f;
+		}
+		if (eae6320::UserInput::IsKeyPressed('S'))
+		{
+			cameraDir.z -= 0.5f;
+		}
+	}
+	//update camera
+
+	const float cameraUnitsPerSecond = 1.0f;	// This is arbitrary
+	const float camUnitsToMove = cameraUnitsPerSecond * eae6320::Time::GetSecondsElapsedThisFrame();	// This makes the speed frame-rate-independent
+																							// Normalize the offset
+	cameraDir.x *= camUnitsToMove;
+	cameraDir.y *= camUnitsToMove;
+
+	Camera::getInstance().m_Position += cameraDir;
+
+
 	return !wereThereErrors;
 }
 

@@ -22,7 +22,9 @@ namespace eae6320 {
 		const GLboolean dontTranspose = false; // Matrices are already in the correct format
 		const GLsizei uniformCountToSet = 1;
 
-		Math::cMatrix_transformation matrixWorldToView = Math::cMatrix_transformation::CreateWorldToViewTransform(Math::cQuaternion::cQuaternion(), Math::cVector(0, 0, 10));
+		Math::cMatrix_transformation matrixWorldToView = Math::cMatrix_transformation::CreateWorldToViewTransform(Camera::getInstance().m_Orientation, Camera::getInstance().m_Position);
+
+		//Math::cMatrix_transformation matrixWorldToView = Math::cMatrix_transformation::CreateWorldToViewTransform(Math::cQuaternion::cQuaternion(), Math::cVector(0, 0, 10));
 		Math::cMatrix_transformation matrixViewToScreen = Math::cMatrix_transformation::CreateViewToScreenTransform(Math::ConvertDegreesToRadians(60), 1.33f, 0.1f, 100);
 
 		glUniformMatrix4fv(i_Effect.location_localToWorld , uniformCountToSet, dontTranspose, reinterpret_cast<const GLfloat*>(&i_localToWorldTransform));

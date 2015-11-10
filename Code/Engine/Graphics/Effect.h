@@ -14,6 +14,8 @@
 #include "../Math/cVector.h"
 #include "../Math/cQuaternion.h"
 #include "../Math/Functions.h"
+#include "../Graphics/Camera.h"
+
 #if defined( EAE6320_PLATFORM_D3D )
 
 #include <d3dx9shader.h>

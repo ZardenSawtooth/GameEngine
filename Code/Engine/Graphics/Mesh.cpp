@@ -49,21 +49,23 @@ namespace eae6320 {
 		// read content of infile
 		infile.read(buffer, size);
 		char * currentPointer = buffer;
-		uint32_t vertexCount = *reinterpret_cast<uint32_t*>(currentPointer);
+		i_Mesh.m_vertexCount = *reinterpret_cast<uint32_t*>(currentPointer);
+		//uint32_t vertexCount = 
 		currentPointer += sizeof(uint32_t);
 		sVertex * vertexData = reinterpret_cast<sVertex*>(currentPointer);
-		currentPointer = currentPointer + (sizeof(sVertex) * vertexCount);
-		uint32_t indexCount = *reinterpret_cast<uint32_t*>(currentPointer);
+		currentPointer = currentPointer + (sizeof(sVertex) * i_Mesh.m_vertexCount);
+		i_Mesh.m_indexCount = *reinterpret_cast<uint32_t*>(currentPointer);
+		//uint32_t indexCount = 
 		currentPointer += sizeof(uint32_t);
 		uint32_t * indexData = reinterpret_cast<uint32_t *>(currentPointer);
 		
 
 #if defined( EAE6320_PLATFORM_D3D )
 		//create index and vertex buffers
-		Graphics::CreateVertexBuffer(vertexCount, vertexData, i_Mesh);
-		Graphics::CreateIndexBuffer(indexCount,  indexData, i_Mesh);
+		Graphics::CreateVertexBuffer(vertexData, i_Mesh);
+		Graphics::CreateIndexBuffer(indexData, i_Mesh);
 #elif defined( EAE6320_PLATFORM_GL )
-		Graphics::CreateVertexArray(i_Mesh, vertexData, indexData, vertexCount, indexCount);
+		Graphics::CreateVertexArray(i_Mesh, vertexData, indexData);
 #endif
 
 		// release dynamically-allocated memory

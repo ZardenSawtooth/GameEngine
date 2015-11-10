@@ -27,7 +27,7 @@ namespace eae6320
 			// It is possible to start rendering in the middle of an index buffer
 			const GLvoid* const offset = 0;
 			// We are drawing a square
-			const GLsizei primitiveCountToRender = 12;	// How many triangles will be drawn?
+			const GLsizei primitiveCountToRender = i_Mesh.m_indexCount;	// How many triangles will be drawn?
 			const GLsizei vertexCountPerTriangle = 3;
 			const GLsizei vertexCountToRender = primitiveCountToRender * vertexCountPerTriangle;
 			glDrawElements(mode, vertexCountToRender, indexType, offset);
@@ -39,7 +39,7 @@ namespace eae6320
 
 	}
 
-	bool Graphics::CreateVertexArray(Mesh &i_Mesh, sVertex* i_vertexData, uint32_t * i_indexData, const unsigned int i_vertexCount, const unsigned int i_indexCount)
+	bool Graphics::CreateVertexArray(Mesh &i_Mesh, sVertex* i_vertexData, uint32_t * i_indexData)
 	{
 		bool wereThereErrors = false;
 		GLuint vertexBufferId = 0;
@@ -130,7 +130,7 @@ namespace eae6320
 				// Experiment with other values to see what happens!
 
 
-				memcpy(vertexData, i_vertexData, sizeof(sVertex) * i_vertexCount);
+				memcpy(vertexData, i_vertexData, sizeof(sVertex) * i_Mesh.m_vertexCount);
 
 			/*	vertexData[0].x = 0.0f;
 				vertexData[0].y = 0.0f;
@@ -323,10 +323,10 @@ namespace eae6320
 				//indexData[5] = 3;
 				// etc...
 
-				memcpy(indexData, i_indexData, sizeof(uint32_t) * i_indexCount * 3);
+				memcpy(indexData, i_indexData, sizeof(uint32_t) * i_Mesh.m_indexCount * 3);
 			}
 
-			const GLsizeiptr bufferSize = i_indexCount * vertexCountPerTriangle * sizeof(uint32_t);
+			const GLsizeiptr bufferSize = i_Mesh.m_indexCount * vertexCountPerTriangle * sizeof(uint32_t);
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER, bufferSize, reinterpret_cast<const GLvoid*>(indexData),
 				// Our code will only ever write to the buffer
 				GL_STATIC_DRAW);

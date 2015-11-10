@@ -15,7 +15,7 @@ namespace eae6320
 		{
 			BeginScene();
 			{	
-				for (int i = 0; i < 1/*RenderableList.size()*/; i++) {
+				for (int i = 0; i < RenderableList.size(); i++) {
 					SetEffect(RenderableList[i]->mEffect);
 
 					Math::cMatrix_transformation matrix(RenderableList[0]->m_orientation, RenderableList[0]->m_position) ;
@@ -26,9 +26,6 @@ namespace eae6320
 				
 			}
 			EndScene();
-			
-			
-	
 		}
 	
 		// Everything has been drawn to the "back buffer", which is just an image in memory.

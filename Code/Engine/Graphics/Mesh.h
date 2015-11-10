@@ -35,8 +35,12 @@ namespace eae6320
 			uint8_t b, g, r, a;	// Direct3D expects the byte layout of a color to be different from what you might expect
 		};
 
+		
+
 		struct  Mesh
 		{
+			uint32_t m_vertexCount;
+			uint32_t m_indexCount;
 
 			#if defined( EAE6320_PLATFORM_D3D )
 				IDirect3DVertexDeclaration9* s_vertexDeclaration = NULL;
@@ -53,12 +57,12 @@ namespace eae6320
 
 		#if defined( EAE6320_PLATFORM_D3D )
 			HRESULT GetVertexProcessingUsage(DWORD& o_usage);
-			bool CreateVertexBuffer(const unsigned int i_vertexCount, sVertex* i_vertexData, Mesh &i_Mesh);
-			bool CreateIndexBuffer(const unsigned int i_indexCount, uint32_t * i_indexData, Mesh &i_Mesh);
+			bool CreateVertexBuffer(sVertex* i_vertexData, Mesh &i_Mesh);
+			bool CreateIndexBuffer(uint32_t * i_indexData, Mesh &i_Mesh);
 
 		#elif defined( EAE6320_PLATFORM_GL )
 
-			bool CreateVertexArray(Mesh &i_Mesh, sVertex* i_vertexData, uint32_t * i_indexData, const unsigned int i_vertexCount, const unsigned int i_indexCount);
+			bool CreateVertexArray(Mesh &i_Mesh, sVertex* i_vertexData, uint32_t * i_indexData);
 		#endif
 
 		void DrawMesh(const Mesh &i_Mesh );

@@ -43,6 +43,7 @@ namespace
 	};*/
 	//IDirect3DVertexDeclaration9* s_vertexDeclaration = NULL;
 	eae6320::Graphics::Mesh sMesh;
+	eae6320::Graphics::Mesh FloorMesh;
 	eae6320::Graphics::Mesh sMeshTriangle;
 	eae6320::Graphics::Effect sEffect;
 

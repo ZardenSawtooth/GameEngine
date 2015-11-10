@@ -137,7 +137,9 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 		goto OnError;
 	}*/
 	
-	
+	glEnable(GL_DEPTH_TEST);
+	glDepthMask(GL_TRUE);
+	glDepthFunc(GL_LEQUAL);
 
 
 	if ( !CreateProgram() )
@@ -183,7 +185,8 @@ bool eae6320::Graphics::Clear() {
 		assert(glGetError() == GL_NO_ERROR);
 		// In addition to the color, "depth" and "stencil" can also be cleared,
 		// but for now we only care about color
-		const GLbitfield clearColor = GL_COLOR_BUFFER_BIT;
+		glClearDepth(1.0f);
+		const GLbitfield clearColor = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT;
 		glClear(clearColor);
 		assert(glGetError() == GL_NO_ERROR);
 	}
@@ -522,6 +525,7 @@ namespace
 					desiredPixelFormat.iPixelType = PFD_TYPE_RGBA;
 					desiredPixelFormat.cColorBits = 32;
 					desiredPixelFormat.iLayerType = PFD_MAIN_PLANE ;
+					desiredPixelFormat.cDepthBits = 16;
 				}
 				// Get the ID of the desired pixel format
 				int pixelFormatId;

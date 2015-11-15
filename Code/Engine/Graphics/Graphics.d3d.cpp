@@ -22,6 +22,7 @@ eae6320::Graphics::Renderable renderableTriangle1;
 eae6320::Graphics::Renderable renderableTriangle2;
 eae6320::Graphics::Renderable renderableSquare;
 eae6320::Graphics::Renderable renderableFloor;
+eae6320::Graphics::Renderable renderableObject;
 
 namespace
 {
@@ -46,7 +47,11 @@ namespace
 	eae6320::Graphics::Mesh sMesh;
 	eae6320::Graphics::Mesh FloorMesh;
 	eae6320::Graphics::Mesh sMeshTriangle;
+	eae6320::Graphics::Mesh transparentObject;
+
+
 	eae6320::Graphics::Effect sEffect;
+	eae6320::Graphics::Effect sEffectTransparent;
 
 	//std::vector <eae6320::Graphics::Renderable> RenderableList;
 
@@ -115,12 +120,16 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 		goto OnError;
 	}
 
-	if (!eae6320::Graphics::LoadMesh(sMesh, "data/box.mesh"))
+	if (!eae6320::Graphics::LoadMesh(sMesh, "data/torus.mesh"))
 	{
 		goto OnError;
 	}
 
 	if (!eae6320::Graphics::LoadMesh(FloorMesh, "data/floor.mesh"))
+	{
+		goto OnError;
+	}
+	if (!eae6320::Graphics::LoadMesh(transparentObject, "data/transparentObject.mesh"))
 	{
 		goto OnError;
 	}
@@ -133,7 +142,10 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 	{
 		goto OnError;
 	}
-
+	if (!eae6320::Graphics::LoadEffect(sEffectTransparent, "data/transparentEffect.effect"))
+	{
+		goto OnError;
+	}
 	
 	HRESULT result = s_direct3dDevice->SetRenderState(D3DRS_ZENABLE, D3DZB_TRUE);
 	result = s_direct3dDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
@@ -142,6 +154,7 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 
 	RenderableList.push_back( &renderableSquare);
 	RenderableList.push_back(&renderableFloor);
+	RenderableList.push_back(&renderableObject);
 	/*RenderableList.push_back( &renderableTriangle1 );
 	RenderableList.push_back( &renderableTriangle2 ); 
 
@@ -158,8 +171,12 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 	renderableSquare.mEffect = sEffect;
 	renderableSquare.mMesh = sMesh;
 
+	renderableFloor.m_position.y = -1;
 	renderableFloor.mEffect = sEffect;
 	renderableFloor.mMesh = FloorMesh;
+
+	renderableObject.mMesh = transparentObject;
+	renderableObject.mEffect = sEffectTransparent;
 	
 	// Initialize the graphics objects
 	/*if ( !CreateVertexBuffer() )

@@ -739,7 +739,7 @@ namespace
 				"{\n";
 			{
 				//EAE6320_TODO: Write out i_vertexBuffer and i_indexBuffer in your human-readable mesh format
-				fout << "\tvertices = \n { \n";
+				fout << "\tvertices = \n\t{ \n";
 				{
 					for (unsigned int i = 0; i < i_vertexBuffer.size(); i++)  
 					{
@@ -751,20 +751,20 @@ namespace
 						fout << "\t\t},\n";
 					}
 				}
-				fout << "\t}\n";
+				fout << "\t},\n";
 
-				fout << "\tindices = \n { \n";
+				fout << "\tindices = \n\t{ \n";
 				{
-					for (unsigned int i = 0; i < i_indexBuffer.size()/3; i= i+3)
+					for (unsigned int i = 0; i < i_indexBuffer.size(); i= i+3)
 					{
-						fout << "\t\t{\n";
+						//fout << "\t\t{\n";
 						{
-							fout << "\t\t\t {" << i_indexBuffer[i] << ", " << i_vertexBuffer[i+1].y << ", " << i_vertexBuffer[i+2].z << " },\n";
+							fout << "\t\t {" << i_indexBuffer[i] << ", " << i_indexBuffer[i+1] << ", " << i_indexBuffer[i+2] << " },\n";
 						}
-						fout << "\t\t},\n";
+						//fout << "\t\t},\n";
 					}
 				}
-				fout << "\t}\n";
+				fout << "\t},\n";
 			}
 			// Close table
 			fout << "}\n";

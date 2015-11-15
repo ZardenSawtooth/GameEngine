@@ -587,13 +587,13 @@ bool UpdateEntities_floats()
 		{
 			cameraDir.x += 2.0f;
 		}
-		if (eae6320::UserInput::IsKeyPressed('W'))
-		{
-			cameraDir.z += 0.5f;
-		}
 		if (eae6320::UserInput::IsKeyPressed('S'))
 		{
-			cameraDir.z -= 0.5f;
+			cameraDir.z += 0.3f;
+		}
+		if (eae6320::UserInput::IsKeyPressed('W'))
+		{
+			cameraDir.z -= 0.3f;
 		}
 	}
 	//update camera

@@ -109,8 +109,8 @@ namespace eae6320
 		{
 			// We are drawing a square
 			
-			const unsigned int vertexCount = 8;	// What is the minimum number of vertices a square needs (so that no data is duplicated)?
-			sVertex vertexData[vertexCount];
+			const unsigned int vertexCount = i_Mesh.m_vertexCount;	// What is the minimum number of vertices a square needs (so that no data is duplicated)?
+			sVertex * vertexData = new sVertex[vertexCount];
 			// Fill in the data for the triangle
 			{
 				// You will need to fill in two pieces of information for each vertex:
@@ -167,7 +167,7 @@ namespace eae6320
 				//vertexData[1].x = EAE6320;
 				// etc.
 			}
-			glBufferData(GL_ARRAY_BUFFER, vertexCount * sizeof(sVertex), reinterpret_cast<GLvoid*>(vertexData),
+			glBufferData(GL_ARRAY_BUFFER, i_Mesh.m_vertexCount * sizeof(sVertex), reinterpret_cast<GLvoid*>(vertexData),
 				// Our code will only ever write to the buffer
 				GL_STATIC_DRAW);
 			const GLenum errorCode = glGetError();
@@ -299,9 +299,9 @@ namespace eae6320
 		// Allocate space and copy the triangle data into the index buffer
 		{
 			// We are drawing a square
-			const unsigned int triangleCount = 12;	// How many triangles does a square have?
+			const unsigned int triangleCount = i_Mesh.m_indexCount;	// How many triangles does a square have?
 			const unsigned int vertexCountPerTriangle = 3;
-			uint32_t indexData[triangleCount * vertexCountPerTriangle];
+			uint32_t * indexData = new uint32_t [triangleCount * vertexCountPerTriangle];
 			// Fill in the data for the triangle
 			{
 				// EAE6320_TODO:

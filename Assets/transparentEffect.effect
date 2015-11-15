@@ -1,0 +1,5 @@
+return 
+{	
+	fragmentShaderPath = "data/transparent.shader",
+	vertexShaderPath =  "data/vertex.shader",
+}

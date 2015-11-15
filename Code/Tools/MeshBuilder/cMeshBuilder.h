@@ -27,7 +27,7 @@ namespace eae6320
 		// COLOR0
 		// 4 uint8_ts == 4 bytes
 		// Offset = 8
-		uint8_t b, g, r, a;	// Direct3D expects the byte layout of a color to be different from what you might expect
+		uint8_t r, g, b, a;	// Direct3D expects the byte layout of a color to be different from what you might expect
 	};
 
 	class cMeshBuilder : public cbBuilder

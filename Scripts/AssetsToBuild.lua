@@ -9,6 +9,8 @@ return
 		{
 			"box.mesh",
 			"floor.mesh",
+			"torus.mesh",
+			"transparentObject.mesh",
 		},
 		
 	},
@@ -21,6 +23,7 @@ return
 		assets = 
 		{
 			"fragment.shader",
+			"transparent.shader",
 		},
 		dependencies = "shaders.inc",
 	},
@@ -45,6 +48,7 @@ return
 		assets = 
 		{
 			"mesheffect.effect",
+			"transparentEffect.effect",
 		},
 	
 	},

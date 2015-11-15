@@ -23,6 +23,7 @@ eae6320::Graphics::Renderable renderableTriangle1;
 eae6320::Graphics::Renderable renderableTriangle2;
 eae6320::Graphics::Renderable renderableSquare;
 eae6320::Graphics::Renderable renderableFloor;
+eae6320::Graphics::Renderable renderableObject;
 
 namespace
 {
@@ -47,8 +48,11 @@ namespace
 	//GLuint s_vertexArrayId = 0;
 	eae6320::Graphics::Mesh sMesh;
 	eae6320::Graphics::Mesh sMeshTriangle;
-	eae6320::Graphics::Effect sEffect;
 	eae6320::Graphics::Mesh FloorMesh;
+	eae6320::Graphics::Mesh transparentObject;
+
+	eae6320::Graphics::Effect sEffect;
+	eae6320::Graphics::Effect sEffectTransparent;
 
 	// OpenGL encapsulates a matching vertex shader and fragment shader into what it calls a "program".
 
@@ -77,7 +81,7 @@ namespace
 
 namespace
 {
-	bool CreateProgram();
+	bool CreateProgram(eae6320::Graphics::Effect &i_Effect, const char * i_path);
 	bool CreateRenderingContext();
 //	bool CreateVertexArray();
 	bool LoadAndAllocateShaderProgram( const char* i_path, void*& o_shader, size_t& o_size, std::string* o_errorMessage );
@@ -124,11 +128,15 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 		goto OnError;
 	}*/
 	
-	if (!eae6320::Graphics::LoadMesh(sMesh, "data/box.mesh"))
+	if (!eae6320::Graphics::LoadMesh(sMesh, "data/torus.mesh"))
 	{
 		goto OnError;
 	}
 	if (!eae6320::Graphics::LoadMesh(FloorMesh, "data/floor.mesh"))
+	{
+		goto OnError;
+	}
+	if (!eae6320::Graphics::LoadMesh(transparentObject, "data/transparentObject.mesh"))
 	{
 		goto OnError;
 	}
@@ -142,13 +150,19 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 	glDepthFunc(GL_LEQUAL);
 
 
-	if ( !CreateProgram() )
+	if ( !CreateProgram(sEffect, "data/mesheffect.effect") )
+	{
+		goto OnError;
+	}
+
+	if (!CreateProgram(sEffectTransparent, "data/transparentEffect.effect"))
 	{
 		goto OnError;
 	}
 
 	RenderableList.push_back(&renderableSquare);
 	RenderableList.push_back(&renderableFloor);
+	RenderableList.push_back(&renderableObject);
 //	RenderableList.push_back(&renderableTriangle1);
 //	RenderableList.push_back(&renderableTriangle2);
 
@@ -162,9 +176,14 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 	renderableTriangle2.mPositionOffset.x = 1.0f;
 	renderableTriangle2.mPositionOffset.y = 0.3f;
 */
+
+	renderableObject.mMesh = transparentObject;
+	renderableObject.mEffect = sEffectTransparent;
+
 	renderableSquare.mEffect = sEffect;
 	renderableSquare.mMesh = sMesh;
 
+	renderableFloor.m_position.y = -1;
 	renderableFloor.mEffect = sEffect;
 	renderableFloor.mMesh = FloorMesh;
 
@@ -367,11 +386,11 @@ bool eae6320::Graphics::ShutDown()
 
 namespace
 {
-	bool CreateProgram()
+	bool CreateProgram(eae6320::Graphics::Effect &i_Effect, const char * i_path)
 	{
 		// Create a program
 		{
-			sEffect.s_programId = glCreateProgram();
+			i_Effect.s_programId = glCreateProgram();
 			const GLenum errorCode = glGetError();
 			if ( errorCode != GL_NO_ERROR )
 			{
@@ -381,7 +400,7 @@ namespace
 				eae6320::UserOutput::Print( errorMessage.str() );
 				return false;
 			}
-			else if (sEffect.s_programId == 0 )
+			else if (i_Effect.s_programId == 0 )
 			{
 				eae6320::UserOutput::Print( "OpenGL failed to create a program" );
 				return false;
@@ -396,11 +415,12 @@ namespace
 		{
 			return false;
 		}*/
-		eae6320::Graphics::LoadEffect(sEffect, "data/mesheffect.effect");
+
+		eae6320::Graphics::LoadEffect(i_Effect, i_path);
 
 		// Link the program
 		{
-			glLinkProgram( sEffect.s_programId );
+			glLinkProgram(i_Effect.s_programId );
 			GLenum errorCode = glGetError();
 			if ( errorCode == GL_NO_ERROR )
 			{
@@ -410,13 +430,13 @@ namespace
 				std::string linkInfo;
 				{
 					GLint infoSize;
-					glGetProgramiv(sEffect.s_programId, GL_INFO_LOG_LENGTH, &infoSize );
+					glGetProgramiv(i_Effect.s_programId, GL_INFO_LOG_LENGTH, &infoSize );
 					errorCode = glGetError();
 					if ( errorCode == GL_NO_ERROR )
 					{
 						eae6320::Graphics:: sLogInfo info( static_cast<size_t>( infoSize ) );
 						GLsizei* dontReturnLength = NULL;
-						glGetProgramInfoLog(sEffect.s_programId, static_cast<GLsizei>( infoSize ), dontReturnLength, info.memory );
+						glGetProgramInfoLog(i_Effect.s_programId, static_cast<GLsizei>( infoSize ), dontReturnLength, info.memory );
 						errorCode = glGetError();
 						if ( errorCode == GL_NO_ERROR )
 						{
@@ -443,7 +463,7 @@ namespace
 				// Check to see if there were link errors
 				GLint didLinkingSucceed;
 				{
-					glGetProgramiv(sEffect.s_programId, GL_LINK_STATUS, &didLinkingSucceed );
+					glGetProgramiv(i_Effect.s_programId, GL_LINK_STATUS, &didLinkingSucceed );
 					errorCode = glGetError();
 					if ( errorCode == GL_NO_ERROR )
 					{
@@ -475,25 +495,25 @@ namespace
 			}
 		}
 
-		sEffect.location_localToWorld = glGetUniformLocation(sEffect.s_programId, "g_transform_localToWorld");
+		i_Effect.location_localToWorld = glGetUniformLocation(i_Effect.s_programId, "g_transform_localToWorld");
 
-		if (sEffect.location_localToWorld == -1) {
+		if (i_Effect.location_localToWorld == -1) {
 			std::stringstream errorMessage;
 			errorMessage << "OpenGL failed to find the Uniform ";
 			eae6320::UserOutput::Print(errorMessage.str());
 		}
 
-		sEffect.location_worldToView = glGetUniformLocation(sEffect.s_programId, "g_transform_worldToView");
+		i_Effect.location_worldToView = glGetUniformLocation(i_Effect.s_programId, "g_transform_worldToView");
 
-		if (sEffect.location_worldToView == -1) {
+		if (i_Effect.location_worldToView == -1) {
 			std::stringstream errorMessage;
 			errorMessage << "OpenGL failed to find the Uniform ";
 			eae6320::UserOutput::Print(errorMessage.str());
 		}
 
-		sEffect.location_viewToScreen = glGetUniformLocation(sEffect.s_programId, "g_transform_viewToScreen");
+		i_Effect.location_viewToScreen = glGetUniformLocation(i_Effect.s_programId, "g_transform_viewToScreen");
 
-		if (sEffect.location_viewToScreen == -1) {
+		if (i_Effect.location_viewToScreen == -1) {
 			std::stringstream errorMessage;
 			errorMessage << "OpenGL failed to find the Uniform ";
 			eae6320::UserOutput::Print(errorMessage.str());

@@ -7,6 +7,6 @@ return
 		alphaTransparency = false,
 		depthTesting = true,
 		depthWriting = true,
-		faceCulling = false,
+		faceCulling = true,
 	}
 }

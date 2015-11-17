@@ -41,6 +41,49 @@ namespace eae6320 {
 		{
 			glUseProgram(i_Effect.s_programId);
 			assert(glGetError() == GL_NO_ERROR);
+
+			uint8_t alpha = 1 << 0;
+			uint8_t	depthTest = 1 << 1;
+			uint8_t depthwrite = 1 << 2;
+			uint8_t faceCulling = 1 << 3;
+
+
+			if (i_Effect.renderstates & alpha) 
+			{
+				glEnable(GL_BLEND);
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			}
+			else
+			{
+				glDisable(GL_BLEND);
+			}
+
+			if (i_Effect.renderstates & depthTest) 
+			{
+				glEnable(GL_DEPTH_TEST);
+				glDepthFunc(GL_LEQUAL);
+			}
+			else
+			{
+				glDisable(GL_DEPTH_TEST);
+			}
+
+			if (i_Effect.renderstates & depthwrite) 
+			{
+				glDepthMask(GL_TRUE);
+			}
+			else
+			{
+				glDepthMask(GL_FALSE);
+			}
+			if (i_Effect.renderstates & faceCulling) {
+				glEnable(GL_CULL_FACE);
+				glFrontFace(GL_CCW);
+			}
+			else
+			{
+				glDisable(GL_CULL_FACE);
+			}
 		}
 
 	}

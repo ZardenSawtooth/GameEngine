@@ -39,6 +39,7 @@ namespace eae6320
 
 		struct  Effect
 		{
+			uint8_t renderstates = 0;
 
 #if defined( EAE6320_PLATFORM_D3D )
 

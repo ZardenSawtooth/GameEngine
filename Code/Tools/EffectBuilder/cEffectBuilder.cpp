@@ -165,15 +165,15 @@ namespace
 	bool LoadTableValues(lua_State& io_luaState, std::ofstream& i_outfile)
 	{
 		bool wereThereErrors = false;
-
 		const char* const keyfragment = "fragmentShaderPath";
 		const char* const keyvertex = "vertexShaderPath";
+		const char* const keyRenderstates = "renderStates";
 
 
 		lua_pushstring(&io_luaState, keyfragment);
 		lua_gettable(&io_luaState, -2);
 		const char * fragmentpath = lua_tostring(&io_luaState, -1);
-		i_outfile.write(reinterpret_cast<const char *>(fragmentpath), std::strlen(fragmentpath));
+		i_outfile.write(fragmentpath, std::strlen(fragmentpath));
 		i_outfile.write("\0", 1);
 		lua_pop(&io_luaState, 1);
 
@@ -181,12 +181,58 @@ namespace
 		lua_pushstring(&io_luaState, keyvertex);
 		lua_gettable(&io_luaState, -2);
 		const char * vertexpath = lua_tostring(&io_luaState, -1);
-		i_outfile.write(reinterpret_cast<const char *>(vertexpath), std::strlen(vertexpath));
+		i_outfile.write(vertexpath, std::strlen(vertexpath));
 		i_outfile.write("\0", 1);
 
 		lua_pop(&io_luaState, 1);
 
+		//getting the render states
+		uint8_t renderstates = 0;
+		uint8_t alpha = 1 << 0;
+		uint8_t	depthTest = 1 << 1;
+		uint8_t depthwrite = 1 << 2;
+		uint8_t faceCulling = 1 << 3;
+		
+		lua_pushstring(&io_luaState, keyRenderstates);
+		lua_gettable(&io_luaState, -2);
+		{
+			lua_pushstring(&io_luaState, "alphaTransparency");
+			lua_gettable(&io_luaState, -2);
+			if (lua_toboolean(&io_luaState, -1) == 1)
+				renderstates |= alpha;
+			else
+				renderstates &= ~alpha;
+			lua_pop(&io_luaState, 1);
 
+			lua_pushstring(&io_luaState, "depthTesting");
+			lua_gettable(&io_luaState, -2);
+			if (lua_toboolean(&io_luaState, -1) == 1)
+				renderstates |= depthTest;
+			else
+				renderstates &= ~depthTest;
+			lua_pop(&io_luaState, 1);
+
+			lua_pushstring(&io_luaState, "depthWriting");
+			lua_gettable(&io_luaState, -2);
+			if (lua_toboolean(&io_luaState, -1) == 1)
+				renderstates |= depthwrite;
+			else
+				renderstates &= ~depthwrite;
+			lua_pop(&io_luaState, 1);
+
+			lua_pushstring(&io_luaState, "faceCulling");
+			lua_gettable(&io_luaState, -2);
+			if (lua_toboolean(&io_luaState, -1) == 1)
+				renderstates |= faceCulling;
+			else
+				renderstates &= ~faceCulling;
+			lua_pop(&io_luaState, 1);
+
+
+		}
+		lua_pop(&io_luaState, 1);
+
+		i_outfile.write(reinterpret_cast<char *>(&renderstates), sizeof(uint8_t));
 
 		return true;
 	}

@@ -187,7 +187,7 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 	renderableFloor.mEffect = sEffect;
 	renderableFloor.mMesh = FloorMesh;
 
-	//enabling backface culling
+	//enabling backface culling 
 	glEnable(GL_CULL_FACE);
 
 	return true;
@@ -205,6 +205,7 @@ bool eae6320::Graphics::Clear() {
 		// In addition to the color, "depth" and "stencil" can also be cleared,
 		// but for now we only care about color
 		glClearDepth(1.0f);
+		glDepthMask(GL_TRUE);
 		const GLbitfield clearColor = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT;
 		glClear(clearColor);
 		assert(glGetError() == GL_NO_ERROR);

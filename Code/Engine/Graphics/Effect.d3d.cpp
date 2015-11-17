@@ -42,6 +42,47 @@ namespace eae6320 {
 		assert(SUCCEEDED(result));
 		result = s_direct3dDevice->SetPixelShader(i_Effect.s_fragmentShader);
 		assert(SUCCEEDED(result));
+
+		//setting Render states
+		uint8_t alpha = 1 << 0;
+		uint8_t	depthTest = 1 << 1;
+		uint8_t depthwrite = 1 << 2;
+		uint8_t faceCulling = 1 << 3;
+
+
+		if (i_Effect.renderstates & alpha) {
+			s_direct3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+			s_direct3dDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+			s_direct3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+		}
+		else
+		{
+			s_direct3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
+		}
+
+		if (i_Effect.renderstates & depthTest) {
+			s_direct3dDevice->SetRenderState(D3DRS_ZENABLE, D3DZB_TRUE);
+			s_direct3dDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_LESSEQUAL);
+		}
+		else
+		{
+			s_direct3dDevice->SetRenderState(D3DRS_ZENABLE, D3DZB_FALSE);
+		}
+
+		if (i_Effect.renderstates & depthwrite) {
+			s_direct3dDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
+		}
+		else
+		{
+			s_direct3dDevice->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
+		}
+		if (i_Effect.renderstates & faceCulling) {
+			s_direct3dDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
+		}
+		else
+		{
+			s_direct3dDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
+		}
 	}
 
 	bool Graphics::LoadFragmentShader(Effect &i_Effect, const char * i_path)

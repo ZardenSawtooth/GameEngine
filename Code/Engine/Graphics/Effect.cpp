@@ -25,7 +25,8 @@ namespace eae6320 {
 		const char * FragmentPath = reinterpret_cast<const char *>(currentPointer);
 		currentPointer += std::strlen(FragmentPath) + 1;
 		const char * VertexPath = reinterpret_cast<const char *>(currentPointer);
-		
+		currentPointer += std::strlen(VertexPath) + 1;
+		i_Effect.renderstates = *reinterpret_cast<uint8_t *>(currentPointer);
 
 		// release dynamically-allocated memory
 		

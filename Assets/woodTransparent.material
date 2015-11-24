@@ -1,0 +1,20 @@
+return
+{
+	effect = "data/mesheffect.effect",
+	uniformData = 
+	{
+		{
+			name = "g_color_RGB",
+			shadertype = "fragment",
+			values = { 1, 2, 3 },
+		},
+		{
+			name = "g_color_alpha",
+			shadertype = "fragment",
+			values = { 1 },
+		}
+	},
+	textureData = 
+	{
+	},
+}

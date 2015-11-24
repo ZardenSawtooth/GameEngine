@@ -52,4 +52,15 @@ return
 		},
 	
 	},
+	Materials = 
+	{
+		src = "",
+		tar = "",
+		tool = "MaterialBuilder.exe",
+		assets = 
+		{
+			"wood.material",
+		},
+	
+	},
 }

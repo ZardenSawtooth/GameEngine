@@ -124,6 +124,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FragmentShaderBuilder", "Co
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MayaMeshExporter", "Code\Tools\MayaMeshExporter\MayaMeshExporter.vcxproj", "{70B81970-5665-4429-B2B2-7F6FCED5AB84}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MaterialBuilder", "Code\Tools\MaterialBuilder\MaterialBuilder.vcxproj", "{0EF75377-98A2-4691-9615-36D640503EB7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Direct3D_64 = Debug|Direct3D_64
@@ -296,6 +298,14 @@ Global
 		{70B81970-5665-4429-B2B2-7F6FCED5AB84}.Release|Direct3D_64.Build.0 = Release|x64
 		{70B81970-5665-4429-B2B2-7F6FCED5AB84}.Release|OpenGL_32.ActiveCfg = Release|x64
 		{70B81970-5665-4429-B2B2-7F6FCED5AB84}.Release|OpenGL_32.Build.0 = Release|x64
+		{0EF75377-98A2-4691-9615-36D640503EB7}.Debug|Direct3D_64.ActiveCfg = Debug|x64
+		{0EF75377-98A2-4691-9615-36D640503EB7}.Debug|Direct3D_64.Build.0 = Debug|x64
+		{0EF75377-98A2-4691-9615-36D640503EB7}.Debug|OpenGL_32.ActiveCfg = Debug|Win32
+		{0EF75377-98A2-4691-9615-36D640503EB7}.Debug|OpenGL_32.Build.0 = Debug|Win32
+		{0EF75377-98A2-4691-9615-36D640503EB7}.Release|Direct3D_64.ActiveCfg = Release|x64
+		{0EF75377-98A2-4691-9615-36D640503EB7}.Release|Direct3D_64.Build.0 = Release|x64
+		{0EF75377-98A2-4691-9615-36D640503EB7}.Release|OpenGL_32.ActiveCfg = Release|Win32
+		{0EF75377-98A2-4691-9615-36D640503EB7}.Release|OpenGL_32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -322,5 +332,6 @@ Global
 		{EC809270-CE46-4204-A0F7-F88A6A4732E9} = {9900714F-F4F3-41AC-B088-78631BDFEEB3}
 		{7590DE77-3929-4687-9759-611AA4906B9B} = {9900714F-F4F3-41AC-B088-78631BDFEEB3}
 		{70B81970-5665-4429-B2B2-7F6FCED5AB84} = {9900714F-F4F3-41AC-B088-78631BDFEEB3}
+		{0EF75377-98A2-4691-9615-36D640503EB7} = {9900714F-F4F3-41AC-B088-78631BDFEEB3}
 	EndGlobalSection
 EndGlobal

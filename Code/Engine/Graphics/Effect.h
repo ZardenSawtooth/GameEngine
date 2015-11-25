@@ -36,9 +36,28 @@ namespace eae6320
 {
 	namespace Graphics
 	{
+		typedef
+#if defined( EAE6320_PLATFORM_D3D )
+			// This is conceptually a D3DXHANDLE but is defined this way
+			// so that external files aren't required to specify the #include path to the DirectX SDK
+			const char*
+#elif defined( EAE6320_PLATFORM_GL )
+			// This is conceptually a GLint but is defined this way
+			// so that external files aren't required to specify the #include path to the OpenGl SDK
+			GLint
+#endif
+			tUniformHandle;
+		enum  eShaderType
+		{
+			fragment, vertex
+		};
+
 
 		struct  Effect
 		{
+
+
+
 			uint8_t renderstates = 0;
 
 #if defined( EAE6320_PLATFORM_D3D )
@@ -49,6 +68,7 @@ namespace eae6320
 			D3DXHANDLE handle_worldToView = NULL;
 			D3DXHANDLE handle_viewToScreen = NULL;
 			ID3DXConstantTable* vertexShaderConstantTable = NULL;
+			ID3DXConstantTable* fragmentShaderConstantTable = NULL;
 #elif defined( EAE6320_PLATFORM_GL )
 			GLuint s_programId = 0;
 			GLint location_localToWorld = -1;
@@ -75,6 +95,13 @@ namespace eae6320
 
 		void SetEffect(const Effect &i_Effect);
 		bool LoadEffect(Effect &i_Effect, const char * i_path);
+
+		tUniformHandle SetMaterialUniforms(const char * i_uniformName, Effect &i_Effect);
+
+		void SetUniforms(Effect &i_Effect, Graphics::tUniformHandle i_UniformHandle, Graphics::eShaderType shaderType, float i_values[], uint8_t i_valueCounttoSet);
+
+		bool CreateProgram(eae6320::Graphics::Effect &i_Effect);
+		bool LinkProgram(eae6320::Graphics::Effect &i_Effect);
 		bool SetDrawCallUniforms(const Effect &i_Effect, Math::cMatrix_transformation i_localToWorldTransform);
 
 	}

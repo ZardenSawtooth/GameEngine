@@ -1,6 +1,7 @@
 #include "Graphics.h"
 #include "Renderable.h"
 #include "Effect.h"
+#include "Material.h"
 
 namespace eae6320 
 {
@@ -16,11 +17,13 @@ namespace eae6320
 			BeginScene();
 			{	
 				for (int i = 0; i < RenderableList.size(); i++) {
-					SetEffect(RenderableList[i]->mEffect);
+					//SetEffect(RenderableList[i]->mEffect);
+					SetMaterial(RenderableList[i]->m_Material);
 
 					Math::cMatrix_transformation matrix(RenderableList[i]->m_orientation, RenderableList[i]->m_position) ;
+					eae6320::Graphics::SetDrawCallUniforms(RenderableList[i]->m_Material.m_effect, matrix);
 
-					eae6320::Graphics::SetDrawCallUniforms(RenderableList[i]->mEffect, matrix);
+
 					eae6320::Graphics::DrawMesh(RenderableList[i]->mMesh);
 				}
 				

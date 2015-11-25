@@ -2,7 +2,7 @@
 #define _RENDERABLE_H
 
 #include "Mesh.h"
-#include "Effect.h"
+#include "Material.h"
 #include "../Math/cVector.h"
 #include "../Math/cQuaternion.h"
 #include <vector>
@@ -20,7 +20,9 @@ namespace eae6320
 				float y = 0.0f;
 			};
 			Mesh mMesh;
-			Effect mEffect;
+			//Effect mEffect;
+			Material m_Material;
+
 			Math::cVector m_position;
 			Math::cQuaternion m_orientation;
 			PositionOffset mPositionOffset;

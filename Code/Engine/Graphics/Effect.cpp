@@ -7,7 +7,10 @@
 
 namespace eae6320 {
 
+
 	bool Graphics::LoadEffect(Effect &i_Effect, const char * i_path) {
+
+		CreateProgram(i_Effect);
 
 		std::ifstream infile(i_path, std::ifstream::binary);
 
@@ -41,6 +44,8 @@ namespace eae6320 {
 #endif
 		delete[] buffer;
 		infile.close();
+
+		LinkProgram(i_Effect);
 
 		return true;
 

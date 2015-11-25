@@ -85,6 +85,26 @@ namespace eae6320 {
 		}
 	}
 
+	Graphics::tUniformHandle Graphics::SetMaterialUniforms(const char * i_uniformName, Effect &i_Effect)
+	{
+		
+		return i_Effect.fragmentShaderConstantTable->GetConstantByName(NULL, i_uniformName);
+	}
+
+	void Graphics::SetUniforms(Effect &i_Effect, Graphics::tUniformHandle i_UniformHandle, Graphics::eShaderType shaderType, float i_values[], uint8_t i_valueCounttoSet)
+	{
+		IDirect3DDevice9* s_direct3dDevice = eae6320::Graphics::getDirect3DDevice();
+		i_Effect.vertexShaderConstantTable->SetFloatArray(s_direct3dDevice, i_UniformHandle, i_values, i_valueCounttoSet);
+	}
+	bool Graphics::CreateProgram(eae6320::Graphics::Effect &i_Effect)
+	{
+		return true;
+	}
+	bool Graphics::LinkProgram(eae6320::Graphics::Effect &i_Effect)
+	{
+		return true;
+	}
+
 	bool Graphics::LoadFragmentShader(Effect &i_Effect, const char * i_path)
 	{
 		IDirect3DDevice9* s_direct3dDevice = eae6320::Graphics::getDirect3DDevice();
@@ -123,12 +143,8 @@ namespace eae6320 {
 			// read content of infile
 			infile.read(buffer, size);
 			char * currentPointer = buffer;
-
-			ID3DXConstantTable* fragmentShaderConstantTable = NULL;
 			
-			D3DXGetShaderConstantTable(reinterpret_cast<const DWORD*>(buffer), &fragmentShaderConstantTable);
-
-			
+			D3DXGetShaderConstantTable(reinterpret_cast<const DWORD*>(buffer), &i_Effect.fragmentShaderConstantTable);
 
 			
 			//if (SUCCEEDED(result))

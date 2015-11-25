@@ -15,6 +15,7 @@
 #include "../Windows/Functions.h"
 #include "../../External/OpenGlExtensions/OpenGlExtensions.h"
 #include "Renderable.h"
+#include "Material.h"
 
 // Static Data Initialization
 //===========================
@@ -51,8 +52,8 @@ namespace
 	eae6320::Graphics::Mesh FloorMesh;
 	eae6320::Graphics::Mesh transparentObject;
 
-	eae6320::Graphics::Effect sEffect;
-	eae6320::Graphics::Effect sEffectTransparent;
+	eae6320::Graphics::Material sMaterial;
+	eae6320::Graphics::Material sMaterialTransparent;
 
 	// OpenGL encapsulates a matching vertex shader and fragment shader into what it calls a "program".
 
@@ -81,12 +82,12 @@ namespace
 
 namespace
 {
-	bool CreateProgram(eae6320::Graphics::Effect &i_Effect, const char * i_path);
+	/*bool CreateProgram(eae6320::Graphics::Effect &i_Effect, const char * i_path);*/
 	bool CreateRenderingContext();
 //	bool CreateVertexArray();
-	bool LoadAndAllocateShaderProgram( const char* i_path, void*& o_shader, size_t& o_size, std::string* o_errorMessage );
+	/*bool LoadAndAllocateShaderProgram( const char* i_path, void*& o_shader, size_t& o_size, std::string* o_errorMessage );
 	bool LoadFragmentShader( const GLuint i_programId );
-	bool LoadVertexShader( const GLuint i_programId );
+	bool LoadVertexShader( const GLuint i_programId );*/
 
 
 	/*struct sLogInfo
@@ -140,6 +141,9 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 	{
 		goto OnError;
 	}
+
+	eae6320::Graphics::LoadMaterial(sMaterialTransparent, "data/woodTransparent.material");
+	eae6320::Graphics::LoadMaterial(sMaterial, "data/wood.material");
 	/*if (!eae6320::Graphics::LoadMesh(sMeshTriangle, "data/triangle.mesh"))
 	{
 		goto OnError;
@@ -150,19 +154,20 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 	glDepthFunc(GL_LEQUAL);
 
 
-	if ( !CreateProgram(sEffect, "data/mesheffect.effect") )
+	/*if ( !LoadEffect(sEffect, "data/mesheffect.effect") )
 	{
 		goto OnError;
 	}
 
-	if (!CreateProgram(sEffectTransparent, "data/transparentEffect.effect"))
+	if (!LoadEffect(sEffectTransparent, "data/transparentEffect.effect"))
 	{
 		goto OnError;
-	}
+	}*/
 
 	RenderableList.push_back(&renderableSquare);
 	RenderableList.push_back(&renderableFloor);
 	RenderableList.push_back(&renderableObject);
+	
 //	RenderableList.push_back(&renderableTriangle1);
 //	RenderableList.push_back(&renderableTriangle2);
 
@@ -178,13 +183,13 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 */
 
 	renderableObject.mMesh = transparentObject;
-	renderableObject.mEffect = sEffectTransparent;
+	renderableObject.m_Material = sMaterial;
 
-	renderableSquare.mEffect = sEffect;
+	renderableSquare.m_Material = sMaterialTransparent;
 	renderableSquare.mMesh = sMesh;
 
 	renderableFloor.m_position.y = -1;
-	renderableFloor.mEffect = sEffect;
+	renderableFloor.m_Material = sMaterial;
 	renderableFloor.mMesh = FloorMesh;
 
 	//enabling backface culling 
@@ -310,9 +315,9 @@ bool eae6320::Graphics::ShutDown()
 
 	if ( s_openGlRenderingContext != NULL )
 	{
-		if (sEffect.s_programId != 0 )
+		if (sMaterial.m_effect.s_programId != 0 )
 		{
-			glDeleteProgram(sEffect.s_programId );
+			glDeleteProgram(sMaterial.m_effect.s_programId );
 			const GLenum errorCode = glGetError();
 			if ( errorCode != GL_NO_ERROR )
 			{
@@ -321,7 +326,7 @@ bool eae6320::Graphics::ShutDown()
 					reinterpret_cast<const char*>( gluErrorString( errorCode ) );
 				UserOutput::Print( errorMessage.str() );
 			}
-			sEffect.s_programId = 0;
+			sMaterial.m_effect.s_programId = 0;
 		}
 		if ( sMesh.s_vertexArrayId != 0 )
 		{
@@ -387,141 +392,141 @@ bool eae6320::Graphics::ShutDown()
 
 namespace
 {
-	bool CreateProgram(eae6320::Graphics::Effect &i_Effect, const char * i_path)
-	{
-		// Create a program
-		{
-			i_Effect.s_programId = glCreateProgram();
-			const GLenum errorCode = glGetError();
-			if ( errorCode != GL_NO_ERROR )
-			{
-				std::stringstream errorMessage;
-				errorMessage << "OpenGL failed to create a program: " <<
-					reinterpret_cast<const char*>( gluErrorString( errorCode ) );
-				eae6320::UserOutput::Print( errorMessage.str() );
-				return false;
-			}
-			else if (i_Effect.s_programId == 0 )
-			{
-				eae6320::UserOutput::Print( "OpenGL failed to create a program" );
-				return false;
-			}
-		}
-		// Load and attach the shaders
-		/*if ( !LoadVertexShader( s_programId ) )
-		{
-			return false;
-		}
-		if ( !LoadFragmentShader( s_programId ) )
-		{
-			return false;
-		}*/
+	//bool CreateProgram(eae6320::Graphics::Effect &i_Effect, const char * i_path)
+	//{
+	//	// Create a program
+	//	/*{
+	//		i_Effect.s_programId = glCreateProgram();
+	//		const GLenum errorCode = glGetError();
+	//		if ( errorCode != GL_NO_ERROR )
+	//		{
+	//			std::stringstream errorMessage;
+	//			errorMessage << "OpenGL failed to create a program: " <<
+	//				reinterpret_cast<const char*>( gluErrorString( errorCode ) );
+	//			eae6320::UserOutput::Print( errorMessage.str() );
+	//			return false;
+	//		}
+	//		else if (i_Effect.s_programId == 0 )
+	//		{
+	//			eae6320::UserOutput::Print( "OpenGL failed to create a program" );
+	//			return false;
+	//		}
+	//	}*/
+	//	// Load and attach the shaders
+	//	/*if ( !LoadVertexShader( s_programId ) )
+	//	{
+	//		return false;
+	//	}
+	//	if ( !LoadFragmentShader( s_programId ) )
+	//	{
+	//		return false;
+	//	}*/
 
-		eae6320::Graphics::LoadEffect(i_Effect, i_path);
+	//	eae6320::Graphics::LoadEffect(i_Effect, i_path);
 
-		// Link the program
-		{
-			glLinkProgram(i_Effect.s_programId );
-			GLenum errorCode = glGetError();
-			if ( errorCode == GL_NO_ERROR )
-			{
-				// Get link info
-				// (this won't be used unless linking fails
-				// but it can be useful to look at when debugging)
-				std::string linkInfo;
-				{
-					GLint infoSize;
-					glGetProgramiv(i_Effect.s_programId, GL_INFO_LOG_LENGTH, &infoSize );
-					errorCode = glGetError();
-					if ( errorCode == GL_NO_ERROR )
-					{
-						eae6320::Graphics:: sLogInfo info( static_cast<size_t>( infoSize ) );
-						GLsizei* dontReturnLength = NULL;
-						glGetProgramInfoLog(i_Effect.s_programId, static_cast<GLsizei>( infoSize ), dontReturnLength, info.memory );
-						errorCode = glGetError();
-						if ( errorCode == GL_NO_ERROR )
-						{
-							linkInfo = info.memory;
-						}
-						else
-						{
-							std::stringstream errorMessage;
-							errorMessage << "OpenGL failed to get link info of the program: " <<
-								reinterpret_cast<const char*>( gluErrorString( errorCode ) );
-							eae6320::UserOutput::Print( errorMessage.str() );
-							return false;
-						}
-					}
-					else
-					{
-						std::stringstream errorMessage;
-						errorMessage << "OpenGL failed to get the length of the program link info: " <<
-							reinterpret_cast<const char*>( gluErrorString( errorCode ) );
-						eae6320::UserOutput::Print( errorMessage.str() );
-						return false;
-					}
-				}
-				// Check to see if there were link errors
-				GLint didLinkingSucceed;
-				{
-					glGetProgramiv(i_Effect.s_programId, GL_LINK_STATUS, &didLinkingSucceed );
-					errorCode = glGetError();
-					if ( errorCode == GL_NO_ERROR )
-					{
-						if ( didLinkingSucceed == GL_FALSE )
-						{
-							std::stringstream errorMessage;
-							errorMessage << "The program failed to link:\n" << linkInfo;
-							eae6320::UserOutput::Print( errorMessage.str() );
-							return false;
-						}
-					}
-					else
-					{
-						std::stringstream errorMessage;
-						errorMessage << "OpenGL failed to find out if linking of the program succeeded: " <<
-							reinterpret_cast<const char*>( gluErrorString( errorCode ) );
-						eae6320::UserOutput::Print( errorMessage.str() );
-						return false;
-					}
-				}
-			}
-			else
-			{
-				std::stringstream errorMessage;
-				errorMessage << "OpenGL failed to link the program: " <<
-					reinterpret_cast<const char*>( gluErrorString( errorCode ) );
-				eae6320::UserOutput::Print( errorMessage.str() );
-				return false;
-			}
-		}
+	//	// Link the program
+	//	{
+	//		glLinkProgram(i_Effect.s_programId );
+	//		GLenum errorCode = glGetError();
+	//		if ( errorCode == GL_NO_ERROR )
+	//		{
+	//			// Get link info
+	//			// (this won't be used unless linking fails
+	//			// but it can be useful to look at when debugging)
+	//			std::string linkInfo;
+	//			{
+	//				GLint infoSize;
+	//				glGetProgramiv(i_Effect.s_programId, GL_INFO_LOG_LENGTH, &infoSize );
+	//				errorCode = glGetError();
+	//				if ( errorCode == GL_NO_ERROR )
+	//				{
+	//					eae6320::Graphics:: sLogInfo info( static_cast<size_t>( infoSize ) );
+	//					GLsizei* dontReturnLength = NULL;
+	//					glGetProgramInfoLog(i_Effect.s_programId, static_cast<GLsizei>( infoSize ), dontReturnLength, info.memory );
+	//					errorCode = glGetError();
+	//					if ( errorCode == GL_NO_ERROR )
+	//					{
+	//						linkInfo = info.memory;
+	//					}
+	//					else
+	//					{
+	//						std::stringstream errorMessage;
+	//						errorMessage << "OpenGL failed to get link info of the program: " <<
+	//							reinterpret_cast<const char*>( gluErrorString( errorCode ) );
+	//						eae6320::UserOutput::Print( errorMessage.str() );
+	//						return false;
+	//					}
+	//				}
+	//				else
+	//				{
+	//					std::stringstream errorMessage;
+	//					errorMessage << "OpenGL failed to get the length of the program link info: " <<
+	//						reinterpret_cast<const char*>( gluErrorString( errorCode ) );
+	//					eae6320::UserOutput::Print( errorMessage.str() );
+	//					return false;
+	//				}
+	//			}
+	//			// Check to see if there were link errors
+	//			GLint didLinkingSucceed;
+	//			{
+	//				glGetProgramiv(i_Effect.s_programId, GL_LINK_STATUS, &didLinkingSucceed );
+	//				errorCode = glGetError();
+	//				if ( errorCode == GL_NO_ERROR )
+	//				{
+	//					if ( didLinkingSucceed == GL_FALSE )
+	//					{
+	//						std::stringstream errorMessage;
+	//						errorMessage << "The program failed to link:\n" << linkInfo;
+	//						eae6320::UserOutput::Print( errorMessage.str() );
+	//						return false;
+	//					}
+	//				}
+	//				else
+	//				{
+	//					std::stringstream errorMessage;
+	//					errorMessage << "OpenGL failed to find out if linking of the program succeeded: " <<
+	//						reinterpret_cast<const char*>( gluErrorString( errorCode ) );
+	//					eae6320::UserOutput::Print( errorMessage.str() );
+	//					return false;
+	//				}
+	//			}
+	//		}
+	//		else
+	//		{
+	//			std::stringstream errorMessage;
+	//			errorMessage << "OpenGL failed to link the program: " <<
+	//				reinterpret_cast<const char*>( gluErrorString( errorCode ) );
+	//			eae6320::UserOutput::Print( errorMessage.str() );
+	//			return false;
+	//		}
+	//	}
 
-		i_Effect.location_localToWorld = glGetUniformLocation(i_Effect.s_programId, "g_transform_localToWorld");
+	//	i_Effect.location_localToWorld = glGetUniformLocation(i_Effect.s_programId, "g_transform_localToWorld");
 
-		if (i_Effect.location_localToWorld == -1) {
-			std::stringstream errorMessage;
-			errorMessage << "OpenGL failed to find the Uniform ";
-			eae6320::UserOutput::Print(errorMessage.str());
-		}
+	//	if (i_Effect.location_localToWorld == -1) {
+	//		std::stringstream errorMessage;
+	//		errorMessage << "OpenGL failed to find the Uniform ";
+	//		eae6320::UserOutput::Print(errorMessage.str());
+	//	}
 
-		i_Effect.location_worldToView = glGetUniformLocation(i_Effect.s_programId, "g_transform_worldToView");
+	//	i_Effect.location_worldToView = glGetUniformLocation(i_Effect.s_programId, "g_transform_worldToView");
 
-		if (i_Effect.location_worldToView == -1) {
-			std::stringstream errorMessage;
-			errorMessage << "OpenGL failed to find the Uniform ";
-			eae6320::UserOutput::Print(errorMessage.str());
-		}
+	//	if (i_Effect.location_worldToView == -1) {
+	//		std::stringstream errorMessage;
+	//		errorMessage << "OpenGL failed to find the Uniform ";
+	//		eae6320::UserOutput::Print(errorMessage.str());
+	//	}
 
-		i_Effect.location_viewToScreen = glGetUniformLocation(i_Effect.s_programId, "g_transform_viewToScreen");
+	//	i_Effect.location_viewToScreen = glGetUniformLocation(i_Effect.s_programId, "g_transform_viewToScreen");
 
-		if (i_Effect.location_viewToScreen == -1) {
-			std::stringstream errorMessage;
-			errorMessage << "OpenGL failed to find the Uniform ";
-			eae6320::UserOutput::Print(errorMessage.str());
-		}
+	//	if (i_Effect.location_viewToScreen == -1) {
+	//		std::stringstream errorMessage;
+	//		errorMessage << "OpenGL failed to find the Uniform ";
+	//		eae6320::UserOutput::Print(errorMessage.str());
+	//	}
 
-		return true;
-	}
+	//	return true;
+	//}
 
 	bool CreateRenderingContext()
 	{

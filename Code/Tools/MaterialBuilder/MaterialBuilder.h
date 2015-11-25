@@ -16,19 +16,33 @@ This is an example builder program that just copies the source file to the targe
 
 // Class Declaration
 //==================
+enum  eShaderType
+{
+	 fragment, vertex
+};
+
+typedef
+#if defined( EAE6320_PLATFORM_D3D )
+// This is conceptually a D3DXHANDLE but is defined this way
+// so that external files aren't required to specify the #include path to the DirectX SDK
+	const char*
+#elif defined( EAE6320_PLATFORM_GL )
+// This is conceptually a GLint but is defined this way
+// so that external files aren't required to specify the #include path to the OpenGl SDK
+	int32_t
+#endif
+    tUniformHandle;
+
+
 
 namespace eae6320
 {
-	struct sVertex
+	struct sParameterToSet
 	{
-		// POSITION
-		// 3 floats == 12 bytes
-		// Offset = 0
-		float x, y, z;
-		// COLOR0
-		// 4 uint8_ts == 4 bytes
-		// Offset = 8
-		uint8_t r, g, b, a;	// Direct3D expects the byte layout of a color to be different from what you might expect
+		/*cEffect::*/tUniformHandle uniformHandle = NULL;
+		/*ShaderTypes::*/eShaderType shaderType;
+		float values[4];
+		uint8_t valueCountToSet;
 	};
 
 	class MaterialBuilder : public cbBuilder

@@ -49,9 +49,14 @@ namespace
 	eae6320::Graphics::Mesh sMeshTriangle;
 	eae6320::Graphics::Mesh transparentObject;
 
+	eae6320::Graphics::Material sMaterialWood;
+	eae6320::Graphics::Material sMaterialWoodTransparent;
+	eae6320::Graphics::Material sMaterialMetal;
+	eae6320::Graphics::Material sMaterialMetalTransparent;
 
-	eae6320::Graphics::Effect sEffect;
-	eae6320::Graphics::Effect sEffectTransparent;
+
+	/*eae6320::Graphics::Effect sEffect;
+	eae6320::Graphics::Effect sEffectTransparent;*/
 
 	//std::vector <eae6320::Graphics::Renderable> RenderableList;
 
@@ -138,15 +143,20 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 	{
 		goto OnError;
 	}*/
-	if (!eae6320::Graphics::LoadEffect(sEffect, "data/mesheffect.effect"))
+	/*if (!eae6320::Graphics::LoadEffect(sEffect, "data/mesheffect.effect"))
 	{
 		goto OnError;
 	}
 	if (!eae6320::Graphics::LoadEffect(sEffectTransparent, "data/transparentEffect.effect"))
 	{
 		goto OnError;
-	}
-	
+	}*/
+	eae6320::Graphics::LoadMaterial(sMaterialWoodTransparent, "data/woodTransparent.material");
+	eae6320::Graphics::LoadMaterial(sMaterialWood, "data/wood.material");
+
+	eae6320::Graphics::LoadMaterial(sMaterialMetal, "data/metal.material");
+	eae6320::Graphics::LoadMaterial(sMaterialMetalTransparent, "data/metalTransparent.material");
+
 	HRESULT result = s_direct3dDevice->SetRenderState(D3DRS_ZENABLE, D3DZB_TRUE);
 	result = s_direct3dDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
 	result = s_direct3dDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_LESSEQUAL);
@@ -168,15 +178,15 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 	renderableTriangle2.mPositionOffset.x = 1.0f;
 	renderableTriangle2.mPositionOffset.y = 0.3f;*/
 
-	renderableSquare.mEffect = sEffect;
+	renderableSquare.m_Material = sMaterialWood;
 	renderableSquare.mMesh = sMesh;
 
 	renderableFloor.m_position.y = -1;
-	renderableFloor.mEffect = sEffect;
+	renderableFloor.m_Material = sMaterialMetal;
 	renderableFloor.mMesh = FloorMesh;
 
 	renderableObject.mMesh = transparentObject;
-	renderableObject.mEffect = sEffectTransparent;
+	renderableObject.m_Material = sMaterialMetalTransparent;
 	
 	// Initialize the graphics objects
 	/*if ( !CreateVertexBuffer() )
@@ -377,15 +387,15 @@ bool eae6320::Graphics::ShutDown()
 	{
 		if ( s_direct3dDevice )
 		{
-			if ( sEffect. s_vertexShader )
+			if ( sMaterialWood.m_effect.s_vertexShader )
 			{
-				sEffect.s_vertexShader->Release();
-				sEffect.s_vertexShader = NULL;
+				sMaterialWood.m_effect.s_vertexShader->Release();
+				sMaterialWood.m_effect.s_vertexShader = NULL;
 			}
-			if (sEffect.s_fragmentShader )
+			if (sMaterialWood.m_effect.s_fragmentShader )
 			{
-				sEffect.s_fragmentShader->Release();
-				sEffect.s_fragmentShader = NULL;
+				sMaterialWood.m_effect.s_fragmentShader->Release();
+				sMaterialWood.m_effect.s_fragmentShader = NULL;
 			}
 
 			if ( sMesh.s_vertexBuffer )

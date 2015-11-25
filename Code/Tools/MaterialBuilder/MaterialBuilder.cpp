@@ -6,6 +6,7 @@
 #include <fstream>
 #include <iostream>
 #include <assert.h>
+#include <vector>
 
 // Interface
 //==========
@@ -28,14 +29,9 @@ namespace
 {
 	bool LoadTableValues(lua_State& io_luaState, std::ofstream& i_outfile);
 
-	bool LoadTableValues_vertices(lua_State& io_luaState, std::ofstream& i_outfile);
-	bool LoadTableValues_vertexData(lua_State& io_luaState, std::ofstream& i_outfile);
-	bool GetPositionValues(lua_State& io_luaState, unsigned int i_index);
-	bool GetColorValues(lua_State& io_luaState, unsigned int i_index);
+	bool LoadTableValues_Uniforms(lua_State& io_luaState, std::ofstream& i_outfile);
 
-	bool LoadTableValues_indices(lua_State& io_luaState, std::ofstream& i_outfile);
-	bool LoadTableValues_indexData(lua_State& io_luaState, std::ofstream& i_outfile);
-
+	bool LoadTableValues_uniformData(lua_State& io_luaState, std::ofstream& i_outfile);
 
 	bool LoadAsset(const char* const i_path, std::ofstream& outfile);
 
@@ -56,7 +52,7 @@ namespace eae6320 {
 
 		
 
-		char* buffer = new char[10];
+		
 
 		//outfile.write(reinterpret_cast<const char *>(vertexData), sizeof(sVertex)*n);
 		//outfile.write(reinterpret_cast<const char *>(indexData), sizeof(uint32_t)*3);
@@ -73,10 +69,11 @@ namespace
 
 	bool LoadAsset(const char* i_path, std::ofstream& i_outfile)
 	{
+		//MessageBox(NULL, "", NULL, MB_OK);
 		bool wereThereErrors = false;
 
 		// Create a new Lua state
-		lua_State* luaState = NULL;
+ 		lua_State* luaState = NULL;
 		{
 			luaState = luaL_newstate();
 			if (!luaState)
@@ -139,7 +136,7 @@ namespace
 			else
 			{
 				wereThereErrors = true;
-				std::cerr << lua_tostring(luaState, -1);
+				//std::cerr << lua_tostring(luaState, -1);
 				// Pop the error message
 				lua_pop(luaState, 1);
 				goto OnExit;
@@ -174,27 +171,38 @@ namespace
 
 	bool LoadTableValues(lua_State& io_luaState, std::ofstream& i_outfile)
 	{
+		//load effect name
+		lua_pushstring(&io_luaState, "effect");
+		lua_gettable(&io_luaState, -2);
+		const char * effectname = lua_tostring(&io_luaState, -1);
+		i_outfile.write(effectname, std::strlen(effectname));
+		i_outfile.write("\0", 1);
+		lua_pop(&io_luaState, 1);
 
-		if (!LoadTableValues_vertices(io_luaState, i_outfile))
+
+		//load the uniforms
+		if (!LoadTableValues_Uniforms(io_luaState, i_outfile))
 		{
 			return false;
 		}
-		if (!LoadTableValues_indices(io_luaState, i_outfile))
+
+
+		/*if (!LoadTableValues_indices(io_luaState, i_outfile))
 		{
 			return false;
-		}
+		}*/
 
 		return true;
 	}
 
-	bool LoadTableValues_vertices(lua_State& io_luaState, std::ofstream& i_outfile)
+	bool LoadTableValues_Uniforms(lua_State& io_luaState, std::ofstream& i_outfile)
 	{
 		bool wereThereErrors = false;
 
 		// Right now the asset table is at -1.
 		// After the following table operation it will be at -2
 		// and the "textures" table will be at -1:
-		const char* const key = "vertices";
+		const char* const key = "uniformData";
 		lua_pushstring(&io_luaState, key);
 		lua_gettable(&io_luaState, -2);
 		// It can be hard to remember where the stack is at
@@ -213,7 +221,7 @@ namespace
 		// (look at the "OnExit" label):
 		if (lua_istable(&io_luaState, -1))
 		{
-			if (!LoadTableValues_vertexData(io_luaState, i_outfile))
+			if (!LoadTableValues_uniformData(io_luaState, i_outfile))
 			{
 				wereThereErrors = true;
 				goto OnExit;
@@ -229,297 +237,90 @@ namespace
 
 	OnExit:
 
-		// Pop the vertices table
+		// Pop the uniform table
 		lua_pop(&io_luaState, 1);
 
 		return !wereThereErrors;
 	}
 
-	bool LoadTableValues_indices(lua_State& io_luaState, std::ofstream& i_outfile)
+	bool LoadTableValues_uniformData(lua_State& io_luaState, std::ofstream& i_outfile)
 	{
 		bool wereThereErrors = false;
+		// Right now the vertices table is at -1.
+		// Every time the while() statement is executed it will be at -2
+		// and the next key will be at -1.
+		// Inside the block the table will be at -3,
+		// the current key will be at -2,
+		// and the value will be at -1.
+		// (You may want to review LoadTableValues_allKeys()
+		// in the ReadTopLevelTableValues example,
+		// but remember that you don't need to know how to do this
+		// for Assignment 03.)
 
-		// Right now the asset table is at -1.
-		// After the following table operation it will be at -2
-		// and the "textures" table will be at -1:
-		const char* const key = "indices";
-		lua_pushstring(&io_luaState, key);
-		lua_gettable(&io_luaState, -2);
-		// It can be hard to remember where the stack is at
-		// and how many values to pop.
-		// One strategy I would suggest is to always call a new function
-		// When you are at a new level:
-		// Right now we know that we have an original table at -2,
-		// and a new one at -1,
-		// and so we _know_ that we always have to pop at least _one_
-		// value before leaving this function
-		// (to make the original table be back to index -1).
-		// If we don't do any further stack manipulation in this function
-		// then it becomes easy to remember how many values to pop
-		// because it will always be one.
-		// This is the strategy I'll take in this example
-		// (look at the "OnExit" label):
-		if (lua_istable(&io_luaState, -1))
-		{
-			if (!LoadTableValues_indexData(io_luaState, i_outfile))
+		const char* const keyName = "name";
+		
+		
+		uint32_t numberOfUniforms = luaL_len(&io_luaState, -1);
+		i_outfile.write(reinterpret_cast<const char *>(&numberOfUniforms), sizeof(uint32_t));
+		eae6320::sParameterToSet * parameters = new eae6320::sParameterToSet[numberOfUniforms];
+		std::vector<const char *> names;
+		for (unsigned int i = 1; i <= numberOfUniforms; i++) {
+
+			lua_pushinteger(&io_luaState, i);
+			lua_gettable(&io_luaState, -2);
 			{
-				wereThereErrors = true;
-				goto OnExit;
+				//name of uniform
+				lua_pushstring(&io_luaState, keyName);
+				lua_gettable(&io_luaState, -2);
+				names.push_back(lua_tostring(&io_luaState, -1));
+				lua_pop(&io_luaState, 1);
+
+				//shader type
+				lua_pushstring(&io_luaState, "shadertype");
+				lua_gettable(&io_luaState, -2);
+				const char * type = lua_tostring(&io_luaState, -1);
+
+				if ( strcmp(type, "fragment") == 0)
+					parameters[i - 1].shaderType = fragment;
+				else
+					parameters[i - 1].shaderType = vertex;
+
+				lua_pop(&io_luaState, 1);
+
+				//values
+
+				lua_pushstring(&io_luaState, "values");
+				lua_gettable(&io_luaState, -2);
+				uint32_t numberofValues = luaL_len(&io_luaState, -1);
+				parameters[i - 1].valueCountToSet = numberofValues;
+				
+
+				for (unsigned int j = 1; j <= numberofValues; j++) 
+				{
+					lua_pushinteger(&io_luaState, j);
+					lua_gettable(&io_luaState, -2);
+
+					parameters[i-1].values[j-1] = static_cast<float> (lua_tonumber(&io_luaState, -1));
+					//std::cerr << "\nfloat value" << parameters[i - 1].values[j - 1];
+					lua_pop(&io_luaState, 1);
+				}
+				lua_pop(&io_luaState, 1);
 			}
+
+			lua_pop(&io_luaState, 1);
 		}
-		else
+		for (unsigned int i = 0; i < numberOfUniforms; i++)
 		{
-			wereThereErrors = true;
-			std::cerr << "The value at \"" << key << "\" must be a table "
-				"(instead of a " << luaL_typename(&io_luaState, -1) << ")\n";
-			goto OnExit;
+			//char* temp = new char[sizeof(eae6320::sParameterToSet)];
+			//memcpy(temp, reinterpret_cast<void*>(&parameters[i]), sizeof(eae6320::sParameterToSet));
+			i_outfile.write(reinterpret_cast<char *>(&parameters[i]), sizeof(eae6320::sParameterToSet) );
+			i_outfile.write("\0", 1);
 		}
-
-	OnExit:
-
-		// Pop the vertices table
-		lua_pop(&io_luaState, 1);
-
-		return !wereThereErrors;
-	}
-
-	bool LoadTableValues_vertexData(lua_State& io_luaState, std::ofstream& i_outfile)
-	{
-		bool wereThereErrors = false;
-		// Right now the vertices table is at -1.
-		// Every time the while() statement is executed it will be at -2
-		// and the next key will be at -1.
-		// Inside the block the table will be at -3,
-		// the current key will be at -2,
-		// and the value will be at -1.
-		// (You may want to review LoadTableValues_allKeys()
-		// in the ReadTopLevelTableValues example,
-		// but remember that you don't need to know how to do this
-		// for Assignment 03.)
-
-		const char* const keypos = "position";
-		const char* const colpos = "color";
-		uint32_t numberOfVertices = luaL_len(&io_luaState, -1);
-		i_outfile.write(reinterpret_cast<const char *>(&numberOfVertices), sizeof(uint32_t));
-		vertexData = new eae6320::sVertex[numberOfVertices];
-
-		for (unsigned int i = 1; i <= numberOfVertices; i++) {
-
-			//push vertexData table
-			lua_pushinteger(&io_luaState, i);
-			lua_gettable(&io_luaState, -2);
-
-			//push positions 
-			lua_pushstring(&io_luaState, keypos);
-			lua_gettable(&io_luaState, -2);
-
-
-
-			//get values of positions
-			if (!GetPositionValues(io_luaState, i - 1))
-				return false;
-
-			//pop position values
-			lua_pop(&io_luaState, 1);
-
-			//push color
-			lua_pushstring(&io_luaState, colpos);
-			lua_gettable(&io_luaState, -2);
-
-
-			// Gets color values from current table
-			if (!GetColorValues(io_luaState, i - 1))
-				return false;
-
-			//pops the color values
-			lua_pop(&io_luaState, 1);
-
-			// Pop the vertexData table
-			lua_pop(&io_luaState, 1);
+		for (unsigned int i = 0; i < numberOfUniforms; i++) 
+		{
+			i_outfile.write(names[i], std::strlen(names[i]));
+			i_outfile.write("\0", 1);
 		}
-		i_outfile.write(reinterpret_cast<const char *>(vertexData), sizeof(eae6320::sVertex)*numberOfVertices);
-		//	OnExit:
-
-		return !wereThereErrors;
-
-		return true;
-	}
-
-	bool GetPositionValues(lua_State& io_luaState, unsigned int i_index)
-	{
-		lua_pushinteger(&io_luaState, 1);
-		lua_gettable(&io_luaState, -2);
-
-		vertexData[i_index].x = static_cast<float> (lua_tonumber(&io_luaState, -1));
-		lua_pop(&io_luaState, 1);
-
-		lua_pushinteger(&io_luaState, 2);
-		lua_gettable(&io_luaState, -2);
-
-		vertexData[i_index].y = static_cast<float> (lua_tonumber(&io_luaState, -1));
-		lua_pop(&io_luaState, 1);
-
-		lua_pushinteger(&io_luaState, 3);
-		lua_gettable(&io_luaState, -2);
-
-		vertexData[i_index].z = static_cast<float> (lua_tonumber(&io_luaState, -1));
-		lua_pop(&io_luaState, 1);
-
-		return true;
-	}
-
-	bool GetColorValues(lua_State& io_luaState, unsigned int i_index)
-	{
-		lua_pushinteger(&io_luaState, 1);
-		lua_gettable(&io_luaState, -2);
-
-#if defined( EAE6320_PLATFORM_D3D )
-
-		vertexData[i_index].b = static_cast<uint8_t> (255 * lua_tonumber(&io_luaState, -1));
-		lua_pop(&io_luaState, 1);
-
-		lua_pushinteger(&io_luaState, 2);
-		lua_gettable(&io_luaState, -2);
-
-		vertexData[i_index].g = static_cast<uint8_t> (255 * lua_tonumber(&io_luaState, -1));
-		lua_pop(&io_luaState, 1);
-
-		lua_pushinteger(&io_luaState, 3);
-		lua_gettable(&io_luaState, -2);
-
-		vertexData[i_index].r = static_cast<uint8_t> (255 * lua_tonumber(&io_luaState, -1));
-		lua_pop(&io_luaState, 1);
-
-		lua_pushinteger(&io_luaState, 4);
-		lua_gettable(&io_luaState, -2);
-
-		vertexData[i_index].a = static_cast<uint8_t> (255 * lua_tonumber(&io_luaState, -1));
-		lua_pop(&io_luaState, 1);
-#elif defined(EAE6320_PLATFORM_GL)
-
-		vertexData[i_index].r = static_cast<uint8_t> (255 * lua_tonumber(&io_luaState, -1));
-		lua_pop(&io_luaState, 1);
-
-		lua_pushinteger(&io_luaState, 2);
-		lua_gettable(&io_luaState, -2);
-
-		vertexData[i_index].g = static_cast<uint8_t> (255 * lua_tonumber(&io_luaState, -1));
-		lua_pop(&io_luaState, 1);
-
-		lua_pushinteger(&io_luaState, 3);
-		lua_gettable(&io_luaState, -2);
-
-		vertexData[i_index].b = static_cast<uint8_t> (255 * lua_tonumber(&io_luaState, -1));
-		lua_pop(&io_luaState, 1);
-
-		lua_pushinteger(&io_luaState, 4);
-		lua_gettable(&io_luaState, -2);
-
-		vertexData[i_index].a = static_cast<uint8_t> (255 * lua_tonumber(&io_luaState, -1));
-		lua_pop(&io_luaState, 1);
-
-
-#endif
-
-
-
-		return true;
-	}
-
-	bool LoadTableValues_indexData(lua_State& io_luaState, std::ofstream& i_outfile)
-	{
-		bool wereThereErrors = false;
-		// Right now the vertices table is at -1.
-		// Every time the while() statement is executed it will be at -2
-		// and the next key will be at -1.
-		// Inside the block the table will be at -3,
-		// the current key will be at -2,
-		// and the value will be at -1.
-		// (You may want to review LoadTableValues_allKeys()
-		// in the ReadTopLevelTableValues example,
-		// but remember that you don't need to know how to do this
-		// for Assignment 03.)
-
-		uint32_t numberOfindices = luaL_len(&io_luaState, -1);
-		i_outfile.write(reinterpret_cast <const char *> (&numberOfindices), sizeof(uint32_t));
-		indexData = new uint32_t[numberOfindices * 3];
-		int indexCount = -1;
-		for (unsigned int i = 1; i <= numberOfindices; i++) {
-
-			//push indexData table
-			lua_pushinteger(&io_luaState, i);
-			lua_gettable(&io_luaState, -2);
-
-
-
-#if defined( EAE6320_PLATFORM_D3D )
-			//push index first value 
-			lua_pushinteger(&io_luaState, 1);
-			lua_gettable(&io_luaState, -2);
-
-			indexData[++indexCount] = static_cast<uint32_t> (lua_tointeger(&io_luaState, -1));
-
-			//pop first value
-			lua_pop(&io_luaState, 1);
-
-			//push index second value 
-			lua_pushinteger(&io_luaState, 3);
-			lua_gettable(&io_luaState, -2);
-
-			indexData[++indexCount] = static_cast<uint32_t> (lua_tointeger(&io_luaState, -1));
-
-			//pop second value
-			lua_pop(&io_luaState, 1);
-
-			//push index third value 
-			lua_pushinteger(&io_luaState, 2);
-			lua_gettable(&io_luaState, -2);
-
-			indexData[++indexCount] = static_cast<uint32_t>(lua_tointeger(&io_luaState, -1));
-
-			//pop third value
-			lua_pop(&io_luaState, 1);
-
-#elif defined(EAE6320_PLATFORM_GL)
-
-			//push index first value 
-			lua_pushinteger(&io_luaState, 1);
-			lua_gettable(&io_luaState, -2);
-
-			indexData[++indexCount] = static_cast<uint32_t> (lua_tointeger(&io_luaState, -1));
-
-			//pop first value
-			lua_pop(&io_luaState, 1);
-
-			//push index second value 
-			lua_pushinteger(&io_luaState, 2);
-			lua_gettable(&io_luaState, -2);
-
-			indexData[++indexCount] = static_cast<uint32_t>(lua_tointeger(&io_luaState, -1));
-
-			//pop second value
-			lua_pop(&io_luaState, 1);
-
-			//push index third value 
-			lua_pushinteger(&io_luaState, 3);
-			lua_gettable(&io_luaState, -2);
-
-			indexData[++indexCount] = static_cast<uint32_t> (lua_tointeger(&io_luaState, -1));
-
-			//pop third value
-			lua_pop(&io_luaState, 1);
-
-
-#endif
-
-
-			// Pop the indexData table
-			lua_pop(&io_luaState, 1);
-
-		}
-		i_outfile.write(reinterpret_cast<const char *>(indexData), sizeof(uint32_t) * 3 * numberOfindices);
-
-		//	OnExit:
 
 		return !wereThereErrors;
 

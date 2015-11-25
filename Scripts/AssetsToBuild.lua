@@ -60,6 +60,9 @@ return
 		assets = 
 		{
 			"wood.material",
+			"woodTransparent.material",
+			"metal.material",
+			"metalTransparent.material",
 		},
 	
 	},

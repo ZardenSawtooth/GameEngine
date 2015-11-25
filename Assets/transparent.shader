@@ -45,7 +45,7 @@ uniform float g_color_alpha;
 	{
 		// (where color is represented by 4 floats representing "RGBA" == "Red/Green/Blue/Alpha")
 		{
-			//o_color = i_color;
+			o_color = i_color;
 			//o_color.rgb *= g_color_RGB;
 			o_color.rgb = i_color.rgb * g_color_RGB;
 			o_color.a *= i_color.a * g_color_alpha;

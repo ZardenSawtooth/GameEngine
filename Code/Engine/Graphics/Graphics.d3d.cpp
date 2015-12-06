@@ -139,19 +139,6 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 		goto OnError;
 	}
 
-	/*if (!eae6320::Graphics::LoadMesh(sMeshTriangle, "data/triangle.mesh"))
-	{
-		goto OnError;
-	}*/
-	/*if (!eae6320::Graphics::LoadEffect(sEffect, "data/mesheffect.effect"))
-	{
-		goto OnError;
-	}
-	if (!eae6320::Graphics::LoadEffect(sEffectTransparent, "data/transparentEffect.effect"))
-	{
-		goto OnError;
-	}*/
-
 	eae6320::Graphics::LoadMaterial(sMaterialWoodTransparent, "data/woodTransparent.material");
 	eae6320::Graphics::LoadMaterial(sMaterialWood, "data/wood.material");
 
@@ -162,22 +149,9 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 	result = s_direct3dDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
 	result = s_direct3dDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_LESSEQUAL);
 		
-
 	RenderableList.push_back( &renderableSquare);
 	RenderableList.push_back(&renderableFloor);
 	RenderableList.push_back(&renderableObject);
-	/*RenderableList.push_back( &renderableTriangle1 );
-	RenderableList.push_back( &renderableTriangle2 ); 
-
-	renderableTriangle1.mEffect = sEffect;
-	renderableTriangle1.mMesh = sMeshTriangle;
-	renderableTriangle1.mPositionOffset.x = -0.3f;
-	renderableTriangle1.mPositionOffset.y = -0.3f;
-
-	renderableTriangle2.mEffect = sEffect;
-	renderableTriangle2.mMesh = sMeshTriangle;
-	renderableTriangle2.mPositionOffset.x = 1.0f;
-	renderableTriangle2.mPositionOffset.y = 0.3f;*/
 
 	renderableSquare.m_Material = sMaterialWood;
 	renderableSquare.mMesh = sMesh;
@@ -188,24 +162,7 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 
 	renderableObject.mMesh = transparentObject;
 	renderableObject.m_Material = sMaterialWoodTransparent;
-	
-	// Initialize the graphics objects
-	/*if ( !CreateVertexBuffer() )
-	{
-		goto OnError;
-	}
-	if ( !CreateIndexBuffer() )
-	{
-		goto OnError;
-	}*/
-	/*if ( !LoadVertexShader() )
-	{
-		goto OnError;
-	}
-	if ( !LoadFragmentShader() )
-	{
-		goto OnError;
-	}*/
+
 
 	return true;
 

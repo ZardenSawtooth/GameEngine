@@ -167,20 +167,6 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 	RenderableList.push_back(&renderableSquare);
 	RenderableList.push_back(&renderableFloor);
 	RenderableList.push_back(&renderableObject);
-	
-//	RenderableList.push_back(&renderableTriangle1);
-//	RenderableList.push_back(&renderableTriangle2);
-
-	/*renderableTriangle1.mEffect = sEffect;
-	renderableTriangle1.mMesh = sMeshTriangle;
-	renderableTriangle1.mPositionOffset.x = -0.3f;
-	renderableTriangle1.mPositionOffset.y = -0.3f;
-
-	renderableTriangle2.mEffect = sEffect;
-	renderableTriangle2.mMesh = sMeshTriangle;
-	renderableTriangle2.mPositionOffset.x = 1.0f;
-	renderableTriangle2.mPositionOffset.y = 0.3f;
-*/
 
 	renderableObject.mMesh = transparentObject;
 	renderableObject.m_Material = sMaterialTransparent;

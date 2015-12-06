@@ -183,9 +183,9 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 */
 
 	renderableObject.mMesh = transparentObject;
-	renderableObject.m_Material = sMaterial;
+	renderableObject.m_Material = sMaterialTransparent;
 
-	renderableSquare.m_Material = sMaterialTransparent;
+	renderableSquare.m_Material = sMaterial;
 	renderableSquare.mMesh = sMesh;
 
 	renderableFloor.m_position.y = -1;

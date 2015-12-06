@@ -6,9 +6,8 @@ return
 		{
 			name = "g_color_RGB",
 			shadertype = "fragment",
-			values = { 1, 1, 1 },
+			values = { 0, 0, 255 },
 		},
 		
 	},
-	textureData = {},
 }

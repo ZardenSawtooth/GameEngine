@@ -48,7 +48,7 @@ uniform float g_color_alpha;
 			o_color = i_color;
 			//o_color.rgb *= g_color_RGB;
 			o_color.rgb = i_color.rgb * g_color_RGB;
-			o_color.a *= i_color.a * g_color_alpha;
+			o_color.a *= g_color_alpha;
 			
 		}
 		

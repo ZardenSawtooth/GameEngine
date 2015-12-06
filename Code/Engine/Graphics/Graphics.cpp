@@ -3,7 +3,7 @@
 #include "Effect.h"
 #include "Material.h"
 
-namespace eae6320 
+namespace eae6320
 {
 	void eae6320::Graphics::Render()
 	{

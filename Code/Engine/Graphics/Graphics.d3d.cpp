@@ -151,6 +151,7 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 	{
 		goto OnError;
 	}*/
+
 	eae6320::Graphics::LoadMaterial(sMaterialWoodTransparent, "data/woodTransparent.material");
 	eae6320::Graphics::LoadMaterial(sMaterialWood, "data/wood.material");
 
@@ -182,11 +183,11 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 	renderableSquare.mMesh = sMesh;
 
 	renderableFloor.m_position.y = -1;
-	renderableFloor.m_Material = sMaterialMetal;
+	renderableFloor.m_Material = sMaterialWood;
 	renderableFloor.mMesh = FloorMesh;
 
 	renderableObject.mMesh = transparentObject;
-	renderableObject.m_Material = sMaterialMetalTransparent;
+	renderableObject.m_Material = sMaterialWoodTransparent;
 	
 	// Initialize the graphics objects
 	/*if ( !CreateVertexBuffer() )

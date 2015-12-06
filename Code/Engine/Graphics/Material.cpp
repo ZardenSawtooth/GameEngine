@@ -4,7 +4,6 @@
 #include <fstream>
 #include "Effect.h"
 
-
 void eae6320::Graphics::LoadMaterial(Material &i_Material, const char * i_path)
 {
 	std::ifstream infile(i_path, std::ifstream::binary);
@@ -33,7 +32,7 @@ void eae6320::Graphics::LoadMaterial(Material &i_Material, const char * i_path)
 
 
 	uint32_t * numberOfUniforms = reinterpret_cast<uint32_t *>(currentPointer);
-	
+	i_Material.m_numberOfUniforms = *numberOfUniforms;
 	currentPointer += sizeof(uint32_t);
 
 	i_Material.uniformArray = new sUniformData[*numberOfUniforms];

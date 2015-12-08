@@ -28,6 +28,9 @@ namespace eae6320
 		// 4 uint8_ts == 4 bytes
 		// Offset = 8
 		uint8_t r, g, b, a;	// Direct3D expects the byte layout of a color to be different from what you might expect
+
+		//texture coordinates
+		float u, v;
 	};
 
 	class cMeshBuilder : public cbBuilder

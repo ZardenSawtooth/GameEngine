@@ -3,6 +3,8 @@
 uniform float3 g_color_RGB;
 uniform float g_color_alpha;
 
+uniform sampler2D g_textureSampler;
+
 #if defined( EAE6320_PLATFORM_D3D )
 	
 	// Entry Point
@@ -14,11 +16,12 @@ uniform float g_color_alpha;
 		//======
 
 		in float4 i_color : COLOR0,
+		in float2 i_textureCoordinates : TEXCOORD0,
 
 		// Output
 		//=======
 
-		out float4 o_color : COLOR0
+		out float4 o_color : COLOR0,
 
 		)
 
@@ -30,6 +33,7 @@ uniform float g_color_alpha;
 
 
 	layout( location = 0 ) in vec4 i_color;
+	layout( location = 1 ) in vec2 i_textureCoordinates;
 
 	// Output
 	//=======
@@ -45,10 +49,12 @@ uniform float g_color_alpha;
 	{
 		// (where color is represented by 4 floats representing "RGBA" == "Red/Green/Blue/Alpha")
 		{
+		
 			o_color = i_color;
 			//o_color.rgb *= g_color_RGB;
 			o_color.rgb = i_color.rgb * g_color_RGB;
 			o_color.a *= g_color_alpha;
+			tex2D( g_textureSampler, texcoords );
 			
 		}
 		

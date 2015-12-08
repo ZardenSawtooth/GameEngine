@@ -16,12 +16,14 @@ uniform float4x4 g_transform_viewToScreen;
 
 		in const float3 i_position_local : POSITION,
 		in const float4 i_color : COLOR,
+		in const float2 i_textureCoordinates : TEXCOORD0,
 
 		// Output
 		//=======
 
 		out float4 O_POSITION_SCREEN : POSITION,
 		out float4 o_color : COLOR
+		out float2 o_textureCoordinates : TEXCOORD0,
 
 		)
 	
@@ -32,11 +34,13 @@ uniform float4x4 g_transform_viewToScreen;
 
 	layout( location = 0 ) in vec3 i_position_local;
 	layout( location = 1 ) in vec4 i_color;
+	layout( location = 2 ) in vec2 i_textureCoordinates;
 
 	// Output
 	//=======
 
 	layout( location = 0 ) out vec4 o_color;
+	layout( location = 1 ) out vec2 o_textureCoordinates;
 
 	// Entry Point
 	//============
@@ -69,9 +73,10 @@ uniform float4x4 g_transform_viewToScreen;
 #elif defined( EAE6320_PLATFORM_GL )
 	gl_Position
 #endif
-	= Transform( position_view, g_transform_viewToScreen );
+	= Transform( position_view, g_transform_viewToScreen);
 	{
 		o_color = i_color;
+		o_textureCoordinates = i_textureCoordinates;
 	}
 }
 

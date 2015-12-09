@@ -52,6 +52,7 @@ namespace
 	bool LoadTableValues_vertexData(lua_State& io_luaState, std::ofstream& i_outfile);
 	bool GetPositionValues(lua_State& io_luaState, unsigned int i_index);
 	bool GetColorValues(lua_State& io_luaState, unsigned int i_index);
+	bool GetTextureCoordValues(lua_State& io_luaState, unsigned int i_index);
 
 	bool LoadTableValues_indices(lua_State& io_luaState, std::ofstream& i_outfile);
 	bool LoadTableValues_indexData(lua_State& io_luaState, std::ofstream& i_outfile);
@@ -353,8 +354,6 @@ namespace
 			lua_pushstring(&io_luaState, keypos);
 			lua_gettable(&io_luaState, -2);
 
-
-
 			//get values of positions
 			if (!GetPositionValues(io_luaState, i - 1))
 				return false;
@@ -373,6 +372,18 @@ namespace
 
 			//pops the color values
 			lua_pop(&io_luaState, 1);
+
+			//push texture coord 
+			lua_pushstring(&io_luaState, "textureCoord");
+			lua_gettable(&io_luaState, -2);
+
+			//get values of texture coord
+			if (!GetTextureCoordValues(io_luaState, i - 1))
+				return false;
+
+			//pop texture coord values
+			lua_pop(&io_luaState, 1);
+
 
 			// Pop the vertexData table
 			lua_pop(&io_luaState, 1);
@@ -462,6 +473,23 @@ namespace
 #endif
 
 
+
+		return true;
+	}
+
+	bool GetTextureCoordValues(lua_State& io_luaState, unsigned int i_index)
+	{
+		lua_pushinteger(&io_luaState, 1);
+		lua_gettable(&io_luaState, -2);
+
+		vertexData[i_index].u = static_cast<float> (lua_tonumber(&io_luaState, -1));
+		lua_pop(&io_luaState, 1);
+
+		lua_pushinteger(&io_luaState, 2);
+		lua_gettable(&io_luaState, -2);
+
+		vertexData[i_index].v = 1.0f - static_cast<float> (lua_tonumber(&io_luaState, -1));
+		lua_pop(&io_luaState, 1);
 
 		return true;
 	}

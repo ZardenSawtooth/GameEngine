@@ -5,66 +5,82 @@ return
 		{
 			 position = {4.52842e-07, -1.72664, -3.45327 },
 			 color = {0, 0, 0, 1 },
+			 textureCoord = {0.5, 0 },
 		},
 		{
 			 position = {4.52842e-07, -1.72664, -3.45327 },
 			 color = {0, 0, 0, 1 },
+			 textureCoord = {0.75, 0.5 },
 		},
 		{
 			 position = {4.52842e-07, -1.72664, -3.45327 },
 			 color = {0, 0, 0, 1 },
+			 textureCoord = {0.25, 0.5 },
 		},
 		{
 			 position = {-3.45327, -1.72664, -3.01895e-07 },
 			 color = {0, 0, 0, 1 },
+			 textureCoord = {0.25, 0.25 },
 		},
 		{
 			 position = {-3.45327, -1.72664, -3.01895e-07 },
 			 color = {0, 0, 0, 1 },
+			 textureCoord = {0.375, 0.5 },
 		},
 		{
 			 position = {-3.45327, -1.72664, -3.01895e-07 },
 			 color = {0, 0, 0, 1 },
+			 textureCoord = {0.375, 0.5 },
 		},
 		{
 			 position = {-1.50947e-07, -1.72664, 3.45327 },
 			 color = {1, 0.155, 0.155, 1 },
+			 textureCoord = {0.5, 0.5 },
 		},
 		{
 			 position = {-1.50947e-07, -1.72664, 3.45327 },
 			 color = {1, 0.155, 0.155, 1 },
+			 textureCoord = {0.5, 0.5 },
 		},
 		{
 			 position = {-1.50947e-07, -1.72664, 3.45327 },
 			 color = {1, 0.155, 0.155, 1 },
+			 textureCoord = {0.5, 0.5 },
 		},
 		{
 			 position = {3.45327, -1.72664, 0 },
 			 color = {0, 0, 0, 1 },
+			 textureCoord = {0.625, 0.5 },
 		},
 		{
 			 position = {3.45327, -1.72664, 0 },
 			 color = {0, 0, 0, 1 },
+			 textureCoord = {0.625, 0.5 },
 		},
 		{
 			 position = {3.45327, -1.72664, 0 },
 			 color = {0, 0, 0, 1 },
+			 textureCoord = {0.75, 0.25 },
 		},
 		{
 			 position = {0, 1.72664, 0 },
 			 color = {0, 1, 1, 1 },
+			 textureCoord = {0.5, 1 },
 		},
 		{
 			 position = {0, 1.72664, 0 },
 			 color = {0, 1, 1, 1 },
+			 textureCoord = {0.5, 1 },
 		},
 		{
 			 position = {0, 1.72664, 0 },
 			 color = {0, 1, 1, 1 },
+			 textureCoord = {0.5, 1 },
 		},
 		{
 			 position = {0, 1.72664, 0 },
 			 color = {0, 1, 1, 1 },
+			 textureCoord = {0.5, 1 },
 		},
 	},
 	indices = 

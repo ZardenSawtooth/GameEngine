@@ -21,7 +21,7 @@ uniform sampler2D g_textureSampler;
 		// Output
 		//=======
 
-		out float4 o_color : COLOR0,
+		out float4 o_color : COLOR0
 
 		)
 
@@ -54,7 +54,7 @@ uniform sampler2D g_textureSampler;
 			//o_color.rgb *= g_color_RGB;
 			o_color.rgb = i_color.rgb * g_color_RGB;
 			o_color.a *= g_color_alpha;
-			tex2D( g_textureSampler, texcoords );
+			tex2D( g_textureSampler, i_textureCoordinates);
 			
 		}
 		

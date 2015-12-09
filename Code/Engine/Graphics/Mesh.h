@@ -33,6 +33,9 @@ namespace eae6320
 			// 4 uint8_ts == 4 bytes
 			// Offset = 8
 			uint8_t b, g, r, a;	// Direct3D expects the byte layout of a color to be different from what you might expect
+
+			//UV coordinates
+			float u, v;
 		};
 
 		

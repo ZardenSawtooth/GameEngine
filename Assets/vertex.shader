@@ -22,8 +22,8 @@ uniform float4x4 g_transform_viewToScreen;
 		//=======
 
 		out float4 O_POSITION_SCREEN : POSITION,
-		out float4 o_color : COLOR
-		out float2 o_textureCoordinates : TEXCOORD0,
+		out float4 o_color : COLOR,
+		out float2 o_textureCoordinates : TEXCOORD0
 
 		)
 	

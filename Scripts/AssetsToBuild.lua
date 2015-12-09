@@ -7,7 +7,6 @@ return
 		tool = "MeshBuilder.exe",
 		assets =
 		{
-			"box.mesh",
 			"floor.mesh",
 			"torus.mesh",
 			"transparentObject.mesh",

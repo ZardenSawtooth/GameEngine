@@ -14,4 +14,10 @@ return
 			values = { 0.2 },
 		},
 	},
+	textureData = 
+	{
+		name = "g_textureSampler",
+		path = "data/metal.png",
+		
+	},
 }

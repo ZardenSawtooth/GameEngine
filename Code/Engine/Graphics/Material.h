@@ -25,10 +25,23 @@ namespace eae6320
 			Effect m_effect;
 			sUniformData * uniformArray;
 			uint8_t m_numberOfUniforms;
+			
+
+#if defined( EAE6320_PLATFORM_D3D )
+			IDirect3DTexture9 * m_texture;
+			DWORD samplerID;
+
+#elif defined( EAE6320_PLATFORM_GL )
+			GLuint m_texture;
+			GLint samplerID;
+#endif
+
 
 		};
 
+
 		void LoadMaterial(Material &i_Material, const char * i_path);
+		bool LoadTexture(Material &i_Material, const char * i_path, const char * i_textureHandle);
 
 		void SetMaterial(Material &i_Material);
 	}

@@ -59,6 +59,14 @@ void eae6320::Graphics::LoadMaterial(Material &i_Material, const char * i_path)
 		//const char * uniformNames = reinterpret_cast<const char *>(currentPointer);
 		currentPointer += std::strlen(tempNames) + 1;
 	}
+
+	const char * textureHandle = reinterpret_cast<const char *>(currentPointer);
+	currentPointer += std::strlen(textureHandle) + 1;
+
+	const char * texturePath = reinterpret_cast<const char *>(currentPointer);
+	currentPointer += std::strlen(texturePath) + 1;
+
+	LoadTexture(i_Material, texturePath, textureHandle);
 	
 }
 

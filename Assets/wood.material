@@ -10,4 +10,10 @@ return
 		},
 		
 	},
+	textureData = 
+	{
+		name = "g_textureSampler",
+		path = "wood.png",
+		
+	},
 }

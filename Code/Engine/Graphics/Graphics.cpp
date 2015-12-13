@@ -16,7 +16,8 @@ namespace eae6320
 		{
 			BeginScene();
 			{	
-				for (int i = 0; i < RenderableList.size(); i++) {
+				for (unsigned int i = 0; i < RenderableList.size(); i++) 
+				{
 					//SetEffect(RenderableList[i]->mEffect);
 					SetMaterial(RenderableList[i]->m_Material);
 

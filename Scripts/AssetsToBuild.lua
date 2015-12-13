@@ -65,4 +65,15 @@ return
 		},
 	
 	},
+	Textures = 
+	{
+		src = "",
+		tar = "",
+		tool = "TextureBuilder.exe",
+		assets = 
+		{
+			"wood.png",
+			"metal.png",
+		},
+	},
 }

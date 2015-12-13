@@ -33,6 +33,8 @@ namespace
 
 	bool LoadTableValues_uniformData(lua_State& io_luaState, std::ofstream& i_outfile);
 
+	bool LoadTableValues_TextureData(lua_State& io_luaState, std::ofstream& i_outfile);
+
 	bool LoadAsset(const char* const i_path, std::ofstream& outfile);
 
 
@@ -50,12 +52,6 @@ namespace eae6320 {
 			return false;
 		}
 
-		
-
-		
-
-		//outfile.write(reinterpret_cast<const char *>(vertexData), sizeof(sVertex)*n);
-		//outfile.write(reinterpret_cast<const char *>(indexData), sizeof(uint32_t)*3);
 		outfile.close();
 
 		return true;
@@ -186,13 +182,83 @@ namespace
 			return false;
 		}
 
-
-		/*if (!LoadTableValues_indices(io_luaState, i_outfile))
+		//load texture data
+		if (!LoadTableValues_TextureData(io_luaState, i_outfile))
 		{
 			return false;
-		}*/
+		}
 
 		return true;
+	}
+
+	bool LoadTableValues_TextureData(lua_State& io_luaState, std::ofstream& i_outfile)
+	{
+		bool wereThereErrors = false;
+
+		// Right now the asset table is at -1.
+		// After the following table operation it will be at -2
+		// and the "textures" table will be at -1:
+		const char* const key = "textureData";
+		lua_pushstring(&io_luaState, key);
+		lua_gettable(&io_luaState, -2);
+		// It can be hard to remember where the stack is at
+		// and how many values to pop.
+		// One strategy I would suggest is to always call a new function
+		// When you are at a new level:
+		// Right now we know that we have an original table at -2,
+		// and a new one at -1,
+		// and so we _know_ that we always have to pop at least _one_
+		// value before leaving this function
+		// (to make the original table be back to index -1).
+		// If we don't do any further stack manipulation in this function
+		// then it becomes easy to remember how many values to pop
+		// because it will always be one.
+		// This is the strategy I'll take in this example
+		// (look at the "OnExit" label):
+		if (lua_istable(&io_luaState, -1))
+		{
+			const char* const keyName = "name";
+
+			//push name
+			lua_pushstring(&io_luaState, keyName);
+			lua_gettable(&io_luaState, -2);
+
+			const char * texturename = lua_tostring(&io_luaState, -1);
+			i_outfile.write(texturename, std::strlen(texturename));
+			i_outfile.write("\0", 1);
+			//names.push_back(lua_tostring(&io_luaState, -1));
+
+			//pop name
+			lua_pop(&io_luaState, 1);
+
+			const char* const keyName2 = "path";
+
+			//push name
+			lua_pushstring(&io_luaState, keyName2);
+			lua_gettable(&io_luaState, -2);
+
+			const char * texturepath = lua_tostring(&io_luaState, -1);
+			i_outfile.write(texturepath, std::strlen(texturepath));
+			i_outfile.write("\0", 1);
+			//names.push_back(lua_tostring(&io_luaState, -1));
+
+			//pop name
+			lua_pop(&io_luaState, 1);
+		}
+		else
+		{
+			wereThereErrors = true;
+			std::cerr << "The value at \"" << key << "\" must be a table "
+				"(instead of a " << luaL_typename(&io_luaState, -1) << ")\n";
+			goto OnExit;
+		}
+
+	OnExit:
+
+		// Pop the uniform table
+		lua_pop(&io_luaState, 1);
+
+		return !wereThereErrors;
 	}
 
 	bool LoadTableValues_Uniforms(lua_State& io_luaState, std::ofstream& i_outfile)

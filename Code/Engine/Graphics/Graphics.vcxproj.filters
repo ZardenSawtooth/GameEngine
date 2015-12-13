@@ -54,6 +54,12 @@
     <ClCompile Include="Material.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Material.d3d.cpp">
+      <Filter>Source Files\Direct3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Material.gl.cpp">
+      <Filter>Source Files\OpenGl</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics.h">

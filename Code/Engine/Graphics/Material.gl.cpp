@@ -11,12 +11,12 @@
 
 bool eae6320::Graphics:: LoadTexture(Material &i_Material, const char * i_path, const char * i_textureHandle)
 {
-	std::string* o_errorMessage = NULL;
+	GLuint o_texture = 1024;
+	std::string* o_errorMessage;
 	bool wereThereErrors = false;
 	HANDLE fileHandle = INVALID_HANDLE_VALUE;
 	void* fileContents = NULL;
-	
-	i_Material.m_texture = 0;
+	//o_texture = 0;
 
 	// Open the texture file
 	{
@@ -99,13 +99,13 @@ bool eae6320::Graphics:: LoadTexture(Material &i_Material, const char * i_path, 
 	// Create a new texture and make it active
 	{
 		const GLsizei textureCount = 1;
-		glGenTextures(textureCount, &i_Material.m_texture);
+		glGenTextures(textureCount, &o_texture);
 		const GLenum errorCode = glGetError();
 		if (errorCode == GL_NO_ERROR)
 		{
 			// This code only supports 2D textures;
 			// if you want to support other types you will need to improve this code.
-			glBindTexture(GL_TEXTURE_2D, i_Material.m_texture);
+			glBindTexture(GL_TEXTURE_2D, o_texture);
 			const GLenum errorCode = glGetError();
 			if (errorCode != GL_NO_ERROR)
 			{
@@ -281,17 +281,28 @@ OnExit:
 		}
 		fileHandle = INVALID_HANDLE_VALUE;
 	}
-	if (wereThereErrors && (i_Material.m_texture != 0))
+	if (wereThereErrors && (o_texture != 0))
 	{
 		const GLsizei textureCount = 1;
-		glDeleteTextures(textureCount, &i_Material.m_texture);
+		glDeleteTextures(textureCount, &o_texture);
 		assert(glGetError == GL_NO_ERROR);
-		i_Material.m_texture = 0;
+		o_texture = 0;
 	}
+
+	
 
 	//set the sampler ID
 	i_Material.samplerID = glGetUniformLocation(i_Material.m_effect.s_programId, i_textureHandle);
 
 
 	return !wereThereErrors;
+}
+
+void eae6320::Graphics::SetTextures(Material &i_Material) {
+	
+	glActiveTexture(GL_TEXTURE0 + 0);
+	glBindTexture(GL_TEXTURE_2D, i_Material.m_texture);
+	GLint value = 0;
+	glUniform1i (i_Material.samplerID, value);
+
 }

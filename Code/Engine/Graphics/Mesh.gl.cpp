@@ -270,7 +270,7 @@ namespace eae6320
 			// 2 floats == 8 bytes
 			// Offset = 0
 			{
-				const GLuint vertexElementLocation = 0;
+				const GLuint vertexElementLocation = 2;
 				const GLint elementCount = 2;
 				const GLboolean notNormalized = GL_FALSE;	// The given floats should be used as-is
 				glVertexAttribPointer(vertexElementLocation, elementCount, GL_FLOAT, notNormalized, stride, offset);

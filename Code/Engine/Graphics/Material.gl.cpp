@@ -11,7 +11,7 @@
 
 bool eae6320::Graphics:: LoadTexture(Material &i_Material, const char * i_path, const char * i_textureHandle)
 {
-	GLuint o_texture = 1024;
+	//GLuint o_texture = 1024;
 	std::string* o_errorMessage;
 	bool wereThereErrors = false;
 	HANDLE fileHandle = INVALID_HANDLE_VALUE;
@@ -99,13 +99,13 @@ bool eae6320::Graphics:: LoadTexture(Material &i_Material, const char * i_path, 
 	// Create a new texture and make it active
 	{
 		const GLsizei textureCount = 1;
-		glGenTextures(textureCount, &o_texture);
+		glGenTextures(textureCount, &i_Material.m_texture);
 		const GLenum errorCode = glGetError();
 		if (errorCode == GL_NO_ERROR)
 		{
 			// This code only supports 2D textures;
 			// if you want to support other types you will need to improve this code.
-			glBindTexture(GL_TEXTURE_2D, o_texture);
+			glBindTexture(GL_TEXTURE_2D, i_Material.m_texture);
 			const GLenum errorCode = glGetError();
 			if (errorCode != GL_NO_ERROR)
 			{
@@ -281,12 +281,12 @@ OnExit:
 		}
 		fileHandle = INVALID_HANDLE_VALUE;
 	}
-	if (wereThereErrors && (o_texture != 0))
+	if (wereThereErrors && (i_Material.m_texture != 0))
 	{
 		const GLsizei textureCount = 1;
-		glDeleteTextures(textureCount, &o_texture);
+		glDeleteTextures(textureCount, &i_Material.m_texture);
 		assert(glGetError == GL_NO_ERROR);
-		o_texture = 0;
+		i_Material.m_texture = 0;
 	}
 
 	

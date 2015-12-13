@@ -23,6 +23,7 @@ eae6320::Graphics::Renderable renderableTriangle2;
 eae6320::Graphics::Renderable renderableSquare;
 eae6320::Graphics::Renderable renderableFloor;
 eae6320::Graphics::Renderable renderableObject;
+eae6320::Graphics::Renderable renderableSphere;
 
 namespace
 {
@@ -125,7 +126,7 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 		goto OnError;
 	}
 
-	if (!eae6320::Graphics::LoadMesh(sMesh, "data/torus.mesh"))
+	if (!eae6320::Graphics::LoadMesh(sMesh, "data/sphere.mesh"))
 	{
 		goto OnError;
 	}
@@ -150,12 +151,18 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 	result = s_direct3dDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_LESSEQUAL);
 		
 	RenderableList.push_back( &renderableSquare);
+	RenderableList.push_back(&renderableSphere);
 	RenderableList.push_back(&renderableFloor);
 	RenderableList.push_back(&renderableObject);
 
-	renderableSquare.m_Material = sMaterialWood;
+	renderableSphere.m_Material = sMaterialWood;
+	renderableSphere.mMesh = sMesh;
+	renderableSphere.m_position.x = -2.5;
+
+	renderableSquare.m_Material = sMaterialMetal;
 	renderableSquare.mMesh = sMesh;
 
+	
 	renderableFloor.m_position.y = -1;
 	renderableFloor.m_Material = sMaterialWood;
 	renderableFloor.mMesh = FloorMesh;

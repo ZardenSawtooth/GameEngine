@@ -44,6 +44,7 @@ namespace eae6320
 		bool LoadTexture(Material &i_Material, const char * i_path, const char * i_textureHandle);
 
 		void SetMaterial(Material &i_Material);
+		void SetTextures(Material &i_Material);
 	}
 
 }

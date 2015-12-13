@@ -54,7 +54,7 @@ uniform sampler2D g_textureSampler;
 			//o_color.rgb *= g_color_RGB;
 			o_color.rgb = i_color.rgb * g_color_RGB;
 			o_color.a *= g_color_alpha;
-			tex2D( g_textureSampler, i_textureCoordinates);
+			o_color = o_color * SampleTexture( g_textureSampler, i_textureCoordinates);
 			
 		}
 		

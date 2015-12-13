@@ -6,14 +6,14 @@ return
 		{
 			name = "g_color_RGB",
 			shadertype = "fragment",
-			values = { 0, 0, 255 },
+			values = { 255, 255, 255 },
 		},
 		
 	},
 	textureData = 
 	{
 		name = "g_textureSampler",
-		path = "wood.png",
+		path = "data/eae6320.png",
 		
 	},
 }

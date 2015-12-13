@@ -77,5 +77,6 @@ void eae6320::Graphics::SetMaterial(Material &i_Material) {
 		Graphics::SetUniforms(i_Material.m_effect ,i_Material.uniformArray[i].uniformHandle, i_Material.uniformArray[i].shaderType, i_Material.uniformArray[i].values, i_Material.uniformArray[i].valueCountToSet);
 	}
 
+	SetTextures(i_Material);
 
 }

@@ -8,6 +8,7 @@ return
 		assets =
 		{
 			"floor.mesh",
+			"sphere.mesh",
 			"torus.mesh",
 			"transparentObject.mesh",
 		},
@@ -74,6 +75,8 @@ return
 		{
 			"wood.png",
 			"metal.png",
+			"eae6320.png",
+			"alpha.png",
 		},
 	},
 }

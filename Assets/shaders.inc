@@ -15,7 +15,7 @@
 #define mat3 float3x3
 #define mat4 float4x4
 
-#define texture2D(sampler, texcoords) tex2D( sampler, texcoords ) 
+#define SampleTexture(sampler, texcoords) tex2D(sampler, texcoords) 
 
 #define Transform( i_vector, i_matrix ) mul(i_vector, i_matrix)
 
@@ -38,6 +38,6 @@
 
 #define Transform( i_vector, i_matrix ) i_vector*i_matrix
 
-#define tex2D(sampler, texcoords) texture2D(sampler, texcoords) 
+#define SampleTexture(sampler, texcoords) texture2D(sampler, texcoords) 
 
 #endif

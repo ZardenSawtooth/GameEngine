@@ -29,3 +29,14 @@ bool eae6320::Graphics::LoadTexture(Material &i_Material, const char * i_texture
 
 	return true;
 }
+
+void eae6320::Graphics::SetTextures (Material &i_Material) {
+	IDirect3DDevice9* direct3dDevice = eae6320::Graphics::getDirect3DDevice();
+
+	const HRESULT result = direct3dDevice->SetTexture(i_Material.samplerID, i_Material.m_texture);
+	if (!SUCCEEDED(result))
+	{
+		std::cerr << "Texture unable to set";
+	}
+	
+}

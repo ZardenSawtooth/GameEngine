@@ -1,0 +1,24 @@
+return
+{
+	effect = "data/transparentEffect.effect",
+	uniformData = 
+	{
+		{
+			name = "g_color_RGB",
+			shadertype = "fragment",
+			values = { 150, 204, 204 },
+		},
+		{
+			name = "g_color_alpha",
+			shadertype = "fragment",
+			values = { 0.8 },
+		},
+		
+	},
+	textureData = 
+	{
+		name = "g_textureSampler",
+		path = "data/gun_material.png",
+		
+	}
+}

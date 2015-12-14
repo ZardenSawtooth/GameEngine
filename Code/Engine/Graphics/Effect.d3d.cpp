@@ -20,6 +20,8 @@ namespace eae6320 {
 
 		Math::cMatrix_transformation matrixViewToScreen = Math::cMatrix_transformation::CreateViewToScreenTransform(Math::ConvertDegreesToRadians(60), 1.33f, 0.1f, 100);
 
+
+
 		
 //		HRESULT result = i_Effect.vertexShaderConstantTable->SetFloatArray(direct3dDevice, i_Effect.handle , i_floatArray, 2);
 

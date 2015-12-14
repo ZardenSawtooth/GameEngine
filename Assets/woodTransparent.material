@@ -11,13 +11,13 @@ return
 		{
 			name = "g_color_alpha",
 			shadertype = "fragment",
-			values = { 0.5 },
+			values = { 1 },
 		},
 	},
 	textureData = 
 	{
 		name = "g_textureSampler",
-		path = "data/metal.png",
+		path = "data/alpha.png",
 		
 	}
 }

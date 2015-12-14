@@ -17,7 +17,8 @@
 #include "../../Engine/UserInput/UserInput.h"
 #include "../../Engine/Graphics/Renderable.h"
 #include "../../Engine/Graphics/Camera.h"
-
+#include "../../Engine/Math/cQuaternion.h"
+#include "../../Engine/Math/cMatrix_transformation.h"
 
 // Static Data Initialization
 //===========================
@@ -65,6 +66,8 @@ int CreateMainWindowAndReturnExitCodeWhenItCloses( const HINSTANCE i_thisInstanc
 // Helper Functions
 //=================
 bool UpdateEntities_floats();
+bool checkObjectShoot();
+
 
 bool CreateMainWindow( const HINSTANCE i_thisInstanceOfTheProgram, const int i_initialWindowDisplayState )
 {
@@ -473,6 +476,11 @@ bool WaitForMainWindowToClose( int& o_exitCode )
 	{
 		eae6320::Time::OnNewFrame();
 		UpdateEntities_floats();
+		checkObjectShoot();
+		
+		
+
+
 		eae6320::Graphics::Render();
 
 		// To send us a message, Windows will add it to a queue.
@@ -528,6 +536,32 @@ bool WaitForMainWindowToClose( int& o_exitCode )
 	return true;
 }
 
+bool checkObjectShoot()
+{
+	if (eae6320::UserInput::IsKeyPressed(VK_SPACE))
+	{
+
+		if (eae6320::Graphics::RenderableList[0]->m_position.x-1 < eae6320::Graphics::RenderableList[4]->m_position.x &&
+			eae6320::Graphics::RenderableList[0]->m_position.x+1 > eae6320::Graphics::RenderableList[4]->m_position.x &&
+			eae6320::Graphics::RenderableList[0]->m_position.y - 1 < eae6320::Graphics::RenderableList[4]->m_position.y &&
+			eae6320::Graphics::RenderableList[0]->m_position.y + 1 > eae6320::Graphics::RenderableList[4]->m_position.y		)
+		{
+			//reduce alpha transparency
+			eae6320::Graphics::RenderableList[0]->m_Material.uniformArray[1].values[0] -= 0.1;
+ 			return true;
+		}
+		if (eae6320::Graphics::RenderableList[1]->m_position.x - 1 < eae6320::Graphics::RenderableList[4]->m_position.x &&
+			eae6320::Graphics::RenderableList[1]->m_position.x + 1 > eae6320::Graphics::RenderableList[4]->m_position.x &&
+			eae6320::Graphics::RenderableList[1]->m_position.y - 1 < eae6320::Graphics::RenderableList[4]->m_position.y &&
+			eae6320::Graphics::RenderableList[1]->m_position.y + 1 > eae6320::Graphics::RenderableList[4]->m_position.y)
+		{
+			//reduce alpha transparency
+			eae6320::Graphics::RenderableList[1]->m_Material.uniformArray[1].values[0] -= 0.1;
+   			return true;
+		}
+	}
+}
+
 bool UpdateEntities_floats()
 {
 	bool wereThereErrors = false;
@@ -540,7 +574,15 @@ bool UpdateEntities_floats()
 		float x, y;
 	}offset;
 
+	float rotationSpeed = 0.8; //in degrees
+
 	eae6320::Math::cVector cameraDir;
+	eae6320::Math::cQuaternion * cameraOrientationLeft = new eae6320::Math::cQuaternion(eae6320::Math::ConvertDegreesToRadians(rotationSpeed), eae6320::Math::cVector(0,1,0));
+	eae6320::Math::cQuaternion * cameraOrientationRight = new eae6320::Math::cQuaternion(eae6320::Math::ConvertDegreesToRadians(-rotationSpeed), eae6320::Math::cVector(0, 1, 0));
+	eae6320::Math::cQuaternion * cameraOrientationUp = new eae6320::Math::cQuaternion(eae6320::Math::ConvertDegreesToRadians(rotationSpeed), eae6320::Math::cVector(1, 0, 0));
+	eae6320::Math::cQuaternion * cameraOrientationDown = new eae6320::Math::cQuaternion(eae6320::Math::ConvertDegreesToRadians(-rotationSpeed), eae6320::Math::cVector(1, 0, 0));
+	
+	
 	
 	offset.x = offset.y = 0.0f;
 	{
@@ -578,24 +620,33 @@ bool UpdateEntities_floats()
 	eae6320::Graphics::RenderableList[0]->m_position.x += offset.x;
 	eae6320::Graphics::RenderableList[0]->m_position.y += offset.y;
 
+	eae6320::Math::cQuaternion cameraOrientation = Camera::getInstance().m_Orientation;
+
 	{
-		if (eae6320::UserInput::IsKeyPressed('A'))
+		if (eae6320::UserInput::IsKeyPressed('A'))	
 		{
 			cameraDir.x -= 2.0f;
+			//Camera::getInstance().m_Orientation = Camera::getInstance().m_Orientation * (*cameraOrientationRight);
 		}
 		if (eae6320::UserInput::IsKeyPressed('D'))
 		{
 			cameraDir.x += 2.0f;
+			//Camera::getInstance().m_Orientation = Camera::getInstance().m_Orientation * (*cameraOrientationLeft);
 		}
+		
 		if (eae6320::UserInput::IsKeyPressed('S'))
 		{
-			cameraDir.z += 0.3f;
+			cameraDir.y -= 1.0f;
+			//Camera::getInstance().m_Orientation = Camera::getInstance().m_Orientation * (*cameraOrientationUp);
 		}
+		
 		if (eae6320::UserInput::IsKeyPressed('W'))
 		{
-			cameraDir.z -= 0.3f;
+			cameraDir.y += 1.0f;
+			//Camera::getInstance().m_Orientation = Camera::getInstance().m_Orientation * (*cameraOrientationDown);
 		}
 	}
+
 	//update camera
 
 	const float cameraUnitsPerSecond = 1.0f;	// This is arbitrary
@@ -605,6 +656,11 @@ bool UpdateEntities_floats()
 	cameraDir.y *= camUnitsToMove;
 
 	Camera::getInstance().m_Position += cameraDir;
+
+	eae6320::Graphics::RenderableList[4]->m_position += cameraDir;
+	eae6320::Graphics::RenderableList[5]->m_position += cameraDir;
+	
+
 
 
 	return !wereThereErrors;

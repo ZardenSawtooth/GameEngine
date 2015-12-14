@@ -11,7 +11,7 @@ return
 		{
 			name = "g_color_alpha",
 			shadertype = "fragment",
-			values = { 0.2 },
+			values = { 1 },
 		},
 	},
 	textureData = 

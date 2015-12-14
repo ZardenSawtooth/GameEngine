@@ -24,6 +24,9 @@ eae6320::Graphics::Renderable renderableSquare;
 eae6320::Graphics::Renderable renderableFloor;
 eae6320::Graphics::Renderable renderableObject;
 eae6320::Graphics::Renderable renderableSphere;
+eae6320::Graphics::Renderable renderableCrosshair;
+eae6320::Graphics::Renderable renderableGun;
+
 
 namespace
 {
@@ -49,11 +52,15 @@ namespace
 	eae6320::Graphics::Mesh FloorMesh;
 	eae6320::Graphics::Mesh sMeshTriangle;
 	eae6320::Graphics::Mesh transparentObject;
+	eae6320::Graphics::Mesh crosshair;
+	eae6320::Graphics::Mesh gunMesh;
 
 	eae6320::Graphics::Material sMaterialWood;
 	eae6320::Graphics::Material sMaterialWoodTransparent;
 	eae6320::Graphics::Material sMaterialMetal;
 	eae6320::Graphics::Material sMaterialMetalTransparent;
+	eae6320::Graphics::Material sMaterialCrosshair;
+	eae6320::Graphics::Material sMaterialgun;
 
 
 	/*eae6320::Graphics::Effect sEffect;
@@ -126,6 +133,14 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 		goto OnError;
 	}
 
+	if (!eae6320::Graphics::LoadMesh(crosshair, "data/planeUP.mesh"))
+	{
+		goto OnError;
+	}
+	if (!eae6320::Graphics::LoadMesh(gunMesh, "data/gun.mesh"))
+	{
+		goto OnError;
+	}
 	if (!eae6320::Graphics::LoadMesh(sMesh, "data/sphere.mesh"))
 	{
 		goto OnError;
@@ -145,6 +160,8 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 
 	eae6320::Graphics::LoadMaterial(sMaterialMetal, "data/metal.material");
 	eae6320::Graphics::LoadMaterial(sMaterialMetalTransparent, "data/metalTransparent.material");
+	eae6320::Graphics::LoadMaterial(sMaterialCrosshair, "data/crosshair.material");
+	eae6320::Graphics::LoadMaterial(sMaterialgun, "data/gun.material");
 
 	HRESULT result = s_direct3dDevice->SetRenderState(D3DRS_ZENABLE, D3DZB_TRUE);
 	result = s_direct3dDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
@@ -154,21 +171,32 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 	RenderableList.push_back(&renderableSphere);
 	RenderableList.push_back(&renderableFloor);
 	RenderableList.push_back(&renderableObject);
+	RenderableList.push_back(&renderableCrosshair);
+	RenderableList.push_back(&renderableGun);
 
-	renderableSphere.m_Material = sMaterialWood;
+	renderableSphere.m_Material = sMaterialWoodTransparent;
 	renderableSphere.mMesh = sMesh;
-	renderableSphere.m_position.x = -2.5;
+	renderableSphere.m_position.x = -4.5;
 
-	renderableSquare.m_Material = sMaterialMetal;
+	renderableSquare.m_Material = sMaterialMetalTransparent;
 	renderableSquare.mMesh = sMesh;
 
 	
 	renderableFloor.m_position.y = -1;
-	renderableFloor.m_Material = sMaterialWood;
+	renderableFloor.m_Material = sMaterialMetal;
 	renderableFloor.mMesh = FloorMesh;
 
 	renderableObject.mMesh = transparentObject;
-	renderableObject.m_Material = sMaterialWoodTransparent;
+	renderableObject.m_Material = sMaterialWood;
+	renderableObject.m_position.y = 5;
+
+	renderableCrosshair.mMesh = crosshair;
+	renderableCrosshair.m_Material = sMaterialCrosshair;
+	renderableCrosshair.m_position.z = 6.0;
+
+	renderableGun.mMesh = gunMesh;
+	renderableGun.m_Material = sMaterialgun;
+	renderableGun.m_position.y = -2.2;
 
 
 	return true;

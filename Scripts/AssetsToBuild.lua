@@ -11,6 +11,8 @@ return
 			"sphere.mesh",
 			"torus.mesh",
 			"transparentObject.mesh",
+			"planeUP.mesh",
+			"gun.mesh",
 		},
 		
 	},
@@ -63,6 +65,8 @@ return
 			"woodTransparent.material",
 			"metal.material",
 			"metalTransparent.material",
+			"crosshair.material",
+			"gun.material",
 		},
 	
 	},
@@ -77,6 +81,9 @@ return
 			"metal.png",
 			"eae6320.png",
 			"alpha.png",
+			"crosshair.png",
+			"gun_material.png",
+			"woodtex.jpg",
 		},
 	},
 }

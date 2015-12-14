@@ -166,8 +166,8 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 	HRESULT result = s_direct3dDevice->SetRenderState(D3DRS_ZENABLE, D3DZB_TRUE);
 	result = s_direct3dDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
 	result = s_direct3dDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_LESSEQUAL);
-		
-	RenderableList.push_back( &renderableSquare);
+	
+	RenderableList.push_back(&renderableSquare);
 	RenderableList.push_back(&renderableSphere);
 	RenderableList.push_back(&renderableFloor);
 	RenderableList.push_back(&renderableObject);
@@ -182,7 +182,7 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 	renderableSquare.mMesh = sMesh;
 
 	
-	renderableFloor.m_position.y = -1;
+	renderableFloor.m_position.y = -2;
 	renderableFloor.m_Material = sMaterialMetal;
 	renderableFloor.mMesh = FloorMesh;
 

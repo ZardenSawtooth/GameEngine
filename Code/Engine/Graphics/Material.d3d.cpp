@@ -27,7 +27,7 @@ bool eae6320::Graphics::LoadTexture(Material &i_Material, const char * i_texture
 
 
 
-	return true;
+	return SUCCEEDED(result);
 }
 
 void eae6320::Graphics::SetTextures (Material &i_Material) {

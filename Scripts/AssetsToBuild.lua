@@ -77,13 +77,13 @@ return
 		tool = "TextureBuilder.exe",
 		assets = 
 		{
-			"wood.png",
 			"metal.png",
 			"eae6320.png",
 			"alpha.png",
 			"crosshair.png",
 			"gun_material.png",
 			"woodtex.jpg",
+			"texttexture1.jpg",
 		},
 	},
 }

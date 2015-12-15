@@ -6,12 +6,12 @@ return
 		{
 			name = "g_color_RGB",
 			shadertype = "fragment",
-			values = { 150, 204, 204 },
+			values = { 1, 1, 1 },
 		},
 		{
 			name = "g_color_alpha",
 			shadertype = "fragment",
-			values = { 0.8 },
+			values = { 1 },
 		},
 		
 	},

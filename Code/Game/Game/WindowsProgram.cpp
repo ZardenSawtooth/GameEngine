@@ -541,22 +541,22 @@ bool checkObjectShoot()
 	if (eae6320::UserInput::IsKeyPressed(VK_SPACE))
 	{
 
-		if (eae6320::Graphics::RenderableList[0]->m_position.x-1 < eae6320::Graphics::RenderableList[4]->m_position.x &&
-			eae6320::Graphics::RenderableList[0]->m_position.x+1 > eae6320::Graphics::RenderableList[4]->m_position.x &&
-			eae6320::Graphics::RenderableList[0]->m_position.y - 1 < eae6320::Graphics::RenderableList[4]->m_position.y &&
-			eae6320::Graphics::RenderableList[0]->m_position.y + 1 > eae6320::Graphics::RenderableList[4]->m_position.y		)
+		if (eae6320::Graphics::RenderableList[4]->m_position.x-1 < eae6320::Graphics::RenderableList[2]->m_position.x &&
+			eae6320::Graphics::RenderableList[4]->m_position.x+1 > eae6320::Graphics::RenderableList[2]->m_position.x &&
+			eae6320::Graphics::RenderableList[4]->m_position.y - 1 < eae6320::Graphics::RenderableList[2]->m_position.y &&
+			eae6320::Graphics::RenderableList[4]->m_position.y + 1 > eae6320::Graphics::RenderableList[2]->m_position.y		)
 		{
 			//reduce alpha transparency
-			eae6320::Graphics::RenderableList[0]->m_Material.uniformArray[1].values[0] -= 0.1;
+			eae6320::Graphics::RenderableList[4]->m_Material.uniformArray[1].values[0] -= 0.1;
  			return true;
 		}
-		if (eae6320::Graphics::RenderableList[1]->m_position.x - 1 < eae6320::Graphics::RenderableList[4]->m_position.x &&
-			eae6320::Graphics::RenderableList[1]->m_position.x + 1 > eae6320::Graphics::RenderableList[4]->m_position.x &&
-			eae6320::Graphics::RenderableList[1]->m_position.y - 1 < eae6320::Graphics::RenderableList[4]->m_position.y &&
-			eae6320::Graphics::RenderableList[1]->m_position.y + 1 > eae6320::Graphics::RenderableList[4]->m_position.y)
+		if (eae6320::Graphics::RenderableList[3]->m_position.x - 1 < eae6320::Graphics::RenderableList[2]->m_position.x &&
+			eae6320::Graphics::RenderableList[3]->m_position.x + 1 > eae6320::Graphics::RenderableList[2]->m_position.x &&
+			eae6320::Graphics::RenderableList[3]->m_position.y - 1 < eae6320::Graphics::RenderableList[2]->m_position.y &&
+			eae6320::Graphics::RenderableList[3]->m_position.y + 1 > eae6320::Graphics::RenderableList[2]->m_position.y)
 		{
 			//reduce alpha transparency
-			eae6320::Graphics::RenderableList[1]->m_Material.uniformArray[1].values[0] -= 0.1;
+			eae6320::Graphics::RenderableList[3]->m_Material.uniformArray[1].values[0] -= 0.1;
    			return true;
 		}
 	}
@@ -657,7 +657,7 @@ bool UpdateEntities_floats()
 
 	Camera::getInstance().m_Position += cameraDir;
 
-	eae6320::Graphics::RenderableList[4]->m_position += cameraDir;
+	eae6320::Graphics::RenderableList[2]->m_position += cameraDir;
 	eae6320::Graphics::RenderableList[5]->m_position += cameraDir;
 	
 

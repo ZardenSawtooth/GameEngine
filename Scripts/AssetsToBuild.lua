@@ -78,6 +78,7 @@ return
 		assets = 
 		{
 			"metal.png",
+			"metal2.png",
 			"eae6320.png",
 			"alpha.png",
 			"crosshair.png",

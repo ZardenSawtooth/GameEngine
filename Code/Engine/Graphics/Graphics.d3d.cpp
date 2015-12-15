@@ -167,11 +167,12 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 	result = s_direct3dDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
 	result = s_direct3dDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_LESSEQUAL);
 	
-	RenderableList.push_back(&renderableSquare);
-	RenderableList.push_back(&renderableSphere);
+	
 	RenderableList.push_back(&renderableFloor);
 	RenderableList.push_back(&renderableObject);
 	RenderableList.push_back(&renderableCrosshair);
+	RenderableList.push_back(&renderableSquare);
+	RenderableList.push_back(&renderableSphere);
 	RenderableList.push_back(&renderableGun);
 
 	renderableSphere.m_Material = sMaterialWoodTransparent;
@@ -180,7 +181,7 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 
 	renderableSquare.m_Material = sMaterialMetalTransparent;
 	renderableSquare.mMesh = sMesh;
-
+	renderableSquare.m_position.z = -3.5;
 	
 	renderableFloor.m_position.y = -2;
 	renderableFloor.m_Material = sMaterialMetal;

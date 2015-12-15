@@ -25,6 +25,9 @@ eae6320::Graphics::Renderable renderableTriangle2;
 eae6320::Graphics::Renderable renderableSquare;
 eae6320::Graphics::Renderable renderableFloor;
 eae6320::Graphics::Renderable renderableObject;
+eae6320::Graphics::Renderable renderableSphere;
+eae6320::Graphics::Renderable renderableCrosshair;
+eae6320::Graphics::Renderable renderableGun;
 
 namespace
 {
@@ -48,12 +51,19 @@ namespace
 	// A vertex array encapsulates both the vertex and index data as well as the vertex format
 	//GLuint s_vertexArrayId = 0;
 	eae6320::Graphics::Mesh sMesh;
-	eae6320::Graphics::Mesh sMeshTriangle;
 	eae6320::Graphics::Mesh FloorMesh;
+	eae6320::Graphics::Mesh sMeshTriangle;
 	eae6320::Graphics::Mesh transparentObject;
+	eae6320::Graphics::Mesh crosshair;
+	eae6320::Graphics::Mesh gunMesh;
 
-	eae6320::Graphics::Material sMaterial;
-	eae6320::Graphics::Material sMaterialTransparent;
+
+	eae6320::Graphics::Material sMaterialWood;
+	eae6320::Graphics::Material sMaterialWoodTransparent;
+	eae6320::Graphics::Material sMaterialMetal;
+	eae6320::Graphics::Material sMaterialMetalTransparent;
+	eae6320::Graphics::Material sMaterialCrosshair;
+	eae6320::Graphics::Material sMaterialgun;
 
 	// OpenGL encapsulates a matching vertex shader and fragment shader into what it calls a "program".
 
@@ -129,10 +139,19 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 		goto OnError;
 	}*/
 	
-	if (!eae6320::Graphics::LoadMesh(sMesh, "data/torus.mesh"))
+	if (!eae6320::Graphics::LoadMesh(crosshair, "data/planeUP.mesh"))
 	{
 		goto OnError;
 	}
+	if (!eae6320::Graphics::LoadMesh(gunMesh, "data/gun.mesh"))
+	{
+		goto OnError;
+	}
+	if (!eae6320::Graphics::LoadMesh(sMesh, "data/sphere.mesh"))
+	{
+		goto OnError;
+	}
+
 	if (!eae6320::Graphics::LoadMesh(FloorMesh, "data/floor.mesh"))
 	{
 		goto OnError;
@@ -142,8 +161,13 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 		goto OnError;
 	}
 
-	eae6320::Graphics::LoadMaterial(sMaterialTransparent, "data/woodTransparent.material");
-	eae6320::Graphics::LoadMaterial(sMaterial, "data/wood.material");
+	eae6320::Graphics::LoadMaterial(sMaterialWoodTransparent, "data/woodTransparent.material");
+	eae6320::Graphics::LoadMaterial(sMaterialWood, "data/wood.material");
+
+	eae6320::Graphics::LoadMaterial(sMaterialMetal, "data/metal.material");
+	eae6320::Graphics::LoadMaterial(sMaterialMetalTransparent, "data/metalTransparent.material");
+	eae6320::Graphics::LoadMaterial(sMaterialCrosshair, "data/crosshair.material");
+	eae6320::Graphics::LoadMaterial(sMaterialgun, "data/gun.material");
 	/*if (!eae6320::Graphics::LoadMesh(sMeshTriangle, "data/triangle.mesh"))
 	{
 		goto OnError;
@@ -165,18 +189,35 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 	}*/
 
 	RenderableList.push_back(&renderableSquare);
+	RenderableList.push_back(&renderableSphere);
 	RenderableList.push_back(&renderableFloor);
 	RenderableList.push_back(&renderableObject);
+	RenderableList.push_back(&renderableCrosshair);
+	RenderableList.push_back(&renderableGun);
 
-	renderableObject.mMesh = transparentObject;
-	renderableObject.m_Material = sMaterialTransparent;
+	renderableSphere.m_Material = sMaterialWoodTransparent;
+	renderableSphere.mMesh = sMesh;
+	renderableSphere.m_position.x = -4.5;
 
-	renderableSquare.m_Material = sMaterial;
+	renderableSquare.m_Material = sMaterialMetalTransparent;
 	renderableSquare.mMesh = sMesh;
 
-	renderableFloor.m_position.y = -1;
-	renderableFloor.m_Material = sMaterial;
+
+	renderableFloor.m_position.y = -2;
+	renderableFloor.m_Material = sMaterialMetal;
 	renderableFloor.mMesh = FloorMesh;
+
+	renderableObject.mMesh = transparentObject;
+	renderableObject.m_Material = sMaterialWood;
+	renderableObject.m_position.y = 5;
+
+	renderableCrosshair.mMesh = crosshair;
+	renderableCrosshair.m_Material = sMaterialCrosshair;
+	renderableCrosshair.m_position.z = 6.0;
+
+	renderableGun.mMesh = gunMesh;
+	renderableGun.m_Material = sMaterialgun;
+	renderableGun.m_position.y = -2.2;
 
 	//enabling backface culling 
 	glEnable(GL_CULL_FACE);
@@ -301,9 +342,9 @@ bool eae6320::Graphics::ShutDown()
 
 	if ( s_openGlRenderingContext != NULL )
 	{
-		if (sMaterial.m_effect.s_programId != 0 )
+		if (sMaterialCrosshair.m_effect.s_programId != 0 )
 		{
-			glDeleteProgram(sMaterial.m_effect.s_programId );
+			glDeleteProgram(sMaterialCrosshair.m_effect.s_programId );
 			const GLenum errorCode = glGetError();
 			if ( errorCode != GL_NO_ERROR )
 			{
@@ -312,7 +353,7 @@ bool eae6320::Graphics::ShutDown()
 					reinterpret_cast<const char*>( gluErrorString( errorCode ) );
 				UserOutput::Print( errorMessage.str() );
 			}
-			sMaterial.m_effect.s_programId = 0;
+			sMaterialCrosshair.m_effect.s_programId = 0;
 		}
 		if ( sMesh.s_vertexArrayId != 0 )
 		{

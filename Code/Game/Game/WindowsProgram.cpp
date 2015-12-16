@@ -541,25 +541,26 @@ bool checkObjectShoot()
 	if (eae6320::UserInput::IsKeyPressed(VK_SPACE))
 	{
 
-		if (eae6320::Graphics::RenderableList[4]->m_position.x-1 < eae6320::Graphics::RenderableList[2]->m_position.x &&
-			eae6320::Graphics::RenderableList[4]->m_position.x+1 > eae6320::Graphics::RenderableList[2]->m_position.x &&
-			eae6320::Graphics::RenderableList[4]->m_position.y - 1 < eae6320::Graphics::RenderableList[2]->m_position.y &&
-			eae6320::Graphics::RenderableList[4]->m_position.y + 1 > eae6320::Graphics::RenderableList[2]->m_position.y		)
+		if (eae6320::Graphics::RenderableList[2]->m_position.x-1 < eae6320::Graphics::RenderableList[4]->m_position.x &&
+			eae6320::Graphics::RenderableList[2]->m_position.x+1 > eae6320::Graphics::RenderableList[4]->m_position.x &&
+			eae6320::Graphics::RenderableList[2]->m_position.y - 1 < eae6320::Graphics::RenderableList[4]->m_position.y &&
+			eae6320::Graphics::RenderableList[2]->m_position.y + 1 > eae6320::Graphics::RenderableList[4]->m_position.y		)
 		{
 			//reduce alpha transparency
-			eae6320::Graphics::RenderableList[4]->m_Material.uniformArray[1].values[0] -= 0.1;
+			eae6320::Graphics::RenderableList[2]->m_Material.uniformArray[1].values[0] -= 0.1f;
  			return true;
 		}
-		if (eae6320::Graphics::RenderableList[3]->m_position.x - 1 < eae6320::Graphics::RenderableList[2]->m_position.x &&
-			eae6320::Graphics::RenderableList[3]->m_position.x + 1 > eae6320::Graphics::RenderableList[2]->m_position.x &&
-			eae6320::Graphics::RenderableList[3]->m_position.y - 1 < eae6320::Graphics::RenderableList[2]->m_position.y &&
-			eae6320::Graphics::RenderableList[3]->m_position.y + 1 > eae6320::Graphics::RenderableList[2]->m_position.y)
+		if (eae6320::Graphics::RenderableList[3]->m_position.x - 1 < eae6320::Graphics::RenderableList[4]->m_position.x &&
+			eae6320::Graphics::RenderableList[3]->m_position.x + 1 > eae6320::Graphics::RenderableList[4]->m_position.x &&
+			eae6320::Graphics::RenderableList[3]->m_position.y - 1 < eae6320::Graphics::RenderableList[4]->m_position.y &&
+			eae6320::Graphics::RenderableList[3]->m_position.y + 1 > eae6320::Graphics::RenderableList[4]->m_position.y)
 		{
 			//reduce alpha transparency
-			eae6320::Graphics::RenderableList[3]->m_Material.uniformArray[1].values[0] -= 0.1;
+			eae6320::Graphics::RenderableList[3]->m_Material.uniformArray[1].values[0] -= 0.1f;
    			return true;
 		}
 	}
+	return true;
 }
 
 bool UpdateEntities_floats()
@@ -574,7 +575,7 @@ bool UpdateEntities_floats()
 		float x, y;
 	}offset;
 
-	float rotationSpeed = 0.8; //in degrees
+	float rotationSpeed = 0.8f; //in degrees
 
 	eae6320::Math::cVector cameraDir;
 	eae6320::Math::cQuaternion * cameraOrientationLeft = new eae6320::Math::cQuaternion(eae6320::Math::ConvertDegreesToRadians(rotationSpeed), eae6320::Math::cVector(0,1,0));
@@ -657,7 +658,7 @@ bool UpdateEntities_floats()
 
 	Camera::getInstance().m_Position += cameraDir;
 
-	eae6320::Graphics::RenderableList[2]->m_position += cameraDir;
+	eae6320::Graphics::RenderableList[4]->m_position += cameraDir;
 	eae6320::Graphics::RenderableList[5]->m_position += cameraDir;
 	
 

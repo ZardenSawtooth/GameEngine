@@ -170,9 +170,9 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 	
 	RenderableList.push_back(&renderableFloor);
 	RenderableList.push_back(&renderableObject);
-	RenderableList.push_back(&renderableCrosshair);
 	RenderableList.push_back(&renderableSquare);
 	RenderableList.push_back(&renderableSphere);
+	RenderableList.push_back(&renderableCrosshair);
 	RenderableList.push_back(&renderableGun);
 
 	renderableSphere.m_Material = sMaterialWoodTransparent;
@@ -189,7 +189,8 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 
 	renderableObject.mMesh = transparentObject;
 	renderableObject.m_Material = sMaterialWood;
-	renderableObject.m_position.y = 5;
+	renderableObject.m_position.y = 4;
+	renderableObject.m_position.z = -10.5;
 
 	renderableCrosshair.mMesh = crosshair;
 	renderableCrosshair.m_Material = sMaterialCrosshair;

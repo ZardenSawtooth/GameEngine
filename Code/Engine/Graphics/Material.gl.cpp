@@ -12,7 +12,7 @@
 bool eae6320::Graphics:: LoadTexture(Material &i_Material, const char * i_path, const char * i_textureHandle)
 {
 	//GLuint o_texture = 1024;
-	std::string* o_errorMessage;
+	std::string* o_errorMessage = NULL;
 	bool wereThereErrors = false;
 	HANDLE fileHandle = INVALID_HANDLE_VALUE;
 	void* fileContents = NULL;

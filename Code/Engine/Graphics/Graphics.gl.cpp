@@ -190,9 +190,9 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 
 	RenderableList.push_back(&renderableFloor);
 	RenderableList.push_back(&renderableObject);
-	RenderableList.push_back(&renderableCrosshair);
 	RenderableList.push_back(&renderableSquare);
 	RenderableList.push_back(&renderableSphere);
+	RenderableList.push_back(&renderableCrosshair);
 	RenderableList.push_back(&renderableGun);
 
 	renderableSphere.m_Material = sMaterialWoodTransparent;
@@ -201,7 +201,7 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 
 	renderableSquare.m_Material = sMaterialMetalTransparent;
 	renderableSquare.mMesh = sMesh;
-	renderableSquare.m_position.z = -3.5;
+	renderableSquare.m_position.z = -3.5f;
 
 	renderableFloor.m_position.y = -2;
 	renderableFloor.m_Material = sMaterialMetal;
@@ -209,15 +209,16 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 
 	renderableObject.mMesh = transparentObject;
 	renderableObject.m_Material = sMaterialWood;
-	renderableObject.m_position.y = 5;
+	renderableObject.m_position.y = 4;
+	renderableObject.m_position.z = -10.5f;
 
 	renderableCrosshair.mMesh = crosshair;
 	renderableCrosshair.m_Material = sMaterialCrosshair;
-	renderableCrosshair.m_position.z = 6.0;
+	renderableCrosshair.m_position.z = 6.0f;
 
 	renderableGun.mMesh = gunMesh;
 	renderableGun.m_Material = sMaterialgun;
-	renderableGun.m_position.y = -2.2;
+	renderableGun.m_position.y = -2.2f;
 
 	//enabling backface culling 
 	glEnable(GL_CULL_FACE);

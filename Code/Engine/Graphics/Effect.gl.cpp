@@ -53,6 +53,7 @@ namespace eae6320 {
 				return false;
 			}
 		}
+		
 	}
 
 	Graphics::tUniformHandle Graphics::SetMaterialUniforms(const char * i_uniformName, Effect &i_Effect )

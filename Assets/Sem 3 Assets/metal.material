@@ -1,0 +1,19 @@
+return
+{
+	effect = "data/mesheffect.effect",
+	uniformData = 
+	{
+		{
+			name = "g_color_RGB",
+			shadertype = "fragment",
+			values = { 1, 1, 1 },
+		},
+		
+	},
+	textureData = 
+	{
+		name = "g_textureSampler",
+		path = "data/woodtex.jpg",
+		
+	},
+}

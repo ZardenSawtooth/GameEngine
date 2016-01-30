@@ -1,0 +1,22 @@
+return
+{
+	effect = "data/transparentEffect.effect",
+	uniformData = 
+	{
+		{
+			name = "g_color_RGB",
+			shadertype = "fragment",
+			values = { 1, 1, 1 },
+		},
+		{
+			name = "g_color_alpha",
+			shadertype = "fragment",
+			values = { 1 },
+		},
+	},
+	textureData = 
+	{
+		name = "g_textureSampler",
+		path = "data/metal2.png",
+	}
+}

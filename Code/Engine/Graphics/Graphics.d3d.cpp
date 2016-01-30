@@ -18,14 +18,15 @@
 
 //IDirect3DDevice9* s_direct3dDevice = NULL;
  std::vector <eae6320::Graphics::Renderable*>  eae6320::Graphics::RenderableList;
-eae6320::Graphics::Renderable renderableTriangle1;
-eae6320::Graphics::Renderable renderableTriangle2;
-eae6320::Graphics::Renderable renderableSquare;
-eae6320::Graphics::Renderable renderableFloor;
-eae6320::Graphics::Renderable renderableObject;
-eae6320::Graphics::Renderable renderableSphere;
-eae6320::Graphics::Renderable renderableCrosshair;
-eae6320::Graphics::Renderable renderableGun;
+ 
+eae6320::Graphics::Renderable ceiling_R;
+eae6320::Graphics::Renderable cement_R;
+eae6320::Graphics::Renderable floor_R;
+eae6320::Graphics::Renderable lambert2_R;
+eae6320::Graphics::Renderable lambert3_R;
+eae6320::Graphics::Renderable metal_R;
+eae6320::Graphics::Renderable railing_R;
+eae6320::Graphics::Renderable walls_R;
 
 
 namespace
@@ -48,19 +49,20 @@ namespace
 		uint8_t b, g, r, a;	// Direct3D expects the byte layout of a color to be different from what you might expect
 	};*/
 	//IDirect3DVertexDeclaration9* s_vertexDeclaration = NULL;
-	eae6320::Graphics::Mesh sMesh;
-	eae6320::Graphics::Mesh FloorMesh;
-	eae6320::Graphics::Mesh sMeshTriangle;
-	eae6320::Graphics::Mesh transparentObject;
-	eae6320::Graphics::Mesh crosshair;
-	eae6320::Graphics::Mesh gunMesh;
+	eae6320::Graphics::Mesh ceiling;
+	eae6320::Graphics::Mesh cement;
+	eae6320::Graphics::Mesh floors;
+	eae6320::Graphics::Mesh lambert2;
+	eae6320::Graphics::Mesh lambert3;
+	eae6320::Graphics::Mesh metal;
+	eae6320::Graphics::Mesh railing;
+	eae6320::Graphics::Mesh walls;
 
-	eae6320::Graphics::Material sMaterialWood;
-	eae6320::Graphics::Material sMaterialWoodTransparent;
-	eae6320::Graphics::Material sMaterialMetal;
-	eae6320::Graphics::Material sMaterialMetalTransparent;
-	eae6320::Graphics::Material sMaterialCrosshair;
-	eae6320::Graphics::Material sMaterialgun;
+	eae6320::Graphics::Material cementMat;
+	eae6320::Graphics::Material floorMat;
+	eae6320::Graphics::Material metalMat;
+	eae6320::Graphics::Material railingMat;
+	eae6320::Graphics::Material wallMat;
 
 
 	/*eae6320::Graphics::Effect sEffect;
@@ -132,73 +134,78 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 	{
 		goto OnError;
 	}
+	
 
-	if (!eae6320::Graphics::LoadMesh(crosshair, "data/planeUP.mesh"))
+	if (!eae6320::Graphics::LoadMesh(ceiling, "data/ceiling.mesh"))
 	{
 		goto OnError;
 	}
-	if (!eae6320::Graphics::LoadMesh(gunMesh, "data/gun.mesh"))
+	if (!eae6320::Graphics::LoadMesh(cement, "data/cement.mesh"))
 	{
 		goto OnError;
 	}
-	if (!eae6320::Graphics::LoadMesh(sMesh, "data/sphere.mesh"))
+	if (!eae6320::Graphics::LoadMesh(floors, "data/floor.mesh"))
+	{
+		goto OnError;
+	}
+	if (!eae6320::Graphics::LoadMesh(lambert2, "data/lambert2.mesh"))
+	{
+		goto OnError;
+	}
+	if (!eae6320::Graphics::LoadMesh(lambert3, "data/lambert3.mesh"))
+	{
+		goto OnError;
+	}
+	if (!eae6320::Graphics::LoadMesh(metal, "data/metal.mesh"))
+	{
+		goto OnError;
+	}
+	if (!eae6320::Graphics::LoadMesh(railing, "data/railing.mesh"))
+	{
+		goto OnError;
+	}
+	if (!eae6320::Graphics::LoadMesh(walls, "data/walls.mesh"))
 	{
 		goto OnError;
 	}
 
-	if (!eae6320::Graphics::LoadMesh(FloorMesh, "data/floor.mesh"))
-	{
-		goto OnError;
-	}
-	if (!eae6320::Graphics::LoadMesh(transparentObject, "data/transparentObject.mesh"))
-	{
-		goto OnError;
-	}
-
-	eae6320::Graphics::LoadMaterial(sMaterialWoodTransparent, "data/woodTransparent.material");
-	eae6320::Graphics::LoadMaterial(sMaterialWood, "data/wood.material");
-
-	eae6320::Graphics::LoadMaterial(sMaterialMetal, "data/metal.material");
-	eae6320::Graphics::LoadMaterial(sMaterialMetalTransparent, "data/metalTransparent.material");
-	eae6320::Graphics::LoadMaterial(sMaterialCrosshair, "data/crosshair.material");
-	eae6320::Graphics::LoadMaterial(sMaterialgun, "data/gun.material");
+	eae6320::Graphics::LoadMaterial(cementMat, "data/cement.material");
+	eae6320::Graphics::LoadMaterial(floorMat, "data/floor.material");
+	eae6320::Graphics::LoadMaterial(metalMat, "data/metal.material");
+	eae6320::Graphics::LoadMaterial(railingMat, "data/railing.material");
+	eae6320::Graphics::LoadMaterial(wallMat, "data/wall.material");
+	
 
 	HRESULT result = s_direct3dDevice->SetRenderState(D3DRS_ZENABLE, D3DZB_TRUE);
 	result = s_direct3dDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
 	result = s_direct3dDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_LESSEQUAL);
-	
-	
-	RenderableList.push_back(&renderableFloor);
-	RenderableList.push_back(&renderableObject);
-	RenderableList.push_back(&renderableSquare);
-	RenderableList.push_back(&renderableSphere);
-	RenderableList.push_back(&renderableCrosshair);
-	RenderableList.push_back(&renderableGun);
 
-	renderableSphere.m_Material = sMaterialWoodTransparent;
-	renderableSphere.mMesh = sMesh;
-	renderableSphere.m_position.x = -4.5;
+	RenderableList.push_back(&ceiling_R);
+	RenderableList.push_back(&cement_R);
+	RenderableList.push_back(&floor_R);
+	//RenderableList.push_back(&lambert2_R);
+	//RenderableList.push_back(&lambert3_R);
+	RenderableList.push_back(&metal_R);
+	RenderableList.push_back(&railing_R);
+	RenderableList.push_back(&walls_R);
 
-	renderableSquare.m_Material = sMaterialMetalTransparent;
-	renderableSquare.mMesh = sMesh;
-	renderableSquare.m_position.z = -3.5;
-	
-	renderableFloor.m_position.y = -2;
-	renderableFloor.m_Material = sMaterialMetal;
-	renderableFloor.mMesh = FloorMesh;
+	ceiling_R.mMesh = ceiling;
+	ceiling_R.m_Material = cementMat;
 
-	renderableObject.mMesh = transparentObject;
-	renderableObject.m_Material = sMaterialWood;
-	renderableObject.m_position.y = 4;
-	renderableObject.m_position.z = -10.5;
+	cement_R.mMesh = cement;
+	cement_R.m_Material = cementMat;
 
-	renderableCrosshair.mMesh = crosshair;
-	renderableCrosshair.m_Material = sMaterialCrosshair;
-	renderableCrosshair.m_position.z = 6.0;
+	floor_R.mMesh = floors;
+	floor_R.m_Material = floorMat;
 
-	renderableGun.mMesh = gunMesh;
-	renderableGun.m_Material = sMaterialgun;
-	renderableGun.m_position.y = -2.2;
+	metal_R.mMesh = metal;
+	metal_R.m_Material = metalMat;
+
+	railing_R.mMesh = railing;
+	railing_R.m_Material = railingMat;
+
+	walls_R.mMesh = walls;
+	walls_R.m_Material = wallMat;
 
 
 	return true;
@@ -382,36 +389,36 @@ bool eae6320::Graphics::ShutDown()
 	{
 		if ( s_direct3dDevice )
 		{
-			if ( sMaterialWood.m_effect.s_vertexShader )
+			if ( cementMat.m_effect.s_vertexShader )
 			{
-				sMaterialWood.m_effect.s_vertexShader->Release();
-				sMaterialWood.m_effect.s_vertexShader = NULL;
+				cementMat.m_effect.s_vertexShader->Release();
+				cementMat.m_effect.s_vertexShader = NULL;
 			}
-			if (sMaterialWood.m_effect.s_fragmentShader )
+			if (cementMat.m_effect.s_fragmentShader )
 			{
-				sMaterialWood.m_effect.s_fragmentShader->Release();
-				sMaterialWood.m_effect.s_fragmentShader = NULL;
+				cementMat.m_effect.s_fragmentShader->Release();
+				cementMat.m_effect.s_fragmentShader = NULL;
 			}
 
-			if ( sMesh.s_vertexBuffer )
+			if ( cement.s_vertexBuffer )
 			{
-				sMesh.s_vertexBuffer->Release();
-				sMesh.s_vertexBuffer = NULL;
+				cement.s_vertexBuffer->Release();
+				cement.s_vertexBuffer = NULL;
 			}
-			if ( sMesh.s_indexBuffer )
+			if (cement.s_indexBuffer )
 			{
-				sMesh.s_indexBuffer->Release();
-				sMesh.s_indexBuffer = NULL;
+				cement.s_indexBuffer->Release();
+				cement.s_indexBuffer = NULL;
 			}
-			if ( sMesh.s_vertexDeclaration )
+			if (cement.s_vertexDeclaration )
 			{
 				s_direct3dDevice->SetVertexDeclaration( NULL );
-				sMesh.s_vertexDeclaration->Release();
-				sMesh.s_vertexDeclaration = NULL;
+				cement.s_vertexDeclaration->Release();
+				cement.s_vertexDeclaration = NULL;
 			}
 
 			//for second triangle mesh
-			if (sMeshTriangle.s_vertexBuffer)
+			/*if (sMeshTriangle.s_vertexBuffer)
 			{
 				sMeshTriangle.s_vertexBuffer->Release();
 				sMeshTriangle.s_vertexBuffer = NULL;
@@ -426,7 +433,7 @@ bool eae6320::Graphics::ShutDown()
 				s_direct3dDevice->SetVertexDeclaration(NULL);
 				sMeshTriangle.s_vertexDeclaration->Release();
 				sMeshTriangle.s_vertexDeclaration = NULL;
-			}
+			}*/
 
 			s_direct3dDevice->Release();
 			s_direct3dDevice = NULL;
@@ -465,7 +472,7 @@ namespace
 			presentationParameters.Windowed = TRUE;
 			presentationParameters.EnableAutoDepthStencil = TRUE;
 			presentationParameters.PresentationInterval = D3DPRESENT_INTERVAL_DEFAULT;
-			presentationParameters.AutoDepthStencilFormat = D3DFMT_D16;// D3DFMT_16;
+			presentationParameters.AutoDepthStencilFormat = D3DFMT_D24S8;// D3DFMT_16;
 		}
 		HRESULT result = s_direct3dInterface->CreateDevice( useDefaultDevice, useHardwareRendering,
 			s_renderingWindow, useHardwareVertexProcessing, &presentationParameters, &s_direct3dDevice );

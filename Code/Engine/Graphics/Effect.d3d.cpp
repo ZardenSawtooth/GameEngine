@@ -18,7 +18,7 @@ namespace eae6320 {
 		
 		Math::cMatrix_transformation matrixWorldToView = Math::cMatrix_transformation::CreateWorldToViewTransform(Camera::getInstance().m_Orientation, Camera::getInstance().m_Position);
 
-		Math::cMatrix_transformation matrixViewToScreen = Math::cMatrix_transformation::CreateViewToScreenTransform(Math::ConvertDegreesToRadians(60), 1.33f, 0.1f, 100);
+		Math::cMatrix_transformation matrixViewToScreen = Math::cMatrix_transformation::CreateViewToScreenTransform(Math::ConvertDegreesToRadians(60), 1.33f, 0.1f, 10000000);
 
 
 

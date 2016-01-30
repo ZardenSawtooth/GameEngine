@@ -13,7 +13,7 @@ return
 	textureData = 
 	{
 		name = "g_textureSampler",
-		path = "data/woodtex.jpg",
+		path = "data/metal_brace_D.png",
 		
 	},
 }

@@ -7,17 +7,18 @@ return
 		tool = "MeshBuilder.exe",
 		assets =
 		{
+			"ceiling.mesh",
+			"cement.mesh",
 			"floor.mesh",
-			"sphere.mesh",
-			"torus.mesh",
-			"transparentObject.mesh",
-			"planeUP.mesh",
-			"gun.mesh",
+			"lambert2.mesh",
+			"lambert3.mesh",
+			"metal.mesh",
+			"railing.mesh",
+			"walls.mesh",
 		},
-		
 	},
 
-	FragmentShaders = 
+	FragmentShaders =
 	{
 		src = "",
 		tar = "",
@@ -61,12 +62,11 @@ return
 		tool = "MaterialBuilder.exe",
 		assets = 
 		{
-			"wood.material",
-			"woodTransparent.material",
+			"cement.material",
+			"floor.material",
 			"metal.material",
-			"metalTransparent.material",
-			"crosshair.material",
-			"gun.material",
+			"railing.material",
+			"wall.material",
 		},
 	
 	},
@@ -77,14 +77,11 @@ return
 		tool = "TextureBuilder.exe",
 		assets = 
 		{
-			"metal.png",
-			"metal2.png",
-			"eae6320.png",
-			"alpha.png",
-			"crosshair.png",
-			"gun_material.png",
-			"woodtex.jpg",
-			"texttexture1.jpg",
+			"cement_wall_D.png",
+			"floor_D.png",
+			"metal_brace_D.png",
+			"railing_D.png",
+			"wall_D.png",
 		},
 	},
 }

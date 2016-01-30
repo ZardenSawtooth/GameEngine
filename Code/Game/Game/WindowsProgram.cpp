@@ -618,48 +618,66 @@ bool UpdateEntities_floats()
 	// You don't have to do it this way for your assignment!
 	// You just need a way to update the position offset associated with the colorful rectangle.
 	
-	eae6320::Graphics::RenderableList[0]->m_position.x += offset.x;
-	eae6320::Graphics::RenderableList[0]->m_position.y += offset.y;
+	//eae6320::Graphics::RenderableList[0]->m_position.x += offset.x;
+	//eae6320::Graphics::RenderableList[0]->m_position.y += offset.y;
+
+	float distToMove = 10.0f;
 
 	eae6320::Math::cQuaternion cameraOrientation = Camera::getInstance().m_Orientation;
 
 	{
 		if (eae6320::UserInput::IsKeyPressed('A'))	
 		{
-			cameraDir.x -= 2.0f;
+			cameraDir.x -= distToMove;
 			//Camera::getInstance().m_Orientation = Camera::getInstance().m_Orientation * (*cameraOrientationRight);
 		}
 		if (eae6320::UserInput::IsKeyPressed('D'))
 		{
-			cameraDir.x += 2.0f;
+			cameraDir.x += distToMove;
 			//Camera::getInstance().m_Orientation = Camera::getInstance().m_Orientation * (*cameraOrientationLeft);
+		}
+
+		eae6320::Math::cQuaternion unitOrientation;
+		
+		if (eae6320::UserInput::IsKeyPressed('W'))
+		{
+			cameraDir.z -= distToMove;
+			//Camera::getInstance().m_Orientation = Camera::getInstance().m_Orientation * (*cameraOrientationUp);
 		}
 		
 		if (eae6320::UserInput::IsKeyPressed('S'))
 		{
-			cameraDir.y -= 1.0f;
-			//Camera::getInstance().m_Orientation = Camera::getInstance().m_Orientation * (*cameraOrientationUp);
-		}
-		
-		if (eae6320::UserInput::IsKeyPressed('W'))
-		{
-			cameraDir.y += 1.0f;
+			cameraDir.z = distToMove;
 			//Camera::getInstance().m_Orientation = Camera::getInstance().m_Orientation * (*cameraOrientationDown);
 		}
+
+		if (eae6320::UserInput::IsKeyPressed('E'))
+		{
+			//cameraDir.z -= distToMove;
+			Camera::getInstance().m_Orientation = Camera::getInstance().m_Orientation * (*cameraOrientationLeft);
+		}
+
+		if (eae6320::UserInput::IsKeyPressed('Q'))
+		{
+			//cameraDir.z = distToMove;
+			Camera::getInstance().m_Orientation = Camera::getInstance().m_Orientation * (*cameraOrientationRight);
+		}
 	}
+
+	
 
 	//update camera
 
 	const float cameraUnitsPerSecond = 1.0f;	// This is arbitrary
 	const float camUnitsToMove = cameraUnitsPerSecond * eae6320::Time::GetSecondsElapsedThisFrame();	// This makes the speed frame-rate-independent
 																							// Normalize the offset
-	cameraDir.x *= camUnitsToMove;
+	//cameraDir.x *= camUnitsToMove;
 	cameraDir.y *= camUnitsToMove;
 
 	Camera::getInstance().m_Position += cameraDir;
-
-	eae6320::Graphics::RenderableList[4]->m_position += cameraDir;
-	eae6320::Graphics::RenderableList[5]->m_position += cameraDir;
+	
+	/*eae6320::Graphics::RenderableList[4]->m_position += cameraDir;
+	eae6320::Graphics::RenderableList[5]->m_position += cameraDir;*/
 	
 
 

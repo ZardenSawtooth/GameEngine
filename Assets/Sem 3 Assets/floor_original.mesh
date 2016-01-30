@@ -1,0 +1,33 @@
+return 
+{	
+	vertices =
+	{
+			{
+				position = {-5.0, -1.0, 5.0},
+				color = {1.0, 1.0, 0.0, 1.0},
+				textureCoord = {0.0 , 0.0},
+			},
+			{
+				position = {5.0, -1.0, 5.0},
+				color = {0.0, 1.0, 1.0, 1.0},
+				textureCoord = {0.0 , 0.0},
+			},
+			{
+				position = {5.0, -1.0, -5.0},
+				color = {1.0, 0.0, 1.0, 1.0},
+				textureCoord = {0.0 , 0.0},
+			},
+			{
+				position = {-5.0, -1.0, -5.0},
+				color = {1.0, 0.0, 1.0, 1.0},
+				textureCoord = {0.0 , 0.0},
+			},
+
+	},
+	
+	indices =
+	{
+			{0,1,2},
+			{0,2,3},
+	},
+}

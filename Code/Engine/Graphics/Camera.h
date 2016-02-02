@@ -10,7 +10,7 @@ class Camera
 public:
 
 	eae6320::Math::cQuaternion m_Orientation;
-	eae6320::Math::cVector m_Position = eae6320::Math::cVector(0,0,10);
+	eae6320::Math::cVector m_Position = eae6320::Math::cVector(0,0,0);
 
 	static Camera& getInstance()
 	{

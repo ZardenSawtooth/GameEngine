@@ -30,6 +30,10 @@ namespace eae6320
 		bool DisplayRenderedBuffer();
 
 		IDirect3DDevice9* getDirect3DDevice();
+
+		
+
+		void RenderDebugShapes();
 	}
 }
 

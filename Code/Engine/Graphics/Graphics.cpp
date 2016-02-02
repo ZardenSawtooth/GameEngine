@@ -21,11 +21,16 @@ namespace eae6320
 					//SetEffect(RenderableList[i]->mEffect);
 					SetMaterial(RenderableList[i]->m_Material);
 
-					Math::cMatrix_transformation matrix(RenderableList[i]->m_orientation, RenderableList[i]->m_position) ;
+					Math::cMatrix_transformation matrix(RenderableList[i]->m_orientation, RenderableList[i]->m_position);
 					eae6320::Graphics::SetDrawCallUniforms(RenderableList[i]->m_Material.m_effect, matrix);
 
 
+
+
 					eae6320::Graphics::DrawMesh(RenderableList[i]->mMesh);
+#ifdef _DEBUG
+					eae6320::Graphics::RenderDebugShapes();
+#endif		
 				}
 				
 			}

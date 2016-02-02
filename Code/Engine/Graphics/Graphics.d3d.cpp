@@ -18,6 +18,8 @@
 
 //IDirect3DDevice9* s_direct3dDevice = NULL;
  std::vector <eae6320::Graphics::Renderable*>  eae6320::Graphics::RenderableList;
+
+ 
  
 eae6320::Graphics::Renderable ceiling_R;
 eae6320::Graphics::Renderable cement_R;
@@ -29,8 +31,16 @@ eae6320::Graphics::Renderable railing_R;
 eae6320::Graphics::Renderable walls_R;
 
 
+//ID3DXMesh *mesh = NULL;
+
+
 namespace
 {
+	ID3DXMesh * meshBox = NULL;
+	ID3DXMesh * meshSphere = NULL;
+	ID3DXMesh * meshCylinder = NULL;
+
+
 	IDirect3DDevice9* s_direct3dDevice = NULL;
 	HWND s_renderingWindow = NULL;
 	IDirect3D9* s_direct3dInterface = NULL;
@@ -63,6 +73,7 @@ namespace
 	eae6320::Graphics::Material metalMat;
 	eae6320::Graphics::Material railingMat;
 	eae6320::Graphics::Material wallMat;
+	eae6320::Graphics::Material defaultMaterial;
 
 
 	/*eae6320::Graphics::Effect sEffect;
@@ -105,6 +116,7 @@ namespace
 IDirect3DDevice9* eae6320::Graphics::getDirect3DDevice() {
 	return s_direct3dDevice;
 }
+
 
 namespace
 {
@@ -169,6 +181,8 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 		goto OnError;
 	}
 
+
+
 	eae6320::Graphics::LoadMaterial(cementMat, "data/cement.material");
 	eae6320::Graphics::LoadMaterial(floorMat, "data/floor.material");
 	eae6320::Graphics::LoadMaterial(metalMat, "data/metal.material");
@@ -179,6 +193,8 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 	HRESULT result = s_direct3dDevice->SetRenderState(D3DRS_ZENABLE, D3DZB_TRUE);
 	result = s_direct3dDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
 	result = s_direct3dDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_LESSEQUAL);
+	
+	
 
 	RenderableList.push_back(&ceiling_R);
 	RenderableList.push_back(&cement_R);
@@ -207,6 +223,14 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 	walls_R.mMesh = walls;
 	walls_R.m_Material = wallMat;
 
+	
+#ifdef _DEBUG
+	D3DXCreateBox(s_direct3dDevice, 10.0f, 10.0f, 10.0f, &meshBox, NULL);
+	D3DXCreateSphere(s_direct3dDevice, 10.0f, 15, 15, &meshSphere, NULL);
+	D3DXCreateCylinder(s_direct3dDevice, 20.0, 20.0, 25.0, 10, 10, &meshCylinder, NULL);
+#endif
+	
+	
 
 	return true;
 
@@ -216,6 +240,41 @@ OnError:
 	return false;
 }
 
+#ifdef _DEBUG
+void eae6320::Graphics::RenderDebugShapes()
+{
+	s_direct3dDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
+
+	Mesh myMeshBox;
+	myMeshBox.m_indexCount = meshBox->GetNumFaces();
+	myMeshBox.m_vertexCount = meshBox->GetNumVertices();
+	meshBox->GetIndexBuffer(&myMeshBox.s_indexBuffer);
+	meshBox->GetVertexBuffer(&myMeshBox.s_vertexBuffer);
+
+	eae6320::Graphics::DrawMesh(myMeshBox);
+
+	Mesh myMeshSphere;
+	myMeshSphere.m_indexCount = meshSphere->GetNumFaces();
+	myMeshSphere.m_vertexCount = meshSphere->GetNumVertices();
+	meshSphere->GetIndexBuffer(&myMeshSphere.s_indexBuffer);
+	meshSphere->GetVertexBuffer(&myMeshSphere.s_vertexBuffer);
+
+	eae6320::Graphics::DrawMesh(myMeshSphere);
+
+	Mesh myMeshCylinder;
+	myMeshCylinder.m_indexCount = meshCylinder->GetNumFaces();
+	myMeshCylinder.m_vertexCount = meshCylinder->GetNumVertices();
+	meshCylinder->GetIndexBuffer(&myMeshCylinder.s_indexBuffer);
+	meshCylinder->GetVertexBuffer(&myMeshCylinder.s_vertexBuffer);
+
+	eae6320::Graphics::DrawMesh(myMeshCylinder);
+
+
+	s_direct3dDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
+	
+	
+}
+#endif
 bool eae6320::Graphics::Clear() {
 	{
 		const D3DRECT* subRectanglesToClear = NULL;

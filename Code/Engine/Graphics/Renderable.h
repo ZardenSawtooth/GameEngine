@@ -9,8 +9,7 @@
 
 namespace eae6320 
 {
-
-	namespace Graphics 
+	namespace Graphics
 	{
 		struct Renderable
 		{

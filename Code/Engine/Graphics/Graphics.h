@@ -34,6 +34,7 @@ namespace eae6320
 		
 
 		void RenderDebugShapes();
+		
 	}
 }
 

@@ -32,18 +32,24 @@ eae6320::Graphics::Renderable walls_R;
 
 
 //ID3DXMesh *mesh = NULL;
-
+void InitDebugShapes(ID3DXMesh * i_d3dMesh, eae6320::Graphics::Mesh &i_Mesh, float i_x, float i_y, float i_z, uint8_t i_r, uint8_t i_g, uint8_t i_b);
 
 namespace
 {
 	ID3DXMesh * meshBox = NULL;
 	ID3DXMesh * meshSphere = NULL;
 	ID3DXMesh * meshCylinder = NULL;
+	ID3DXMesh * meshBox2 = NULL;
+	ID3DXMesh * meshSphere2 = NULL;
+	ID3DXMesh * meshCylinder2 = NULL;
+	
 
 
 	IDirect3DDevice9* s_direct3dDevice = NULL;
 	HWND s_renderingWindow = NULL;
 	IDirect3D9* s_direct3dInterface = NULL;
+
+	
 	
 	
 	// This struct determines the layout of the data that the CPU will send to the GPU
@@ -67,6 +73,15 @@ namespace
 	eae6320::Graphics::Mesh metal;
 	eae6320::Graphics::Mesh railing;
 	eae6320::Graphics::Mesh walls;
+	eae6320::Graphics::Mesh myMeshBox;
+	eae6320::Graphics::Mesh myMeshSphere;
+	eae6320::Graphics::Mesh myMeshCylinder;
+	eae6320::Graphics::Mesh myMeshBox2;
+	eae6320::Graphics::Mesh myMeshSphere2;
+	eae6320::Graphics::Mesh myMeshCylinder2;
+
+	eae6320::Graphics::Mesh lines;
+
 
 	eae6320::Graphics::Material cementMat;
 	eae6320::Graphics::Material floorMat;
@@ -227,7 +242,23 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 #ifdef _DEBUG
 	D3DXCreateBox(s_direct3dDevice, 10.0f, 10.0f, 10.0f, &meshBox, NULL);
 	D3DXCreateSphere(s_direct3dDevice, 10.0f, 15, 15, &meshSphere, NULL);
-	D3DXCreateCylinder(s_direct3dDevice, 20.0, 20.0, 25.0, 10, 10, &meshCylinder, NULL);
+	D3DXCreateCylinder(s_direct3dDevice, 10.0, 10.0, 25.0, 10, 10, &meshCylinder, NULL);
+	D3DXCreateBox(s_direct3dDevice, 10.0f, 10.0f, 10.0f, &meshBox2, NULL);
+	D3DXCreateSphere(s_direct3dDevice, 10.0f, 15, 15, &meshSphere2, NULL);
+	D3DXCreateCylinder(s_direct3dDevice, 10.0, 10.0, 25.0, 10, 10, &meshCylinder2, NULL);
+
+	
+
+	InitDebugShapes(meshBox, myMeshBox, 10, 0, -20, 255, 0, 0 );
+	InitDebugShapes(meshSphere, myMeshSphere, -10, 0, -20, 255, 0, 0);
+	InitDebugShapes(meshCylinder, myMeshCylinder, -30, 0, -20, 0, 255, 0);
+	InitDebugShapes(meshBox2, myMeshBox2, 10, -20, -20, 200, 255, 200);
+	InitDebugShapes(meshSphere2, myMeshSphere2, -10, -20, -20, 255, 255, 0);
+	InitDebugShapes(meshCylinder2, myMeshCylinder2, -30, -20, -20, 255, 0, 100);
+
+	
+
+
 #endif
 	
 	
@@ -241,40 +272,76 @@ OnError:
 }
 
 #ifdef _DEBUG
+void InitDebugShapes( ID3DXMesh * i_d3dMesh, eae6320::Graphics::Mesh &i_Mesh, float i_x, float i_y, float i_z, uint8_t i_r, uint8_t i_g, uint8_t i_b  )
+{
+	eae6320::Graphics::sVertex * sBox;
+	i_Mesh.m_indexCount = i_d3dMesh->GetNumFaces();
+	i_Mesh.m_vertexCount = i_d3dMesh->GetNumVertices();
+	i_d3dMesh->GetIndexBuffer(&i_Mesh.s_indexBuffer);
+	i_d3dMesh->GetVertexBuffer(&i_Mesh.s_vertexBuffer);
+
+	i_Mesh.s_vertexBuffer->Lock(0, 0, (void**)&sBox, 0);
+	{
+		for (unsigned int i = 0; i < i_Mesh.m_vertexCount; i++)
+		{
+			sBox[i].r = i_r;
+			sBox[i].g = i_g;
+			sBox[i].b = i_b;
+			sBox[i].a = 255;
+
+			sBox[i].x += i_x;
+			sBox[i].y += i_y;
+			sBox[i].z += i_z;
+		}
+
+	}
+	i_Mesh.s_vertexBuffer->Unlock();
+
+
+}
+
+
 void eae6320::Graphics::RenderDebugShapes()
 {
 	s_direct3dDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
 
-	Mesh myMeshBox;
-	myMeshBox.m_indexCount = meshBox->GetNumFaces();
-	myMeshBox.m_vertexCount = meshBox->GetNumVertices();
-	meshBox->GetIndexBuffer(&myMeshBox.s_indexBuffer);
-	meshBox->GetVertexBuffer(&myMeshBox.s_vertexBuffer);
-
-	eae6320::Graphics::DrawMesh(myMeshBox);
-
-	Mesh myMeshSphere;
-	myMeshSphere.m_indexCount = meshSphere->GetNumFaces();
-	myMeshSphere.m_vertexCount = meshSphere->GetNumVertices();
-	meshSphere->GetIndexBuffer(&myMeshSphere.s_indexBuffer);
-	meshSphere->GetVertexBuffer(&myMeshSphere.s_vertexBuffer);
-
+	/*eae6320::Graphics::DrawMesh(myMeshBox);
 	eae6320::Graphics::DrawMesh(myMeshSphere);
-
-	Mesh myMeshCylinder;
-	myMeshCylinder.m_indexCount = meshCylinder->GetNumFaces();
-	myMeshCylinder.m_vertexCount = meshCylinder->GetNumVertices();
-	meshCylinder->GetIndexBuffer(&myMeshCylinder.s_indexBuffer);
-	meshCylinder->GetVertexBuffer(&myMeshCylinder.s_vertexBuffer);
-
 	eae6320::Graphics::DrawMesh(myMeshCylinder);
+	eae6320::Graphics::DrawMesh(myMeshBox2);
+	eae6320::Graphics::DrawMesh(myMeshSphere2);
+	eae6320::Graphics::DrawMesh(myMeshCylinder2);*/
 
+	
+	D3DCOLOR lineColor = D3DCOLOR_XRGB(255, 0, 0);
 
+	struct LineList
+	{
+		float x, y, z;
+	};
+
+	LineList * g_LineList;
+	g_LineList[0].x = 0.0f;
+
+	lines.s_vertexBuffer->Lock(0, 0, (void **)&g_LineList, 0);
+	g_LineList[0] = {	(-0.5f, -1.0f, 0.0f) };
+	g_LineList[1] = {	(10.0f, 10.0f, 0.0f) };
+	lines.s_vertexBuffer->Unlock();
+
+	HRESULT result = s_direct3dDevice->SetStreamSource(0, lines.s_vertexBuffer, 0, sizeof(D3DVECTOR));
+	assert(SUCCEEDED(result));
+		
+	const D3DPRIMITIVETYPE lineList = D3DPT_LINELIST;
+	const unsigned int indexOfFirstVertexToRender = 0;
+	s_direct3dDevice->DrawPrimitive(lineList, indexOfFirstVertexToRender, 2 );
+	
 	s_direct3dDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
 	
 	
 }
 #endif
+
+
 bool eae6320::Graphics::Clear() {
 	{
 		const D3DRECT* subRectanglesToClear = NULL;

@@ -251,12 +251,12 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 
 	InitDebugShapes(meshBox, myMeshBox, 10, 0, -20, 255, 0, 0 );
 	InitDebugShapes(meshSphere, myMeshSphere, -10, 0, -20, 255, 0, 0);
-	InitDebugShapes(meshCylinder, myMeshCylinder, -30, 0, -20, 0, 255, 0);
+	InitDebugShapes(meshCylinder, myMeshCylinder, 30, 0, 20, 0, 255, 0);
 	InitDebugShapes(meshBox2, myMeshBox2, 10, -20, -20, 200, 255, 200);
 	InitDebugShapes(meshSphere2, myMeshSphere2, -10, -20, -20, 255, 255, 0);
-	InitDebugShapes(meshCylinder2, myMeshCylinder2, -30, -20, -20, 255, 0, 100);
+	InitDebugShapes(meshCylinder2, myMeshCylinder2, 30, -20, 20, 255, 0, 100);
 
-	
+
 
 
 #endif
@@ -296,8 +296,6 @@ void InitDebugShapes( ID3DXMesh * i_d3dMesh, eae6320::Graphics::Mesh &i_Mesh, fl
 
 	}
 	i_Mesh.s_vertexBuffer->Unlock();
-
-
 }
 
 
@@ -305,27 +303,58 @@ void eae6320::Graphics::RenderDebugShapes()
 {
 	s_direct3dDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
 
-	/*eae6320::Graphics::DrawMesh(myMeshBox);
+	eae6320::Graphics::DrawMesh(myMeshBox);
 	eae6320::Graphics::DrawMesh(myMeshSphere);
 	eae6320::Graphics::DrawMesh(myMeshCylinder);
 	eae6320::Graphics::DrawMesh(myMeshBox2);
 	eae6320::Graphics::DrawMesh(myMeshSphere2);
-	eae6320::Graphics::DrawMesh(myMeshCylinder2);*/
-
-	
-	D3DCOLOR lineColor = D3DCOLOR_XRGB(255, 0, 0);
+	eae6320::Graphics::DrawMesh(myMeshCylinder2);
 
 	struct LineList
 	{
-		float x, y, z;
+		float x;
+		float y;
+		float z;
+
+		//uint8_t r;
+		//uint8_t g;
+		//uint8_t b;
+		//uint8_t a;
 	};
 
 	LineList * g_LineList;
-	g_LineList[0].x = 0.0f;
+	DWORD usage = 0;
+	
+	const HRESULT result5 = s_direct3dDevice->CreateVertexBuffer(4 * sizeof(LineList), GetVertexProcessingUsage(usage), 0, D3DPOOL_DEFAULT,	&lines.s_vertexBuffer, NULL);
 
 	lines.s_vertexBuffer->Lock(0, 0, (void **)&g_LineList, 0);
-	g_LineList[0] = {	(-0.5f, -1.0f, 0.0f) };
-	g_LineList[1] = {	(10.0f, 10.0f, 0.0f) };
+
+	g_LineList[0].x = 1.0f;
+	g_LineList[0].y = 5.0f;
+	g_LineList[0].z = 1.0f;
+
+	/*g_LineList[0].r = 255;
+	g_LineList[0].g = 0;
+	g_LineList[0].b = 0;
+	g_LineList[0].a = 255;*/
+
+	g_LineList[1].x = 20.0f;
+	g_LineList[1].y = 5.0f;
+	g_LineList[1].z = 0.0f;
+
+	/*g_LineList[1].r = 255;
+	g_LineList[1].g = 255;
+	g_LineList[1].b = 0;
+	g_LineList[1].a = 255;*/
+
+	g_LineList[2].x = 1.0f;
+	g_LineList[2].y = 4.0f;
+	g_LineList[2].z = 0.0f;
+
+	g_LineList[3].x = 20.0f;
+	g_LineList[3].y = 4.0f;
+	g_LineList[3].z = 0.0f;
+
 	lines.s_vertexBuffer->Unlock();
 
 	HRESULT result = s_direct3dDevice->SetStreamSource(0, lines.s_vertexBuffer, 0, sizeof(D3DVECTOR));
@@ -333,7 +362,7 @@ void eae6320::Graphics::RenderDebugShapes()
 		
 	const D3DPRIMITIVETYPE lineList = D3DPT_LINELIST;
 	const unsigned int indexOfFirstVertexToRender = 0;
-	s_direct3dDevice->DrawPrimitive(lineList, indexOfFirstVertexToRender, 2 );
+	s_direct3dDevice->DrawPrimitive(lineList, indexOfFirstVertexToRender, 4 );
 	
 	s_direct3dDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
 	

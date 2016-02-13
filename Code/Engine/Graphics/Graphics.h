@@ -20,14 +20,17 @@ namespace eae6320
 {
 	namespace Graphics
 	{
+		
+
 		bool Initialize( const HWND i_renderingWindow );
-		void Render();
+		void Render(float gameTime);
 		bool ShutDown();
 
 		bool Clear();
 		bool BeginScene();
 		bool EndScene();
 		bool DisplayRenderedBuffer();
+		
 
 		IDirect3DDevice9* getDirect3DDevice();
 

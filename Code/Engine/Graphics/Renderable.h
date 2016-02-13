@@ -6,6 +6,7 @@
 #include "../Math/cVector.h"
 #include "../Math/cQuaternion.h"
 #include <vector>
+#include "GameSprite.h"
 
 namespace eae6320 
 {
@@ -28,6 +29,7 @@ namespace eae6320
 		}; 
 
 		extern std::vector <Renderable*>  RenderableList;
+		extern std::vector <GameSprite*>  GameSpriteList;
 
 	}
 }

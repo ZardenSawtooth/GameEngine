@@ -82,6 +82,8 @@ return
 			"metal_brace_D.png",
 			"railing_D.png",
 			"wall_D.png",
+			"logo.png",
+			"numbers.png",
 		},
 	},
 }

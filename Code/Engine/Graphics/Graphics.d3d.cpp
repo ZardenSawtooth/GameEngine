@@ -11,6 +11,7 @@
 #include <sstream>
 #include "Renderable.h"
 #include "../Math/cVector.h"
+#include "GameSprite.h"
 
 
 // Static Data Initialization
@@ -18,6 +19,7 @@
 
 //IDirect3DDevice9* s_direct3dDevice = NULL;
  std::vector <eae6320::Graphics::Renderable*>  eae6320::Graphics::RenderableList;
+ std::vector <GameSprite*>  eae6320::Graphics::GameSpriteList;
 
  
  
@@ -29,6 +31,9 @@ eae6320::Graphics::Renderable lambert3_R;
 eae6320::Graphics::Renderable metal_R;
 eae6320::Graphics::Renderable railing_R;
 eae6320::Graphics::Renderable walls_R;
+
+GameSprite newSprite;
+GameSprite newSprite2(600, 100);
 
 
 //ID3DXMesh *mesh = NULL;
@@ -90,7 +95,7 @@ namespace
 	eae6320::Graphics::Material wallMat;
 	eae6320::Graphics::Material defaultMaterial;
 
-
+	
 	/*eae6320::Graphics::Effect sEffect;
 	eae6320::Graphics::Effect sEffectTransparent;*/
 
@@ -204,6 +209,11 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 	eae6320::Graphics::LoadMaterial(railingMat, "data/railing.material");
 	eae6320::Graphics::LoadMaterial(wallMat, "data/wall.material");
 	
+	newSprite.Initialize(s_direct3dDevice, "data/logo.png", 256, 256 );
+	GameSpriteList.push_back(&newSprite);
+	newSprite2.Initialize(s_direct3dDevice, "data/numbers.png", 512, 64);
+	newSprite2.Update(0.0f, 0);
+	GameSpriteList.push_back(&newSprite2);
 
 	HRESULT result = s_direct3dDevice->SetRenderState(D3DRS_ZENABLE, D3DZB_TRUE);
 	result = s_direct3dDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);

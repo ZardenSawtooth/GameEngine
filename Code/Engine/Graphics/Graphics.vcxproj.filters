@@ -60,6 +60,9 @@
     <ClCompile Include="Material.gl.cpp">
       <Filter>Source Files\OpenGl</Filter>
     </ClCompile>
+    <ClCompile Include="GameSprite.cpp">
+      <Filter>Source Files\Direct3D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics.h">
@@ -78,6 +81,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Material.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameSprite.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

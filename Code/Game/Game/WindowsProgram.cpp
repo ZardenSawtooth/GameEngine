@@ -66,6 +66,7 @@ int CreateMainWindowAndReturnExitCodeWhenItCloses( const HINSTANCE i_thisInstanc
 // Helper Functions
 //=================
 bool UpdateEntities_floats();
+void UpdateInputNumber(float i_gameTime);
 //bool checkObjectShoot();
 
 
@@ -476,12 +477,13 @@ bool WaitForMainWindowToClose( int& o_exitCode )
 	{
 		eae6320::Time::OnNewFrame();
 		UpdateEntities_floats();
+		UpdateInputNumber(eae6320::Time::GetSecondsElapsedThisFrame());
 		//checkObjectShoot();
 		
 		
 
 
-		eae6320::Graphics::Render();
+		eae6320::Graphics::Render(eae6320::Time::GetSecondsElapsedThisFrame());
 
 		// To send us a message, Windows will add it to a queue.
 		// Most Windows applications should wait until a message is received and then react to it.
@@ -561,6 +563,26 @@ bool checkObjectShoot()
 		}
 	}
 	return true;
+}
+
+void UpdateInputNumber(float i_gameTime)
+{
+	if (eae6320::UserInput::IsKeyPressed('0'))
+	{
+		eae6320::Graphics::GameSpriteList[1]->Update(0.0f, 0);
+	}
+	if (eae6320::UserInput::IsKeyPressed('1'))
+	{
+		eae6320::Graphics::GameSpriteList[1]->Update(0.0f, 1);
+	}
+	if (eae6320::UserInput::IsKeyPressed('2'))
+	{
+		eae6320::Graphics::GameSpriteList[1]->Update(0.0f, 2);
+	}
+	if (eae6320::UserInput::IsKeyPressed('3'))
+	{
+		eae6320::Graphics::GameSpriteList[1]->Update(0.0f, 3);
+	}
 }
 
 bool UpdateEntities_floats()

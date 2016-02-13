@@ -66,7 +66,7 @@ int CreateMainWindowAndReturnExitCodeWhenItCloses( const HINSTANCE i_thisInstanc
 // Helper Functions
 //=================
 bool UpdateEntities_floats();
-bool checkObjectShoot();
+//bool checkObjectShoot();
 
 
 bool CreateMainWindow( const HINSTANCE i_thisInstanceOfTheProgram, const int i_initialWindowDisplayState )
@@ -476,7 +476,7 @@ bool WaitForMainWindowToClose( int& o_exitCode )
 	{
 		eae6320::Time::OnNewFrame();
 		UpdateEntities_floats();
-		checkObjectShoot();
+		//checkObjectShoot();
 		
 		
 
@@ -572,12 +572,13 @@ bool UpdateEntities_floats()
 	// rather than the less-descriptive [0] and [1]:
 	struct 
 	{
-		float x, y;
+		float x, y, z;
 	}offset;
 
-	float rotationSpeed = 0.8f; //in degrees
+	float rotationSpeed = 1.0f; //in degrees
 
 	eae6320::Math::cVector cameraDir;
+
 	eae6320::Math::cQuaternion * cameraOrientationLeft = new eae6320::Math::cQuaternion(eae6320::Math::ConvertDegreesToRadians(rotationSpeed), eae6320::Math::cVector(0,1,0));
 	eae6320::Math::cQuaternion * cameraOrientationRight = new eae6320::Math::cQuaternion(eae6320::Math::ConvertDegreesToRadians(-rotationSpeed), eae6320::Math::cVector(0, 1, 0));
 	eae6320::Math::cQuaternion * cameraOrientationUp = new eae6320::Math::cQuaternion(eae6320::Math::ConvertDegreesToRadians(rotationSpeed), eae6320::Math::cVector(1, 0, 0));
@@ -621,46 +622,36 @@ bool UpdateEntities_floats()
 	//eae6320::Graphics::RenderableList[0]->m_position.x += offset.x;
 	//eae6320::Graphics::RenderableList[0]->m_position.y += offset.y;
 
-	float distToMove = 10.0f;
+	float distToMove = 5.0f;
+
 
 	eae6320::Math::cQuaternion cameraOrientation = Camera::getInstance().m_Orientation;
-
 	{
 		if (eae6320::UserInput::IsKeyPressed('A'))	
 		{
-			cameraDir.x -= distToMove;
-			//Camera::getInstance().m_Orientation = Camera::getInstance().m_Orientation * (*cameraOrientationRight);
+			Camera::getInstance().m_Orientation = Camera::getInstance().m_Orientation * (*cameraOrientationRight);
 		}
 		if (eae6320::UserInput::IsKeyPressed('D'))
 		{
-			cameraDir.x += distToMove;
-			//Camera::getInstance().m_Orientation = Camera::getInstance().m_Orientation * (*cameraOrientationLeft);
+			Camera::getInstance().m_Orientation = Camera::getInstance().m_Orientation * (*cameraOrientationLeft);
 		}
-
-		eae6320::Math::cQuaternion unitOrientation;
-		
-		if (eae6320::UserInput::IsKeyPressed('W'))
+ 		if (eae6320::UserInput::IsKeyPressed('W'))
 		{
 			cameraDir.z -= distToMove;
-			//Camera::getInstance().m_Orientation = Camera::getInstance().m_Orientation * (*cameraOrientationUp);
 		}
 		
 		if (eae6320::UserInput::IsKeyPressed('S'))
 		{
-			cameraDir.z = distToMove;
-			//Camera::getInstance().m_Orientation = Camera::getInstance().m_Orientation * (*cameraOrientationDown);
-		}
+			cameraDir.z += distToMove;
 
-		if (eae6320::UserInput::IsKeyPressed('E'))
-		{
-			//cameraDir.z -= distToMove;
-			Camera::getInstance().m_Orientation = Camera::getInstance().m_Orientation * (*cameraOrientationLeft);
 		}
-
-		if (eae6320::UserInput::IsKeyPressed('Q'))
+		if (eae6320::UserInput::IsKeyPressed(VK_UP))
 		{
-			//cameraDir.z = distToMove;
-			Camera::getInstance().m_Orientation = Camera::getInstance().m_Orientation * (*cameraOrientationRight);
+			cameraDir.y += distToMove;
+		}
+		if (eae6320::UserInput::IsKeyPressed(VK_DOWN))
+		{
+			cameraDir.y -= distToMove;
 		}
 	}
 
@@ -674,14 +665,14 @@ bool UpdateEntities_floats()
 	//cameraDir.x *= camUnitsToMove;
 	cameraDir.y *= camUnitsToMove;
 
-	Camera::getInstance().m_Position += cameraDir;
-	
+	eae6320::Math::cMatrix_transformation FlyCamPosition(Camera::getInstance().m_Orientation, Camera::getInstance().m_Position);
+
+	Camera::getInstance().m_Position.x += FlyCamPosition.m_00 * cameraDir.x + FlyCamPosition.m_10 * cameraDir.y + FlyCamPosition.m_20 * cameraDir.z + FlyCamPosition.m_30 * 0;
+	Camera::getInstance().m_Position.y += FlyCamPosition.m_01 * cameraDir.x + FlyCamPosition.m_11 * cameraDir.y + FlyCamPosition.m_21 * cameraDir.z + FlyCamPosition.m_31 * 0;
+	Camera::getInstance().m_Position.z += FlyCamPosition.m_02 * cameraDir.x + FlyCamPosition.m_12 * cameraDir.y + FlyCamPosition.m_22 * cameraDir.z + FlyCamPosition.m_32 * 0;
+
 	/*eae6320::Graphics::RenderableList[4]->m_position += cameraDir;
 	eae6320::Graphics::RenderableList[5]->m_position += cameraDir;*/
 	
-
-
-
 	return !wereThereErrors;
 }
-

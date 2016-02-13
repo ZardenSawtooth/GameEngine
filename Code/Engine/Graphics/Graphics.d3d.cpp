@@ -333,19 +333,9 @@ void eae6320::Graphics::RenderDebugShapes()
 	g_LineList[0].y = 5.0f;
 	g_LineList[0].z = 1.0f;
 
-	/*g_LineList[0].r = 255;
-	g_LineList[0].g = 0;
-	g_LineList[0].b = 0;
-	g_LineList[0].a = 255;*/
-
 	g_LineList[1].x = 20.0f;
 	g_LineList[1].y = 5.0f;
 	g_LineList[1].z = 0.0f;
-
-	/*g_LineList[1].r = 255;
-	g_LineList[1].g = 255;
-	g_LineList[1].b = 0;
-	g_LineList[1].a = 255;*/
 
 	g_LineList[2].x = 1.0f;
 	g_LineList[2].y = 4.0f;

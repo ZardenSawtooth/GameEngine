@@ -43,7 +43,6 @@ namespace eae6320
 		{
 			// Interface
 			//==========
-
 		public:
 
 			static cMatrix_transformation CreateWorldToViewTransform(
@@ -61,7 +60,7 @@ namespace eae6320
 			// Data
 			//=====
 
-		private:
+//		private:
 
 			// Storage is column-major; see notes at the top of the file
 			float m_00, m_10, m_20, m_30,

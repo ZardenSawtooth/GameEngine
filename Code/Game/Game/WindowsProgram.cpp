@@ -19,6 +19,10 @@
 #include "../../Engine/Graphics/Camera.h"
 #include "../../Engine/Math/cQuaternion.h"
 #include "../../Engine/Math/cMatrix_transformation.h"
+#include "../../Engine/Graphics/UI.h"
+#include "../../Engine/Core/CollisionSystem.h"
+#include "../../Engine/Core/Player.h"
+#include "../../Engine/Core/TPCamera.h"
 
 // Static Data Initialization
 //===========================
@@ -459,6 +463,7 @@ bool UnregisterMainWindowClass( const HINSTANCE i_thisInstanceOfTheProgram )
 	}
 }
 
+
 bool WaitForMainWindowToClose( int& o_exitCode )
 {
 	// Any time something happens that Windows cares about, it will send the main window a message.
@@ -471,19 +476,25 @@ bool WaitForMainWindowToClose( int& o_exitCode )
 
 	// Enter an infinite loop that will continue until a quit message (WM_QUIT) is received from Windows
 	eae6320::Graphics::Initialize(s_mainWindow);
-	MSG message = { 0 };
+	
+	eae6320::Core::CollisionSystem::Initialize("data/collisionData.mesh");
+	
+	eae6320::Core::Player * player = new eae6320::Core::Player();
 
+	player->Position = Camera::getInstance().m_Position; //eae6320::Math::cVector(0, -120, 0);
+	bool flyCamActive = false;
+
+	
+	eae6320::Core::TPCamera * playerCamera = new eae6320::Core::TPCamera();
+	playerCamera->AspectRatio = (float)1024 / (float)768;
+	
+	
+	int UIDelay = 0;
+	float rotationOffset = 0;
+	MSG message = { 0 };
 	do
 	{
-		eae6320::Time::OnNewFrame();
-		UpdateEntities_floats();
-		UpdateInputNumber(eae6320::Time::GetSecondsElapsedThisFrame());
-		//checkObjectShoot();
 		
-		
-
-
-		eae6320::Graphics::Render(eae6320::Time::GetSecondsElapsedThisFrame());
 
 		// To send us a message, Windows will add it to a queue.
 		// Most Windows applications should wait until a message is received and then react to it.
@@ -502,14 +513,74 @@ bool WaitForMainWindowToClose( int& o_exitCode )
 		}
 		if ( !hasWindowsSentAMessage )
 		{
-			// Usually there will be no messages in the queue, and the game can run
+			eae6320::Time::OnNewFrame();
 
-			// (This example program has nothing to do,
-			// and so it will just constantly run this while loop using up CPU cycles.
-			// A real game might have something like the following:
-			//	someGameClass.OnNewFrame();
-			// or similar, though.)
-		}
+			//if (sphereEnabled)
+			//{
+			//	//change size of shapes and draw them
+			//	
+			//}
+
+			if (eae6320::UserInput::IsKeyUp(VK_OEM_3))
+			{
+				eae6320::Graphics::UI::ToggleDebugMenu();
+			}
+			if (eae6320::UserInput::IsKeyUp('F'))
+			{
+				flyCamActive = !flyCamActive;
+			}
+			if (eae6320::Graphics::UI::IsDebugMenuActive())
+			{	
+				if (eae6320::UserInput::IsKeyUp(VK_UP))
+					eae6320::Graphics::UI::Update(eae6320::Graphics::UI::Up);
+				else if (eae6320::UserInput::IsKeyUp(VK_DOWN))
+					eae6320::Graphics::UI::Update(eae6320::Graphics::UI::Down);
+				else if (eae6320::UserInput::IsKeyUp(VK_SPACE))
+					eae6320::Graphics::UI::Update(eae6320::Graphics::UI::Interact);
+				else if (eae6320::UserInput::IsKeyUp(VK_LEFT))
+					eae6320::Graphics::UI::Update(eae6320::Graphics::UI::Left);
+				else if (eae6320::UserInput::IsKeyUp(VK_RIGHT))
+					eae6320::Graphics::UI::Update(eae6320::Graphics::UI::Right);
+			}
+			else
+			{
+				if (flyCamActive)
+				{
+					//code for fly cam
+					UpdateEntities_floats();
+				}
+				
+				else
+				{
+					if (eae6320::UserInput::IsKeyPressed(VK_LEFT))
+					{
+						rotationOffset = -45;
+					}
+					else if (eae6320::UserInput::IsKeyPressed(VK_RIGHT))
+					{
+						rotationOffset = 45;
+					}
+					else
+						rotationOffset = 0;
+					player->UpdateInput();
+					player->Update(eae6320::Time::GetSecondsElapsedThisFrame());
+
+					playerCamera->eulerX = 5;
+					playerCamera->eulerY += (player->eulerY + rotationOffset - playerCamera->eulerY) * eae6320::Time::GetSecondsElapsedThisFrame() * 3;
+
+					player->UpdateCamera(playerCamera);
+
+					Camera::getInstance().m_Position = playerCamera->Position;
+					Camera::getInstance().m_PositionPlayer = player->Position;
+					Camera::getInstance().m_PositionPlayerRay = player->Position - player->getLocalZ() *100;
+					Camera::getInstance().m_Orientation = playerCamera->Orientation;
+				}
+			}
+			
+			//UpdateInputNumber(eae6320::Time::GetSecondsElapsedThisFrame());
+		
+			eae6320::Graphics::Render(eae6320::Time::GetSecondsElapsedThisFrame());
+			}
 		else
 		{
 			// If Windows _has_ sent a message, this iteration of the loop will handle it.

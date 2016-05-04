@@ -5,6 +5,8 @@
 #ifndef EAE6320_MATH_CVECTOR_H
 #define EAE6320_MATH_CVECTOR_H
 
+#include "cMatrix_transformation.h"
+
 // Class Declaration
 //==================
 
@@ -32,6 +34,8 @@ namespace eae6320
 			cVector operator *( const float i_rhs ) const;
 			cVector& operator *=( const float i_rhs );
 			friend cVector operator *( const float i_lhs, const cVector& i_rhs );
+
+			cVector operator *(const cMatrix_transformation i_rhs) const;
 
 			// Division
 			cVector operator /( const float i_rhs ) const;

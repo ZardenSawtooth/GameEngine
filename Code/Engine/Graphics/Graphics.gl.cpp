@@ -46,6 +46,8 @@ namespace
 		// 4 uint8_ts == 4 bytes
 		// Offset = 8
 		uint8_t r, g, b, a;	// 8 bits [0,255] per RGBA channel (the alpha channel is unused but is present so that color uses a full 4 bytes)
+
+
 	};
 
 	// A vertex array encapsulates both the vertex and index data as well as the vertex format

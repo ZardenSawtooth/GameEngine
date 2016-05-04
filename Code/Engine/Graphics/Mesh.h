@@ -36,6 +36,12 @@ namespace eae6320
 
 			//UV coordinates
 			float u, v;
+
+			//Normals
+			// 3 floats == 12 bytes
+			// Offset = 24
+			/*float nx, ny, nz;*/
+
 		};
 
 		

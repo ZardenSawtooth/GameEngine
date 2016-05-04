@@ -36,7 +36,7 @@ namespace eae6320
 
 		
 
-		void RenderDebugShapes();
+		void RenderDebugShapes(float gameTime);
 		
 	}
 }

@@ -3,6 +3,7 @@
 #include "Effect.h"
 #include "Material.h"
 #include "GameSprite.h"
+#include "UI.h"
 
 namespace eae6320
 {
@@ -17,10 +18,9 @@ namespace eae6320
 		{
 			BeginScene();
 			{	
-				GameSpriteList[0]->Draw(gameTime);
-				
-				GameSpriteList[1]->Draw(gameTime);
-
+				/*GameSpriteList[0]->Draw(gameTime);
+				GameSpriteList[1]->Draw(gameTime);*/
+				Graphics::UI::Draw();
 				for (unsigned int i = 0; i < RenderableList.size(); i++) 
 				{
 					//SetEffect(RenderableList[i]->mEffect);
@@ -29,14 +29,10 @@ namespace eae6320
 					Math::cMatrix_transformation matrix(RenderableList[i]->m_orientation, RenderableList[i]->m_position);
 					eae6320::Graphics::SetDrawCallUniforms(RenderableList[i]->m_Material.m_effect, matrix);
 
-					
-
-
-
 					eae6320::Graphics::DrawMesh(RenderableList[i]->mMesh);
 				}
 #ifdef _DEBUG
-					eae6320::Graphics::RenderDebugShapes();
+					eae6320::Graphics::RenderDebugShapes(gameTime);
 #endif		
 				
 				

@@ -64,6 +64,14 @@ eae6320::Math::cVector operator *( const float i_lhs, const eae6320::Math::cVect
 	return i_rhs * i_lhs;
 }
 
+eae6320::Math::cVector eae6320::Math::cVector::operator *(const eae6320::Math::cMatrix_transformation i_rhs) const
+{
+	return cVector(
+		(x * i_rhs.m_00 + y * i_rhs.m_10 + z * i_rhs.m_20 + 1.0f * i_rhs.m_30),
+		(x * i_rhs.m_01 + y * i_rhs.m_11 + z * i_rhs.m_21 + 1.0f * i_rhs.m_31),
+		(x * i_rhs.m_02 + y * i_rhs.m_12 + z * i_rhs.m_22 + 1.0f * i_rhs.m_32));
+}
+
 // Division
 eae6320::Math::cVector eae6320::Math::cVector::operator /( const float i_rhs ) const
 {

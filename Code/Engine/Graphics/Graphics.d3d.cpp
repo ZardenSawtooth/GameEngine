@@ -12,6 +12,8 @@
 #include "Renderable.h"
 #include "../Math/cVector.h"
 #include "GameSprite.h"
+#include "UI.h"
+#include "Camera.h"
 
 
 // Static Data Initialization
@@ -32,7 +34,7 @@ eae6320::Graphics::Renderable metal_R;
 eae6320::Graphics::Renderable railing_R;
 eae6320::Graphics::Renderable walls_R;
 
-GameSprite newSprite;
+GameSprite newSprite(652, 100);
 GameSprite newSprite2(600, 100);
 
 
@@ -95,7 +97,14 @@ namespace
 	eae6320::Graphics::Material wallMat;
 	eae6320::Graphics::Material defaultMaterial;
 
-	
+	const int defaultRadius = 20;
+	int radius = defaultRadius;
+	void ResetSphere()
+	{
+		radius = defaultRadius;
+	}
+	bool sphereEnabled = false;
+	char * fpsString = new char[20];
 	/*eae6320::Graphics::Effect sEffect;
 	eae6320::Graphics::Effect sEffectTransparent;*/
 
@@ -202,18 +211,35 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 	}
 
 
-
+	//materials
 	eae6320::Graphics::LoadMaterial(cementMat, "data/cement.material");
 	eae6320::Graphics::LoadMaterial(floorMat, "data/floor.material");
 	eae6320::Graphics::LoadMaterial(metalMat, "data/metal.material");
 	eae6320::Graphics::LoadMaterial(railingMat, "data/railing.material");
 	eae6320::Graphics::LoadMaterial(wallMat, "data/wall.material");
 	
-	newSprite.Initialize(s_direct3dDevice, "data/logo.png", 256, 256 );
+	eae6320::Graphics::UI::SetDirect3dDevice(s_direct3dDevice);
+	eae6320::Graphics::UI::Initialize();
+
+	//initialize UI stuff
+	
+	sprintf(fpsString, "Abc");
+	eae6320::Graphics::UI::CreateText("FPS", fpsString);
+	
+	eae6320::Graphics::UI::CreateCheckBox("Sphere", &sphereEnabled);
+	eae6320::Graphics::UI::CreateSlider("Radius", &radius, 10, 100);
+	eae6320::Graphics::UI::CreateButton("Default", &ResetSphere);
+
+
+	//sprites
+	newSprite.Initialize(s_direct3dDevice, "data/numbers.png", 512, 64 );
 	GameSpriteList.push_back(&newSprite);
+	newSprite.Update(0.0f, 0);
 	newSprite2.Initialize(s_direct3dDevice, "data/numbers.png", 512, 64);
 	newSprite2.Update(0.0f, 0);
 	GameSpriteList.push_back(&newSprite2);
+
+	
 
 	HRESULT result = s_direct3dDevice->SetRenderState(D3DRS_ZENABLE, D3DZB_TRUE);
 	result = s_direct3dDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
@@ -252,19 +278,19 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 #ifdef _DEBUG
 	D3DXCreateBox(s_direct3dDevice, 10.0f, 10.0f, 10.0f, &meshBox, NULL);
 	D3DXCreateSphere(s_direct3dDevice, 10.0f, 15, 15, &meshSphere, NULL);
-	D3DXCreateCylinder(s_direct3dDevice, 10.0, 10.0, 25.0, 10, 10, &meshCylinder, NULL);
+	/*D3DXCreateCylinder(s_direct3dDevice, 10.0, 10.0, 25.0, 10, 10, &meshCylinder, NULL);
 	D3DXCreateBox(s_direct3dDevice, 10.0f, 10.0f, 10.0f, &meshBox2, NULL);
 	D3DXCreateSphere(s_direct3dDevice, 10.0f, 15, 15, &meshSphere2, NULL);
-	D3DXCreateCylinder(s_direct3dDevice, 10.0, 10.0, 25.0, 10, 10, &meshCylinder2, NULL);
+	D3DXCreateCylinder(s_direct3dDevice, 10.0, 10.0, 25.0, 10, 10, &meshCylinder2, NULL);*/
 
 	
 
 	InitDebugShapes(meshBox, myMeshBox, 10, 0, -20, 255, 0, 0 );
 	InitDebugShapes(meshSphere, myMeshSphere, -10, 0, -20, 255, 0, 0);
-	InitDebugShapes(meshCylinder, myMeshCylinder, 30, 0, 20, 0, 255, 0);
+	/*InitDebugShapes(meshCylinder, myMeshCylinder, 30, 0, 20, 0, 255, 0);
 	InitDebugShapes(meshBox2, myMeshBox2, 10, -20, -20, 200, 255, 200);
 	InitDebugShapes(meshSphere2, myMeshSphere2, -10, -20, -20, 255, 255, 0);
-	InitDebugShapes(meshCylinder2, myMeshCylinder2, 30, -20, 20, 255, 0, 100);
+	InitDebugShapes(meshCylinder2, myMeshCylinder2, 30, -20, 20, 255, 0, 100);*/
 
 
 
@@ -289,8 +315,10 @@ void InitDebugShapes( ID3DXMesh * i_d3dMesh, eae6320::Graphics::Mesh &i_Mesh, fl
 	i_Mesh.m_vertexCount = i_d3dMesh->GetNumVertices();
 	i_d3dMesh->GetIndexBuffer(&i_Mesh.s_indexBuffer);
 	i_d3dMesh->GetVertexBuffer(&i_Mesh.s_vertexBuffer);
+	
 
 	i_Mesh.s_vertexBuffer->Lock(0, 0, (void**)&sBox, 0);
+	
 	{
 		for (unsigned int i = 0; i < i_Mesh.m_vertexCount; i++)
 		{
@@ -309,16 +337,29 @@ void InitDebugShapes( ID3DXMesh * i_d3dMesh, eae6320::Graphics::Mesh &i_Mesh, fl
 }
 
 
-void eae6320::Graphics::RenderDebugShapes()
+void eae6320::Graphics::RenderDebugShapes(float gameTime)
 {
 	s_direct3dDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
+	float framerate = 1/gameTime;
+	sprintf(fpsString, "%f", framerate);
 
+	D3DXCreateBox(s_direct3dDevice, 20.0f, 100.0f, 20.0f, &meshBox, NULL);
+	InitDebugShapes(meshBox, myMeshBox, Camera::getInstance().m_PositionPlayer.x, Camera::getInstance().m_PositionPlayer.y, Camera::getInstance().m_PositionPlayer.z, 255, 0, 0);
 	eae6320::Graphics::DrawMesh(myMeshBox);
-	eae6320::Graphics::DrawMesh(myMeshSphere);
-	eae6320::Graphics::DrawMesh(myMeshCylinder);
-	eae6320::Graphics::DrawMesh(myMeshBox2);
-	eae6320::Graphics::DrawMesh(myMeshSphere2);
-	eae6320::Graphics::DrawMesh(myMeshCylinder2);
+
+
+	if (sphereEnabled)
+	{
+		
+		D3DXCreateSphere(s_direct3dDevice, radius, 15, 15, &meshSphere, NULL);
+		InitDebugShapes(meshSphere, myMeshSphere, 5, 0, 5, 255, 0, 0);
+		eae6320::Graphics::DrawMesh(myMeshSphere);
+		/*eae6320::Graphics::DrawMesh(myMeshCylinder);
+		eae6320::Graphics::DrawMesh(myMeshBox2);
+		eae6320::Graphics::DrawMesh(myMeshSphere2);
+		eae6320::Graphics::DrawMesh(myMeshCylinder2);*/
+	}
+	
 
 	struct LineList
 	{
@@ -339,13 +380,13 @@ void eae6320::Graphics::RenderDebugShapes()
 
 	lines.s_vertexBuffer->Lock(0, 0, (void **)&g_LineList, 0);
 
-	g_LineList[0].x = 1.0f;
-	g_LineList[0].y = 5.0f;
-	g_LineList[0].z = 1.0f;
+	g_LineList[0].x = Camera::getInstance().m_PositionPlayer.x;
+	g_LineList[0].y = Camera::getInstance().m_PositionPlayer.y;
+	g_LineList[0].z = Camera::getInstance().m_PositionPlayer.z;
 
-	g_LineList[1].x = 20.0f;
-	g_LineList[1].y = 5.0f;
-	g_LineList[1].z = 0.0f;
+	g_LineList[1].x = Camera::getInstance().m_PositionPlayerRay.x;
+	g_LineList[1].y = Camera::getInstance().m_PositionPlayerRay.y;
+	g_LineList[1].z = Camera::getInstance().m_PositionPlayerRay.z;
 
 	g_LineList[2].x = 1.0f;
 	g_LineList[2].y = 4.0f;

@@ -70,6 +70,19 @@ void GameSprite::Update(float gameTime, int i_keypress)
 	m_spriteCoord->top = 0;
 }
 
+void GameSprite::UpdateHeight(float gameTime, int height)
+{
+	//Update our sprite
+	m_spriteCoord = new RECT();
+
+	m_spriteCoord->left = 0;
+	m_spriteCoord->right = 75;
+	m_spriteCoord->bottom = 150;
+	m_spriteCoord->top = height;
+}
+
+
+
 void GameSprite::Draw(float gameTime)
 {
 	if(sprite && tex)

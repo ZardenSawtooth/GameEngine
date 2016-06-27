@@ -36,7 +36,7 @@ namespace eae6320
 		// 3 floats == 12 bytes
 		// Offset = 24
 		//
-		float nx, ny, nz;
+		//float nx, ny, nz;
 	};
 
 	class cMeshBuilder : public cbBuilder

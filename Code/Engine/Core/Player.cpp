@@ -4,6 +4,10 @@
 #include "../UserInput/UserInput.h"
 #include "../Math/Functions.h"
 #include "../Time/Time.h"
+#include "../Core/Networking.h"
+#include "../Graphics/Renderable.h"
+#include "../Audio/AudioControl.h"
+#include "../Graphics/Camera.h"
 
 namespace eae6320
 {
@@ -11,13 +15,56 @@ namespace eae6320
 	{
 		Math::cVector camDefault(0, 80, 400);
 		Math::cVector camOffset(0, 80, 400);
+		
 		void Player::UpdateInput()
 		{
 			Math::cVector VelocityOffset;
 			if (UserInput::IsKeyPressed('W'))
-				VelocityOffset.z -= 8.0f;
+			{
+				if (UserInput::IsKeyPressed(SHIFT_PRESSED) && boostValue <100)
+				{
+					VelocityOffset.z -= 12.0f;
+					boost = true;
+				}
+				else
+				{
+					VelocityOffset.z -= 6.0f;
+					boost = false;
+				}
+
+				if (Camera::getInstance().m_PositionPlayer.y > -150.0f)
+					eae6320::Audio::PlayAudio(6);
+				else
+				eae6320::Audio::PlayAudio(5);
+			}
+			else
+			
+
 			if (UserInput::IsKeyPressed('S'))
-				VelocityOffset.z += 8.0f;
+			{
+				if (UserInput::IsKeyPressed(SHIFT_PRESSED) && boostValue < 100)
+				{
+					VelocityOffset.z += 12.0f;
+					boost = true;
+				}
+				else
+				{
+					VelocityOffset.z += 6.0f;
+					boost = false;
+				}
+
+				if (Camera::getInstance().m_PositionPlayer.y > -150.0f)
+					eae6320::Audio::PlayAudio(6);
+				else
+					eae6320::Audio::PlayAudio(5);
+			}
+			else
+			{
+				boost = false;
+				eae6320::Audio::StopAudio(5);
+				eae6320::Audio::StopAudio(6);
+			}
+				
 			/*if (UserInput::IsKeyPressed('A'))
 				VelocityOffset.x -= 5.0f;
 			if (UserInput::IsKeyPressed('D'))
@@ -27,6 +74,7 @@ namespace eae6320
 			if (UserInput::IsKeyPressed('D'))
 				eulerY += 2.0f;
 			Velocity = VelocityOffset * Math::cMatrix_transformation(Orientation, Math::cVector(0.0f, 0.0f, 0.0f));
+			
 		}
 
 		void Player::Update(float dt)
@@ -87,7 +135,6 @@ namespace eae6320
 			{
 				camOffset += (camDefault - camOffset) * Time::GetSecondsElapsedThisFrame();
 			}
-
 			val = camOffset * i_localToWorld;
 			camera->Position += (val - camera->Position) * eae6320::Time::GetSecondsElapsedThisFrame() * 10;
 			camera->Orientation = eae6320::Math::cQuaternion(eae6320::Math::ConvertDegreesToRadians(camera->eulerX), eae6320::Math::cVector(1, 0, 0)) * eae6320::Math::cQuaternion(eae6320::Math::ConvertDegreesToRadians(camera->eulerY), eae6320::Math::cVector(0, 1, 0)) * eae6320::Math::cQuaternion(eae6320::Math::ConvertDegreesToRadians(camera->eulerZ), eae6320::Math::cVector(0, 0, 1));

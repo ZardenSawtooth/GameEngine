@@ -17,6 +17,7 @@ public:
 	bool Initialize(LPDIRECT3DDEVICE9 device, std::string file, int width, int height);
 	bool IsInitialized();
 	virtual void Update(float gameTime, int i_keypress);
+	virtual void UpdateHeight(float gameTime, int height);
 	virtual void Draw(float gameTime);
 private:
 	//Pointers

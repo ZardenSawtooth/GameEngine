@@ -18,8 +18,9 @@ namespace eae6320
 		{
 			BeginScene();
 			{	
-				/*GameSpriteList[0]->Draw(gameTime);
-				GameSpriteList[1]->Draw(gameTime);*/
+				GameSpriteList[0]->Draw(gameTime);
+				GameSpriteList[1]->Draw(gameTime);
+				GameSpriteList[2]->Draw(gameTime);
 				Graphics::UI::Draw();
 				for (unsigned int i = 0; i < RenderableList.size(); i++) 
 				{

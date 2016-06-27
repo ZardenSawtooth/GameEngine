@@ -87,12 +87,12 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(LibDir)</OutDir>
-    <IncludePath>"$(DXSDK_DIR)";$(IncludePath)</IncludePath>
+    <IncludePath>$(DXSDK_DIR);$(IncludePath)</IncludePath>
     <LibraryPath>$(DXSDK_DIR)LIB\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(LibDir)</OutDir>
-    <IncludePath>"$(DXSDK_DIR)";$(IncludePath)</IncludePath>
+    <IncludePath>$(DXSDK_DIR);$(IncludePath)</IncludePath>
     <LibraryPath>$(DXSDK_DIR)LIB\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

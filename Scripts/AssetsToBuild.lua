@@ -18,6 +18,17 @@ return
 		},
 	},
 
+	CollisionData = 
+	{
+		src = "",
+		tar = "",
+		tool = "CollisionDataBuilder.exe",
+		assets =
+		{
+			"collisionData.mesh"
+		},
+	},
+
 	FragmentShaders =
 	{
 		src = "",
@@ -84,6 +95,26 @@ return
 			"wall_D.png",
 			"logo.png",
 			"numbers.png",
+			"bar.png"
+		},
+	},
+
+	Audio = 
+	{
+		src = "Audio/",
+		tar = "",
+		tool = "GenericBuilder.exe",
+		assets =
+		{
+			"GameMusic.wav",
+			"EnemyPickUpFlag.wav",
+			"PickUpFlag.wav",
+			"ResetFlag.wav",
+			"Scored.wav",
+			"WalkingGround.wav",
+			"WalkingUp.wav",
+			"EnemyScored.wav",
+			"Sprint.wav",
 		},
 	},
 }

@@ -16,7 +16,12 @@ namespace eae6320
 			Math::cVector Velocity;
 			float eulerX, eulerY, eulerZ;
 			void Update(float dt);
-
+			
+			float boostValue = 0;
+			bool boost = false;
+			bool Flag = false;
+			int team = 0;
+			int score = 0;
 			void UpdateInput();
 			void UpdateCamera(TPCamera * camera);
 

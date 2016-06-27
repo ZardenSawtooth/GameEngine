@@ -11,12 +11,13 @@
 #include <string>
 #include "../../Engine/Windows/Includes.h"
 #include "../../Engine/Graphics/Graphics.h"
+#include "../../Engine/Core/Networking.h"
 
 // Main Function
 //==============
 
 int CreateMainWindowAndReturnExitCodeWhenItCloses( const HINSTANCE i_thisInstanceOfTheProgram, const int i_initialWindowDisplayState );
-
+void ResetFlag();
 // Helper Functions
 //=================
 

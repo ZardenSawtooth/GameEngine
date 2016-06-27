@@ -13,7 +13,16 @@ public:
 	eae6320::Math::cQuaternion m_Orientation;
 	eae6320::Math::cVector m_Position = eae6320::Math::cVector(0,0,0);
 	eae6320::Math::cVector m_PositionPlayer = eae6320::Math::cVector(0, 0, 0);
+	eae6320::Math::cVector m_PositionPlayerTwo = eae6320::Math::cVector(0, 0, 0);
+	eae6320::Math::cVector m_PositionPlayerTwoRay = eae6320::Math::cVector(0, 0, 0);
 	eae6320::Math::cVector m_PositionPlayerRay = eae6320::Math::cVector(0, 0, 0);
+
+	eae6320::Math::cVector m_Flag1 = eae6320::Math::cVector(0, 0, 0);
+	eae6320::Math::cVector m_Flag2 = eae6320::Math::cVector(0, 0, 0);
+
+	eae6320::Math::cVector m_FlagEnd1 = eae6320::Math::cVector(300, -220, -1200);
+	eae6320::Math::cVector m_FlagEnd2 = eae6320::Math::cVector(-300, -220, 1200);
+
 
 	float eulerX, eulerY, eulerZ;
 	float AspectRatio;

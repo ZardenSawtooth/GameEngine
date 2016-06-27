@@ -385,16 +385,16 @@ namespace
 			//pop texture coord values
 			lua_pop(&io_luaState, 1);
 
-			//push normal
-			lua_pushstring(&io_luaState, "normal");
-			lua_gettable(&io_luaState, -2);
+			////push normal
+			//lua_pushstring(&io_luaState, "normal");
+			//lua_gettable(&io_luaState, -2);
 
-			//get values of normal coord
-			if (!GetNormalValues(io_luaState, i - 1))
-				return false;
+			////get values of normal coord
+			//if (!GetNormalValues(io_luaState, i - 1))
+			//	return false;
 
-			//pop normal values
-			lua_pop(&io_luaState, 1);
+			////pop normal values
+			//lua_pop(&io_luaState, 1);
 
 
 			// Pop the vertexData table
@@ -491,59 +491,63 @@ namespace
 
 	bool GetTextureCoordValues(lua_State& io_luaState, unsigned int i_index)
 	{
-		lua_pushinteger(&io_luaState, 1);
-		lua_gettable(&io_luaState, -2);
-
-		vertexData[i_index].u = static_cast<float> (lua_tonumber(&io_luaState, -1));
-		lua_pop(&io_luaState, 1);
-
-		lua_pushinteger(&io_luaState, 2);
-		lua_gettable(&io_luaState, -2);
-
-		vertexData[i_index].v = 1.0f - static_cast<float> (lua_tonumber(&io_luaState, -1));
-		lua_pop(&io_luaState, 1);
-
-		return true;
-	}
-
-	bool GetNormalValues(lua_State& io_luaState, unsigned int i_index)
-	{
 		if (lua_istable(&io_luaState, -1))
 		{
-		//	std::stringstream errorMessage;
-		//	errorMessage << "The value at \"" << i_index << "\" must be a table "
-		//		"(instead of a " << luaL_typename(&io_luaState, -1) << ")\n";
-		//	eae6320::OutputErrorMessage(errorMessage.str().c_str(), __FILE__);
-		//	//Pop the faulty entry
-		//	lua_pop(&io_luaState, 1);
-		//	return false;
-		//}
-		//else
-		//{
 			lua_pushinteger(&io_luaState, 1);
 			lua_gettable(&io_luaState, -2);
 
-			vertexData[i_index].nx = static_cast<float> (lua_tonumber(&io_luaState, -1));
+			vertexData[i_index].u = static_cast<float> (lua_tonumber(&io_luaState, -1));
 			lua_pop(&io_luaState, 1);
 
 			lua_pushinteger(&io_luaState, 2);
 			lua_gettable(&io_luaState, -2);
 
-			vertexData[i_index].ny = static_cast<float> (lua_tonumber(&io_luaState, -1));
-			lua_pop(&io_luaState, 1);
-
-			lua_pushinteger(&io_luaState, 3);
-			lua_gettable(&io_luaState, -2);
-
-			vertexData[i_index].nz = static_cast<float> (lua_tonumber(&io_luaState, -1));
+			vertexData[i_index].v = 1.0f - static_cast<float> (lua_tonumber(&io_luaState, -1));
 			lua_pop(&io_luaState, 1);
 
 			return true;
-
 		}
 		return false;
 	}
 
+	//bool GetNormalValues(lua_State& io_luaState, unsigned int i_index)
+	//{
+	//	if (lua_istable(&io_luaState, -1))
+	//	{
+	//	//	std::stringstream errorMessage;
+	//	//	errorMessage << "The value at \"" << i_index << "\" must be a table "
+	//	//		"(instead of a " << luaL_typename(&io_luaState, -1) << ")\n";
+	//	//	eae6320::OutputErrorMessage(errorMessage.str().c_str(), __FILE__);
+	//	//	//Pop the faulty entry
+	//	//	lua_pop(&io_luaState, 1);
+	//	//	return false;
+	//	//}
+	//	//else
+	//	//{
+	//		lua_pushinteger(&io_luaState, 1);
+	//		lua_gettable(&io_luaState, -2);
+
+	//		vertexData[i_index].nx = static_cast<float> (lua_tonumber(&io_luaState, -1));
+	//		lua_pop(&io_luaState, 1);
+
+	//		lua_pushinteger(&io_luaState, 2);
+	//		lua_gettable(&io_luaState, -2);
+
+	//		vertexData[i_index].ny = static_cast<float> (lua_tonumber(&io_luaState, -1));
+	//		lua_pop(&io_luaState, 1);
+
+	//		lua_pushinteger(&io_luaState, 3);
+	//		lua_gettable(&io_luaState, -2);
+
+	//		vertexData[i_index].nz = static_cast<float> (lua_tonumber(&io_luaState, -1));
+	//		lua_pop(&io_luaState, 1);
+
+	//		return true;
+
+	//	}
+	//	return false;
+	//}
+	
 	bool LoadTableValues_indexData(lua_State& io_luaState, std::ofstream& i_outfile)
 	{
 		bool wereThereErrors = false;

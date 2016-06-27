@@ -14,6 +14,7 @@
 #include "GameSprite.h"
 #include "UI.h"
 #include "Camera.h"
+#include "../Core/Networking.h"
 
 
 // Static Data Initialization
@@ -34,8 +35,9 @@ eae6320::Graphics::Renderable metal_R;
 eae6320::Graphics::Renderable railing_R;
 eae6320::Graphics::Renderable walls_R;
 
-GameSprite newSprite(652, 100);
+GameSprite newSprite(100, 100);
 GameSprite newSprite2(600, 100);
+GameSprite newSprite3(750, 20);
 
 
 //ID3DXMesh *mesh = NULL;
@@ -48,7 +50,10 @@ namespace
 	ID3DXMesh * meshCylinder = NULL;
 	ID3DXMesh * meshBox2 = NULL;
 	ID3DXMesh * meshSphere2 = NULL;
+	ID3DXMesh * meshSphere3 = NULL;
 	ID3DXMesh * meshCylinder2 = NULL;
+	ID3DXMesh * meshBoxFlag1 = NULL;
+	ID3DXMesh * meshBoxFlag2 = NULL;
 	
 
 
@@ -85,7 +90,10 @@ namespace
 	eae6320::Graphics::Mesh myMeshCylinder;
 	eae6320::Graphics::Mesh myMeshBox2;
 	eae6320::Graphics::Mesh myMeshSphere2;
+	eae6320::Graphics::Mesh myMeshSphere3;
 	eae6320::Graphics::Mesh myMeshCylinder2;
+	eae6320::Graphics::Mesh myMeshBoxFlagLand1;
+	eae6320::Graphics::Mesh myMeshBoxFlagLand2;
 
 	eae6320::Graphics::Mesh lines;
 
@@ -238,8 +246,9 @@ bool eae6320::Graphics::Initialize( const HWND i_renderingWindow )
 	newSprite2.Initialize(s_direct3dDevice, "data/numbers.png", 512, 64);
 	newSprite2.Update(0.0f, 0);
 	GameSpriteList.push_back(&newSprite2);
-
-	
+	newSprite3.Initialize(s_direct3dDevice, "data/bar.png", 75, 130);
+	newSprite3.UpdateHeight(0.0f, 0);
+	GameSpriteList.push_back(&newSprite3);
 
 	HRESULT result = s_direct3dDevice->SetRenderState(D3DRS_ZENABLE, D3DZB_TRUE);
 	result = s_direct3dDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
@@ -343,9 +352,45 @@ void eae6320::Graphics::RenderDebugShapes(float gameTime)
 	float framerate = 1/gameTime;
 	sprintf(fpsString, "%f", framerate);
 
-	D3DXCreateBox(s_direct3dDevice, 20.0f, 100.0f, 20.0f, &meshBox, NULL);
-	InitDebugShapes(meshBox, myMeshBox, Camera::getInstance().m_PositionPlayer.x, Camera::getInstance().m_PositionPlayer.y, Camera::getInstance().m_PositionPlayer.z, 255, 0, 0);
-	eae6320::Graphics::DrawMesh(myMeshBox);
+	if (eae6320::Networking::IsServer())
+	{
+		D3DXCreateBox(s_direct3dDevice, 20.0f, 100.0f, 20.0f, &meshBox, NULL);
+		InitDebugShapes(meshBox, myMeshBox, Camera::getInstance().m_PositionPlayer.x, Camera::getInstance().m_PositionPlayer.y, Camera::getInstance().m_PositionPlayer.z, 255, 0, 0);
+		eae6320::Graphics::DrawMesh(myMeshBox);
+
+		D3DXCreateBox(s_direct3dDevice, 20.0f, 100.0f, 20.0f, &meshBox2, NULL);
+		InitDebugShapes(meshBox2, myMeshBox2, Camera::getInstance().m_PositionPlayerTwo.x, Camera::getInstance().m_PositionPlayerTwo.y, Camera::getInstance().m_PositionPlayerTwo.z, 0, 255, 0);
+		eae6320::Graphics::DrawMesh(myMeshBox2);
+	}
+	else
+	{
+		D3DXCreateBox(s_direct3dDevice, 20.0f, 100.0f, 20.0f, &meshBox, NULL);
+		InitDebugShapes(meshBox, myMeshBox, Camera::getInstance().m_PositionPlayer.x, Camera::getInstance().m_PositionPlayer.y, Camera::getInstance().m_PositionPlayer.z, 0, 255, 0);
+		eae6320::Graphics::DrawMesh(myMeshBox);
+
+		D3DXCreateBox(s_direct3dDevice, 20.0f, 100.0f, 20.0f, &meshBox2, NULL);
+		InitDebugShapes(meshBox2, myMeshBox2, Camera::getInstance().m_PositionPlayerTwo.x, Camera::getInstance().m_PositionPlayerTwo.y, Camera::getInstance().m_PositionPlayerTwo.z, 255, 0, 0);
+		eae6320::Graphics::DrawMesh(myMeshBox2);
+	}
+
+	
+
+
+	D3DXCreateSphere(s_direct3dDevice, radius, 15, 15, &meshSphere2, NULL);
+	InitDebugShapes(meshSphere2, myMeshSphere2, Camera::getInstance().m_Flag1.x, Camera::getInstance().m_Flag1.y + 50, Camera::getInstance().m_Flag1.z, 255, 150, 0);
+	eae6320::Graphics::DrawMesh(myMeshSphere2);
+
+	D3DXCreateSphere(s_direct3dDevice, radius, 15, 15, &meshSphere3, NULL);
+	InitDebugShapes(meshSphere3, myMeshSphere3, Camera::getInstance().m_Flag2.x, Camera::getInstance().m_Flag2.y + 50, Camera::getInstance().m_Flag2.z, 100, 150, 0);
+	eae6320::Graphics::DrawMesh(myMeshSphere3);
+
+	D3DXCreateBox(s_direct3dDevice, 60.0f, 20.0f, 60.0f, &meshBoxFlag1, NULL);
+	InitDebugShapes(meshBoxFlag1, myMeshBoxFlagLand1, Camera::getInstance().m_FlagEnd1.x, Camera::getInstance().m_FlagEnd1.y, Camera::getInstance().m_FlagEnd1.z, 255, 150, 0);
+	eae6320::Graphics::DrawMesh(myMeshBoxFlagLand1);
+
+	D3DXCreateBox(s_direct3dDevice, 60.0f, 20, 60.0f, &meshBoxFlag2, NULL);
+	InitDebugShapes(meshBoxFlag2, myMeshBoxFlagLand2, Camera::getInstance().m_FlagEnd2.x, Camera::getInstance().m_FlagEnd2.y, Camera::getInstance().m_FlagEnd2.z, 100, 255, 0);
+	eae6320::Graphics::DrawMesh(myMeshBoxFlagLand2);
 
 
 	if (sphereEnabled)
@@ -388,13 +433,13 @@ void eae6320::Graphics::RenderDebugShapes(float gameTime)
 	g_LineList[1].y = Camera::getInstance().m_PositionPlayerRay.y;
 	g_LineList[1].z = Camera::getInstance().m_PositionPlayerRay.z;
 
-	g_LineList[2].x = 1.0f;
-	g_LineList[2].y = 4.0f;
-	g_LineList[2].z = 0.0f;
+	g_LineList[2].x = Camera::getInstance().m_PositionPlayerTwo.x;
+	g_LineList[2].y = Camera::getInstance().m_PositionPlayerTwo.y;
+	g_LineList[2].z = Camera::getInstance().m_PositionPlayerTwo.z;
 
-	g_LineList[3].x = 20.0f;
-	g_LineList[3].y = 4.0f;
-	g_LineList[3].z = 0.0f;
+	g_LineList[3].x = Camera::getInstance().m_PositionPlayerTwoRay.x;
+	g_LineList[3].y = Camera::getInstance().m_PositionPlayerTwoRay.y;
+	g_LineList[3].z = Camera::getInstance().m_PositionPlayerTwoRay.z;
 
 	lines.s_vertexBuffer->Unlock();
 

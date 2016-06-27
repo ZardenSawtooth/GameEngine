@@ -19,12 +19,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Networking.h" />
     <ClInclude Include="TPCamera.h" />
     <ClInclude Include="CollisionSystem.h" />
     <ClInclude Include="Player.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CollisionSystem.cpp" />
+    <ClCompile Include="Networking.cpp" />
     <ClCompile Include="Player.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -92,9 +94,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(LibDir)</OutDir>
+    <IncludePath>$(DXSDK_DIR);$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(LibDir)</OutDir>
+    <IncludePath>$(DXSDK_DIR);$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(LibDir)</OutDir>

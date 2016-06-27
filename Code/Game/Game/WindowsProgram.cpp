@@ -23,6 +23,7 @@
 #include "../../Engine/Core/CollisionSystem.h"
 #include "../../Engine/Core/Player.h"
 #include "../../Engine/Core/TPCamera.h"
+#include "../../Engine/Audio/AudioControl.h"
 
 // Static Data Initialization
 //===========================
@@ -45,6 +46,12 @@ namespace
 	// your program could have problems when it is run at the same time on the same computer
 	// as one of your classmate's
 	const char* s_mainWindowClass_name = "tapia_aqeel's Main Window Class";
+
+	eae6320::Math::cVector * Flag1Position = new eae6320::Math::cVector(100, -150, 1200);
+	eae6320::Math::cVector * Flag2Position = new eae6320::Math::cVector(-100, -150, -1200);
+
+	int player1score = 0;
+	int player2score = 0;
 }
 
 // Main Function
@@ -72,6 +79,7 @@ int CreateMainWindowAndReturnExitCodeWhenItCloses( const HINSTANCE i_thisInstanc
 bool UpdateEntities_floats();
 void UpdateInputNumber(float i_gameTime);
 //bool checkObjectShoot();
+void checkFlagPosition(eae6320::Core::Player * i_player1, eae6320::Core::Player * i_player2);
 
 
 bool CreateMainWindow( const HINSTANCE i_thisInstanceOfTheProgram, const int i_initialWindowDisplayState )
@@ -149,7 +157,12 @@ HWND CreateMainWindowHandle( const HINSTANCE i_thisInstanceOfTheProgram, const i
 	{
 		// The window's "caption"
 		// (The text that is displayed in the title bar)
-		const char* windowCaption = "tapia_aqeel's EAE6320 Game";
+		const char* windowCaption = "tapia_aqeel's EAE6320 Game Client";
+		if (eae6320::Networking::IsServer())
+		{
+			windowCaption = "tapia_aqeel's EAE6320 Game Server";
+		}
+		
 		// The window's style
 		const DWORD windowStyle =
 			// "Overlapped" is basically the same as "top-level"
@@ -475,13 +488,42 @@ bool WaitForMainWindowToClose( int& o_exitCode )
 	// (e.g. from an in-game menu)
 
 	// Enter an infinite loop that will continue until a quit message (WM_QUIT) is received from Windows
+	eae6320::Audio::Initialize();
+	eae6320::Audio::AddAudioFile("data/Audio/GameMusic.wav", true, 0.2f);
+	eae6320::Audio::AddAudioFile("data/Audio/EnemyPickUpFlag.wav");
+	eae6320::Audio::AddAudioFile("data/Audio/PickUpFlag.wav");
+	eae6320::Audio::AddAudioFile("data/Audio/ResetFlag.wav");
+	eae6320::Audio::AddAudioFile("data/Audio/Scored.wav");
+	eae6320::Audio::AddAudioFile("data/Audio/WalkingGround.wav", true);
+	eae6320::Audio::AddAudioFile("data/Audio/WalkingUp.wav", true);
+	eae6320::Audio::AddAudioFile("data/Audio/EnemyScored.wav");
+	eae6320::Audio::AddAudioFile("data/Audio/Sprint.wav", true);
+	eae6320::Audio::PlayAudio(0);
+
 	eae6320::Graphics::Initialize(s_mainWindow);
 	
 	eae6320::Core::CollisionSystem::Initialize("data/collisionData.mesh");
 	
+
+	Camera::getInstance().m_Flag1 = *Flag1Position;
+	Camera::getInstance().m_Flag2 = *Flag2Position;
+
 	eae6320::Core::Player * player = new eae6320::Core::Player();
 
+	eae6320::Core::Player * SecondPlayer = new eae6320::Core::Player();
+	eae6320::Networking::InitializePlayer(SecondPlayer, player);
+	if (eae6320::Networking::IsServer())
+	{
+		player->team = 0;
+	}
+	else
+		player->team = 1;
+
 	player->Position = Camera::getInstance().m_Position; //eae6320::Math::cVector(0, -120, 0);
+
+	SecondPlayer->Position = Camera::getInstance().m_Position;
+	SecondPlayer->Position.y += 2000;
+
 	bool flyCamActive = false;
 
 	
@@ -514,71 +556,107 @@ bool WaitForMainWindowToClose( int& o_exitCode )
 		if ( !hasWindowsSentAMessage )
 		{
 			eae6320::Time::OnNewFrame();
+			HWND currentWindow = GetForegroundWindow();
+			
 
-			//if (sphereEnabled)
-			//{
-			//	//change size of shapes and draw them
-			//	
-			//}
+			
+				//if (sphereEnabled)
+				//{
+				//	//change size of shapes and draw them
+				//	
+				//}
 
-			if (eae6320::UserInput::IsKeyUp(VK_OEM_3))
-			{
-				eae6320::Graphics::UI::ToggleDebugMenu();
-			}
-			if (eae6320::UserInput::IsKeyUp('F'))
-			{
-				flyCamActive = !flyCamActive;
-			}
-			if (eae6320::Graphics::UI::IsDebugMenuActive())
-			{	
-				if (eae6320::UserInput::IsKeyUp(VK_UP))
-					eae6320::Graphics::UI::Update(eae6320::Graphics::UI::Up);
-				else if (eae6320::UserInput::IsKeyUp(VK_DOWN))
-					eae6320::Graphics::UI::Update(eae6320::Graphics::UI::Down);
-				else if (eae6320::UserInput::IsKeyUp(VK_SPACE))
-					eae6320::Graphics::UI::Update(eae6320::Graphics::UI::Interact);
-				else if (eae6320::UserInput::IsKeyUp(VK_LEFT))
-					eae6320::Graphics::UI::Update(eae6320::Graphics::UI::Left);
-				else if (eae6320::UserInput::IsKeyUp(VK_RIGHT))
-					eae6320::Graphics::UI::Update(eae6320::Graphics::UI::Right);
-			}
-			else
-			{
-				if (flyCamActive)
+				if (eae6320::UserInput::IsKeyUp(VK_OEM_3) && currentWindow == s_mainWindow)
 				{
-					//code for fly cam
-					UpdateEntities_floats();
+					eae6320::Graphics::UI::ToggleDebugMenu();
 				}
-				
+				if (eae6320::UserInput::IsKeyUp('F') && currentWindow == s_mainWindow)
+				{
+					flyCamActive = !flyCamActive;
+				}
+				if (eae6320::Graphics::UI::IsDebugMenuActive() && currentWindow == s_mainWindow)
+				{	
+					if (eae6320::UserInput::IsKeyUp(VK_UP))
+						eae6320::Graphics::UI::Update(eae6320::Graphics::UI::Up);
+					else if (eae6320::UserInput::IsKeyUp(VK_DOWN))
+						eae6320::Graphics::UI::Update(eae6320::Graphics::UI::Down);
+					else if (eae6320::UserInput::IsKeyUp(VK_SPACE))
+						eae6320::Graphics::UI::Update(eae6320::Graphics::UI::Interact);
+					else if (eae6320::UserInput::IsKeyUp(VK_LEFT))
+						eae6320::Graphics::UI::Update(eae6320::Graphics::UI::Left);
+					else if (eae6320::UserInput::IsKeyUp(VK_RIGHT))
+						eae6320::Graphics::UI::Update(eae6320::Graphics::UI::Right);
+				}
 				else
 				{
-					if (eae6320::UserInput::IsKeyPressed(VK_LEFT))
+					if (flyCamActive)
 					{
-						rotationOffset = -45;
+						//code for fly cam
+						UpdateEntities_floats();
 					}
-					else if (eae6320::UserInput::IsKeyPressed(VK_RIGHT))
-					{
-						rotationOffset = 45;
-					}
+
 					else
-						rotationOffset = 0;
-					player->UpdateInput();
-					player->Update(eae6320::Time::GetSecondsElapsedThisFrame());
+					{
+						if (eae6320::UserInput::IsKeyPressed(VK_LEFT) && currentWindow == s_mainWindow)
+						{
+							rotationOffset = -45;
+						}
+						else if (eae6320::UserInput::IsKeyPressed(VK_RIGHT) && currentWindow == s_mainWindow)
+						{
+							rotationOffset = 45;
+						}
+						else
+							rotationOffset = 0;
 
-					playerCamera->eulerX = 5;
-					playerCamera->eulerY += (player->eulerY + rotationOffset - playerCamera->eulerY) * eae6320::Time::GetSecondsElapsedThisFrame() * 3;
+						if( currentWindow == s_mainWindow)
+							player->UpdateInput();
 
-					player->UpdateCamera(playerCamera);
+						if (player->boost)
+						{
+							if(player->boostValue <120)
+							player->boostValue += 0.5f;
+							//eae6320::Audio::StopAudio(5);
+							eae6320::Audio::PlayAudio(8);
+							
+						}
+						else
+						{
+							if(player->boostValue > 0)
+							player->boostValue -= 0.1f;
+							eae6320::Audio::StopAudio(8);
+							
+							
+						}
+						eae6320::Graphics::GameSpriteList[2]->UpdateHeight(0.0f, (int) player->boostValue);
+						
+						player->Update(eae6320::Time::GetSecondsElapsedThisFrame());
+						
+						checkFlagPosition(player, SecondPlayer);
 
-					Camera::getInstance().m_Position = playerCamera->Position;
-					Camera::getInstance().m_PositionPlayer = player->Position;
-					Camera::getInstance().m_PositionPlayerRay = player->Position - player->getLocalZ() *100;
-					Camera::getInstance().m_Orientation = playerCamera->Orientation;
+						eae6320::Networking::SendPlayerPosition();
+						eae6320::Networking::Update();
+						
+						playerCamera->eulerX = 5;
+						playerCamera->eulerY += (player->eulerY + rotationOffset - playerCamera->eulerY) * eae6320::Time::GetSecondsElapsedThisFrame() * 3;
+
+						player->UpdateCamera(playerCamera);
+
+						Camera::getInstance().m_Position = playerCamera->Position;
+						Camera::getInstance().m_PositionPlayer = player->Position;
+
+						Camera::getInstance().m_PositionPlayerTwo = SecondPlayer->Position;
+
+						Camera::getInstance().m_PositionPlayerRay = player->Position - player->getLocalZ() * 100;
+
+						Camera::getInstance().m_PositionPlayerTwoRay = SecondPlayer->Position - SecondPlayer->getLocalZ() * 100;
+
+						Camera::getInstance().m_Orientation = playerCamera->Orientation;
+					
 				}
 			}
 			
 			//UpdateInputNumber(eae6320::Time::GetSecondsElapsedThisFrame());
-		
+			
 			eae6320::Graphics::Render(eae6320::Time::GetSecondsElapsedThisFrame());
 			}
 		else
@@ -607,6 +685,121 @@ bool WaitForMainWindowToClose( int& o_exitCode )
 	o_exitCode = static_cast<int>( message.wParam );
 
 	return true;
+}
+
+void checkFlagPosition(eae6320::Core::Player * i_player1, eae6320::Core::Player * i_player2)
+{
+	
+	eae6320::Math::cVector playerDistance = i_player1->Position - i_player2->Position;
+
+	eae6320::Audio::SetVolume(5, playerDistance.GetLength(), 1000.0f, 100.0f);
+
+	if (i_player1->team == 0)
+	{
+		eae6320::Math::cVector playerFlag = i_player1->Position - Camera::getInstance().m_Flag1;
+		eae6320::Math::cVector flagCheckpoint = Camera::getInstance().m_Flag1 - Camera::getInstance().m_FlagEnd1;
+		if (playerFlag.GetLength() < 100)
+		{
+			//pick up flag
+			if(!i_player1->Flag)
+				eae6320::Audio::PlayAudio(2);
+			Camera::getInstance().m_Flag1 = i_player1->Position;
+			i_player1->Flag = true;
+			
+		}
+
+		if (flagCheckpoint.GetLength() < 100)
+		{
+			Camera::getInstance().m_Flag1 = *Flag1Position;
+			Camera::getInstance().m_Flag2 = *Flag2Position;
+			i_player1->score++;
+			eae6320::Graphics::GameSpriteList[0]->Update(0.0f, i_player1->score);
+			i_player1->Flag = false;
+			i_player2->Flag = false;
+			eae6320::Audio::PlayAudio(4);
+			
+		}
+
+		if (playerDistance.GetLength() < 100)
+		{
+			//tagging
+			Camera::getInstance().m_Flag1 = *Flag1Position;
+			Camera::getInstance().m_Flag2 = *Flag2Position;
+			eae6320::Networking::TagBitch();
+			if (i_player1->Flag || i_player2->Flag)
+				eae6320::Audio::PlayAudio(3);
+			i_player1->Flag = false;
+			i_player2->Flag = false;
+			
+		}
+
+		if (i_player2->Flag)
+		{
+			Camera::getInstance().m_Flag2 = i_player2->Position;
+		}
+		else
+		{
+			Camera::getInstance().m_Flag2 = *Flag2Position;
+		}
+	}
+	else
+	{
+		eae6320::Math::cVector playerFlag = i_player1->Position - Camera::getInstance().m_Flag2;
+		eae6320::Math::cVector flagCheckpoint = Camera::getInstance().m_Flag2 - Camera::getInstance().m_FlagEnd2;
+		if (playerFlag.GetLength() < 100)
+		{
+			//pick up flag
+			if(!i_player1->Flag)
+				eae6320::Audio::PlayAudio(2);
+			Camera::getInstance().m_Flag2 = i_player1->Position;
+			i_player1->Flag = true;
+			
+		}
+
+		if (flagCheckpoint.GetLength() < 100)
+		{
+			Camera::getInstance().m_Flag2 = *Flag2Position;
+			Camera::getInstance().m_Flag1 = *Flag1Position;
+			i_player1->score++;
+			eae6320::Graphics::GameSpriteList[0]->Update(0.0f, i_player1->score);
+			i_player1->Flag = false;
+			i_player2->Flag = false;
+			eae6320::Audio::PlayAudio(4);
+		}
+
+		if (playerDistance.GetLength() < 100)
+		{
+			//tagging
+			Camera::getInstance().m_Flag1 = *Flag1Position;
+			Camera::getInstance().m_Flag2 = *Flag2Position;
+			eae6320::Networking::TagBitch();
+			if(i_player1->Flag || i_player2->Flag)
+				eae6320::Audio::PlayAudio(3);
+			i_player1->Flag = false;
+			i_player2->Flag = false;
+			
+		}
+
+		if (i_player2->Flag)
+		{
+			Camera::getInstance().m_Flag1 = i_player2->Position;
+		}
+		else
+		{
+			Camera::getInstance().m_Flag1 = *Flag1Position;
+		}
+	}
+
+	eae6320::Graphics::GameSpriteList[1]->Update(0.0f, i_player2->score);
+	
+	
+
+}
+
+void ResetFlag() 
+{
+	Camera::getInstance().m_Flag1 = *Flag1Position;
+	Camera::getInstance().m_Flag2 = *Flag2Position;
 }
 
 bool checkObjectShoot()
@@ -676,9 +869,7 @@ bool UpdateEntities_floats()
 	eae6320::Math::cQuaternion * cameraOrientationRight = new eae6320::Math::cQuaternion(eae6320::Math::ConvertDegreesToRadians(-rotationSpeed), eae6320::Math::cVector(0, 1, 0));
 	eae6320::Math::cQuaternion * cameraOrientationUp = new eae6320::Math::cQuaternion(eae6320::Math::ConvertDegreesToRadians(rotationSpeed), eae6320::Math::cVector(1, 0, 0));
 	eae6320::Math::cQuaternion * cameraOrientationDown = new eae6320::Math::cQuaternion(eae6320::Math::ConvertDegreesToRadians(-rotationSpeed), eae6320::Math::cVector(1, 0, 0));
-	
-	
-	
+
 	offset.x = offset.y = 0.0f;
 	{
 		// Get the direction

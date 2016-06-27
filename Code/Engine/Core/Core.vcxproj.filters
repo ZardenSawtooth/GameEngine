@@ -4,9 +4,11 @@
     <ClInclude Include="CollisionSystem.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="TPCamera.h" />
+    <ClInclude Include="Networking.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CollisionSystem.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Networking.cpp" />
   </ItemGroup>
 </Project>
